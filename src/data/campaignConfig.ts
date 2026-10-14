@@ -28,6 +28,8 @@ export const partyColors = {
 export const countryRanges = {
   presidentialApproval: { min: 47, max: 58 },
   congressSupport: { min: 42, max: 54 },
+  executiveSupport: { min: 46, max: 56 },
+  judiciaryRelation: { min: 46, max: 56 },
   economicOutlook: { min: 48, max: 62 },
   budget: { min: 68, max: 100 },
   politicalCapital: { min: 45, max: 64 },
@@ -38,6 +40,37 @@ export const countryRanges = {
   publicIntegrity: { min: 55, max: 72 },
   foreignRelations: { min: 53, max: 71 },
 } satisfies Record<string, ValueRange>
+
+export const actionPointRules = {
+  weeklyBase: 2,
+  supportThreshold: 49,
+  maximumNewPerWeek: 6,
+  maximumCarryOver: 2,
+} as const
+
+export const economyRules = {
+  regularRevenue: 6,
+  operatingExpense: 5,
+  revenuePerEconomicBand: 30,
+  expensePerCapacityBand: 40,
+  maximumBudget: 100,
+} as const
+
+export const indicatorLabels = {
+  presidentialApproval: 'Aprovação presidencial',
+  congressSupport: 'Apoio no Congresso',
+  executiveSupport: 'Apoio interno do Executivo',
+  judiciaryRelation: 'Relação institucional com o Judiciário',
+  economicOutlook: 'Situação econômica',
+  budget: 'Orçamento',
+  politicalCapital: 'Capital político',
+  administrativeCapacity: 'Capacidade administrativa',
+  institutionalStability: 'Estabilidade institucional',
+  polarization: 'Polarização',
+  publicTrust: 'Confiança pública',
+  publicIntegrity: 'Integridade pública',
+  foreignRelations: 'Relação externa',
+} as const
 
 export const partyRanges = {
   popularity: { min: 14, max: 28 },

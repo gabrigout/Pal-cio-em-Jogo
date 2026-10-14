@@ -5,6 +5,7 @@ import CampaignSetup from './components/CampaignSetup'
 import Dashboard from './components/Dashboard'
 import TopNavigation from './components/TopNavigation'
 import { createCampaign } from './engine/campaign'
+import { advanceWeek, chooseWeeklyDecision, dismissWeeklySummary, executeAction } from './engine/turn'
 import type { CampaignState, PartySelection, PoliticalOrientation, SectionId } from './state/types'
 
 const sectionTitles: Record<Exclude<SectionId, 'brasil'>, string> = {
@@ -22,6 +23,22 @@ export default function App() {
 
   function startCampaign(orientation: PoliticalOrientation, party: PartySelection) {
     setCampaign(createCampaign(orientation, party))
+  }
+
+  function runAction(actionId: string) {
+    setCampaign((current) => current ? executeAction(current, actionId) ?? current : current)
+  }
+
+  function chooseDecision(optionId: string) {
+    setCampaign((current) => current ? chooseWeeklyDecision(current, optionId) ?? current : current)
+  }
+
+  function moveToNextWeek() {
+    setCampaign((current) => current ? advanceWeek(current) : current)
+  }
+
+  function closeWeeklySummary() {
+    setCampaign((current) => current ? dismissWeeklySummary(current) : current)
   }
 
   if (!campaign) {
@@ -67,7 +84,13 @@ export default function App() {
       </header>
 
       {activeSection === 'brasil' ? (
-        <Dashboard campaign={campaign} onAdvanceWeek={() => undefined} />
+        <Dashboard
+          campaign={campaign}
+          onAdvanceWeek={moveToNextWeek}
+          onChooseDecision={chooseDecision}
+          onDismissSummary={closeWeeklySummary}
+          onRunAction={runAction}
+        />
       ) : (
         <main className="section-placeholder page-enter">
           <span className="section-placeholder-mark"><Landmark aria-hidden="true" size={23} /></span>

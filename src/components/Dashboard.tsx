@@ -9,14 +9,16 @@ import {
   Radio,
 } from 'lucide-react'
 import { getDashboardMetrics } from '../engine/dashboard'
+import { getTurnDashboardData } from '../engine/turn'
 import {
   activeWork,
   closedWork,
-  dashboardNews,
   waitingWork,
 } from '../data/dashboard'
 import type { CampaignState, WorkItem } from '../state/types'
 import MetricCard from './MetricCard'
+import TurnControls from './TurnControls'
+import WeeklySummaryDialog from './WeeklySummaryDialog'
 
 function WorkColumn({ title, items, icon: Icon }: {
   title: string
@@ -47,8 +49,17 @@ function WorkColumn({ title, items, icon: Icon }: {
   )
 }
 
-export default function Dashboard({ campaign, onAdvanceWeek }: { campaign: CampaignState; onAdvanceWeek: () => void }) {
+interface DashboardProps {
+  campaign: CampaignState
+  onAdvanceWeek: () => void
+  onRunAction: (actionId: string) => void
+  onChooseDecision: (optionId: string) => void
+  onDismissSummary: () => void
+}
+
+export default function Dashboard({ campaign, onAdvanceWeek, onRunAction, onChooseDecision, onDismissSummary }: DashboardProps) {
   const dashboardMetrics = getDashboardMetrics(campaign)
+  const turnDashboardData = getTurnDashboardData(campaign)
 
   return (
     <main className="dashboard page-enter">
@@ -64,6 +75,13 @@ export default function Dashboard({ campaign, onAdvanceWeek }: { campaign: Campa
           {dashboardMetrics.map((metric) => <MetricCard key={metric.id} metric={metric} />)}
         </div>
       </section>
+
+      <TurnControls
+        campaign={campaign}
+        data={turnDashboardData}
+        onChooseDecision={onChooseDecision}
+        onRunAction={onRunAction}
+      />
 
       <section aria-labelledby="alerts-title" className="alerts-panel">
         <div className="alerts-symbol"><CircleAlert aria-hidden="true" size={19} /></div>
@@ -86,7 +104,7 @@ export default function Dashboard({ campaign, onAdvanceWeek }: { campaign: Campa
           <span className="section-aside"><Radio aria-hidden="true" size={14} /> Monitoramento nacional</span>
         </div>
         <div className="news-list">
-          {dashboardNews.map((news, index) => (
+          {[...campaign.news].reverse().map((news, index) => (
             <article className="news-item" key={news.id}>
               <span className="news-index">0{index + 1}</span>
               <span className={`news-marker tone-${news.tone}`} />
@@ -125,6 +143,12 @@ export default function Dashboard({ campaign, onAdvanceWeek }: { campaign: Campa
           Avançar Semana <ChevronRight aria-hidden="true" size={17} />
         </button>
       </footer>
+      {campaign.weeklySummary && (
+        <WeeklySummaryDialog
+          onDismiss={onDismissSummary}
+          summary={campaign.weeklySummary}
+        />
+      )}
     </main>
   )
 }

@@ -2,6 +2,8 @@ import { countryRanges, partyRanges } from '../data/campaignConfig'
 import { parties } from '../data/parties'
 import { initialCalendar } from '../state/initialState'
 import { createCampaignTheme } from './theme'
+import { initializeCampaignTurn } from './turn'
+import { dashboardNews } from '../data/dashboard'
 import type {
   CampaignState,
   CountryIndicators,
@@ -57,6 +59,8 @@ function rollCountryIndicators(random: () => number): CountryIndicators {
   return {
     presidentialApproval: randomInRange(countryRanges.presidentialApproval.min, countryRanges.presidentialApproval.max, random),
     congressSupport: randomInRange(countryRanges.congressSupport.min, countryRanges.congressSupport.max, random),
+    executiveSupport: randomInRange(countryRanges.executiveSupport.min, countryRanges.executiveSupport.max, random),
+    judiciaryRelation: randomInRange(countryRanges.judiciaryRelation.min, countryRanges.judiciaryRelation.max, random),
     economicOutlook: randomInRange(countryRanges.economicOutlook.min, countryRanges.economicOutlook.max, random),
     budget: randomInRange(countryRanges.budget.min, countryRanges.budget.max, random),
     politicalCapital: randomInRange(countryRanges.politicalCapital.min, countryRanges.politicalCapital.max, random),
@@ -101,14 +105,28 @@ export function createCampaign(
     ),
   }
 
-  return {
+  const campaign: CampaignState = {
     id: `campaign-${Date.now()}-${randomInRange(1000, 9999, random)}`,
     orientation,
     party,
     calendar: { ...initialCalendar },
     country: rollCountryIndicators(random),
     theme: createCampaignTheme(selection.colors[0], selection.colors[1]),
+    turn: {
+      availableActionPoints: 0,
+      newActionPoints: 0,
+      carriedActionPoints: 0,
+      activeDecisionId: '',
+      chosenDecisionOptionId: null,
+      actionsTaken: [],
+      weeklyChanges: [],
+    },
+    news: dashboardNews.map((news) => ({ ...news })),
+    pendingEffects: [],
+    weeklySummary: null,
   }
+
+  return initializeCampaignTurn(campaign)
 }
 
 export function isCustomPartyValid(name: string, acronym: string, colors: string[]): boolean {
