@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Landmark } from 'lucide-react'
 import Dashboard from './components/Dashboard'
 import TopNavigation from './components/TopNavigation'
+import { playerParty } from './data/campaign'
 import { initialCampaignState } from './state/initialState'
 import type { SectionId } from './state/types'
 
@@ -32,6 +33,13 @@ export default function App() {
           <div className="campaign-date">
             <span className="date-label">CALENDÁRIO PRESIDENCIAL</span>
             <strong>{month} de {year} <span>—</span> Semana {week}/{weeksPerMonth}</strong>
+          </div>
+          <div aria-label={`Partido ${playerParty.name}`} className="party-identity">
+            <span className="party-colors" aria-hidden="true">
+              {playerParty.colors.map((color) => <i key={color} style={{ backgroundColor: color }} />)}
+            </span>
+            <span className="party-acronym">{playerParty.acronym}</span>
+            <span className="party-name">{playerParty.name}</span>
           </div>
         </div>
         <TopNavigation activeSection={activeSection} onNavigate={setActiveSection} />
