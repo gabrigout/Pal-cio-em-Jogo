@@ -1,0 +1,1599 @@
+{
+  "title": "Palácio em Jogo — Catálogo de Personagens",
+  "version": "1.0",
+  "note": "Nomes reais são referências de inspiração satírica; os personagens de jogo usam nomes e perfis ficcionais. Verificar contexto e cargos antes de publicar.",
+  "new_characters_count": 150,
+  "previous_characters_count": 8,
+  "characters": [
+    {
+      "id": "NEW-001",
+      "sequence": 1,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Lucas Pavanato",
+      "satirical_name": "Lucas Polêmicato",
+      "description": "Transforma qualquer discussão em conteúdo. Quanto mais câmeras aparecem, maior fica a audiência.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-002",
+      "sequence": 2,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Eduarda Campopiano",
+      "satirical_name": "Eduarda CampoMinado",
+      "description": "Cada debate é um campo de batalha. Sua especialidade é manter a discussão movimentada.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica",
+      "notes": ""
+    },
+    {
+      "id": "NEW-003",
+      "sequence": 3,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Renan Santos",
+      "satirical_name": "Renan SemFreio",
+      "description": "Quer reformular o sistema inteiro e vive procurando uma terceira opção entre os grupos tradicionais.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-004",
+      "sequence": 4,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Amanda Vettorazzo",
+      "satirical_name": "Amanda ViraTópico",
+      "description": "Uma pauta municipal vira assunto nacional antes mesmo de terminar a reunião.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-005",
+      "sequence": 5,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Guto Zacarias",
+      "satirical_name": "Guto do Protesto",
+      "description": "Transforma indignação em manifestação, discurso e vídeo de oposição.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-006",
+      "sequence": 6,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Rubinho Nunes",
+      "satirical_name": "Rubinho Requerimento",
+      "description": "Para cada problema, uma representação, um documento ou uma nova investigação parlamentar.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-007",
+      "sequence": 7,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Arthur do Val",
+      "satirical_name": "Arthur do Áudio",
+      "description": "Um personagem sobre reputação pública, consequências das próprias declarações e a memória interminável da internet.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-008",
+      "sequence": 8,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Ana Campagnolo",
+      "satirical_name": "Ana CampoMinado",
+      "description": "Defende suas convicções com firmeza e transforma divergências ideológicas em grandes embates.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica",
+      "notes": ""
+    },
+    {
+      "id": "NEW-009",
+      "sequence": 9,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Augusto Cury",
+      "satirical_name": "Doutor Sentimental",
+      "description": "Quer administrar o país pela inteligência emocional. Até o déficit público precisa respirar fundo.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-010",
+      "sequence": 10,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Rui Costa Pimenta",
+      "satirical_name": "Rui da Revolução Permanente",
+      "description": "Acredita que o sistema sempre pode ser transformado e que nenhuma reforma vai longe o bastante.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-011",
+      "sequence": 11,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Hertz Dias",
+      "satirical_name": "Hertz do Contraponto",
+      "description": "Chega ao debate para contestar consensos e lembrar que existe oposição à oposição também.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-012",
+      "sequence": 12,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Samara Martins",
+      "satirical_name": "Samara da Virada",
+      "description": "Quer apresentar uma alternativa política fora dos grupos dominantes e conquistar espaço no debate nacional.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-013",
+      "sequence": 13,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Clariana Barão",
+      "satirical_name": "Clariana do Plano B",
+      "description": "Aparece com uma proposta diferente quando todos acreditavam que a disputa já estava resolvida.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-014",
+      "sequence": 14,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Edmilson Costa",
+      "satirical_name": "Edmilson do Manifesto",
+      "description": "Cada problema nacional exige uma nova discussão sobre a estrutura econômica do país.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-015",
+      "sequence": 15,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Wilson Grassi",
+      "satirical_name": "Wilson da Balança",
+      "description": "Promete avaliar cada lado antes de tomar uma posição, mas precisa convencer o eleitor de que isso não é indecisão.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-016",
+      "sequence": 16,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Júlio Delgado",
+      "satirical_name": "Júlio do Acordão",
+      "description": "Conhece os corredores do Congresso e procura construir acordos onde ninguém vê uma maioria.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-017",
+      "sequence": 17,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Aroldo Medina",
+      "satirical_name": "Aroldo do Palanque",
+      "description": "Quer transformar visibilidade eleitoral em uma presença política duradoura.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-018",
+      "sequence": 18,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Rick Azevedo",
+      "satirical_name": "Rick da Escala",
+      "description": "Leva as discussões sobre trabalho e jornada para o centro da conversa, mesmo quando a pauta do dia era outra.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-019",
+      "sequence": 19,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Guilherme Cortez",
+      "satirical_name": "Cortez do Corte Rápido",
+      "description": "Busca traduzir debates políticos em mensagens curtas que cabem na tela do celular.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-020",
+      "sequence": 20,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Ana Elisa",
+      "satirical_name": "Ana do Algoritmo",
+      "description": "Consegue levar pautas sociais para o público digital e transformar comentários em mobilização.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-021",
+      "sequence": 21,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Alvinho Lira",
+      "satirical_name": "Alvinho da Nova Geração",
+      "description": "Chega jovem ao cenário político e precisa provar que não é apenas a novidade da eleição.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-022",
+      "sequence": 22,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Marina JHC",
+      "satirical_name": "Marina da Renovação",
+      "description": "Procura construir sua própria identidade política sem depender exclusivamente do grupo ao qual está ligada.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-023",
+      "sequence": 23,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Filipe Barros",
+      "satirical_name": "Filipe da Bancada",
+      "description": "Consegue transformar uma disputa parlamentar em uma longa discussão nas redes.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-024",
+      "sequence": 24,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Índia Armelau",
+      "satirical_name": "Índia dos Assuntos Quentes",
+      "description": "Sabe que uma proposta polêmica pode dominar a conversa pública durante vários dias.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-025",
+      "sequence": 25,
+      "group": "Grupo 1 — Novos políticos, MBL e candidatos presidenciais",
+      "real_reference": "Chris Tonietto",
+      "satirical_name": "Chris da Convicção",
+      "description": "Defende suas pautas sem rodeios e raramente deixa um debate terminar sem marcar posição.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-026",
+      "sequence": 26,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Fernando Holiday",
+      "satirical_name": "Holiday da Treta",
+      "description": "Gosta de desafiar adversários ideológicos e transformar divergências em confrontos públicos.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-027",
+      "sequence": 27,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Fábio Ostermann",
+      "satirical_name": "Ostermann dos Gráficos",
+      "description": "Apresenta uma explicação econômica para quase tudo, inclusive para o fracasso da própria explicação.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-028",
+      "sequence": 28,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Paulo Ganime",
+      "satirical_name": "Ganime de Planilha",
+      "description": "Quer medir a eficiência de cada proposta antes de liberar o próximo debate.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-029",
+      "sequence": 29,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Vinicius Poit",
+      "satirical_name": "Poit do Empreendedor",
+      "description": "Enxerga oportunidades onde outros só veem burocracia.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-030",
+      "sequence": 30,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Felipe Rigoni",
+      "satirical_name": "Rigoni dos Indicadores",
+      "description": "Acredita que toda discussão melhora depois de ganhar uma tabela e três métricas.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-031",
+      "sequence": 31,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Adriana Ventura",
+      "satirical_name": "Ventura da Transparência",
+      "description": "Faz perguntas sobre gastos públicos até a reunião inteira começar a consultar o orçamento.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-032",
+      "sequence": 32,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Luiz Lima",
+      "satirical_name": "Luiz do Desempenho",
+      "description": "Trata o setor público como uma competição em que todo mundo precisa bater metas.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-033",
+      "sequence": 33,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Tomé Abduch",
+      "satirical_name": "Tomé da Pauta Quente",
+      "description": "Gosta de temas que dividem opiniões e rendem discussões prolongadas.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-034",
+      "sequence": 34,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Paulo Kogos",
+      "satirical_name": "Kogos do Estado Mínimo",
+      "description": "Quer reduzir tanto o Estado que a próxima discussão será sobre quem apaga a luz.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-035",
+      "sequence": 35,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Hélio Beltrão",
+      "satirical_name": "Hélio do Mercado Livre",
+      "description": "Acredita que muitos problemas desaparecem quando se reduz a interferência do governo.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-036",
+      "sequence": 36,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Paulo Martins",
+      "satirical_name": "Martins do Debate",
+      "description": "Sempre tem uma opinião forte sobre o assunto do dia e uma resposta para o comentário seguinte.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-037",
+      "sequence": 37,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Zé Trovão",
+      "satirical_name": "Zé do Comboio",
+      "description": "Transforma mobilização política em demonstração de força e presença nas ruas.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-038",
+      "sequence": 38,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Gustavo Gayer",
+      "satirical_name": "Gayer da Câmera",
+      "description": "Acha que todo acontecimento político merece uma gravação, uma análise e uma reação.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-039",
+      "sequence": 39,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Carlos Jordy",
+      "satirical_name": "Jordy do Embate",
+      "description": "Mantém o confronto ideológico no centro da estratégia parlamentar.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-040",
+      "sequence": 40,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Alexandre Ramagem",
+      "satirical_name": "Ramagem Reservada",
+      "description": "Prefere falar de estratégia e segurança, mas precisa lidar com a exposição constante do debate político.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-041",
+      "sequence": 41,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Paulo Bilynskyj",
+      "satirical_name": "Bilynskyj da Ordem",
+      "description": "Valoriza hierarquia, segurança e declarações sem muita margem para interpretação.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-042",
+      "sequence": 42,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Douglas Garcia",
+      "satirical_name": "Douglas do Confronto",
+      "description": "Entra nas discussões com posições firmes e sai com assunto para vários vídeos.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-043",
+      "sequence": 43,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Gil Diniz",
+      "satirical_name": "Gil da Militância",
+      "description": "Organiza sua atuação em torno das pautas e dos grupos que defende.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-044",
+      "sequence": 44,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Junio Amaral",
+      "satirical_name": "Junio da Linha-Dura",
+      "description": "Prefere propostas rígidas e discursos diretos. A negociação não é seu primeiro reflexo.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-045",
+      "sequence": 45,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Bibo Nunes",
+      "satirical_name": "Bibo do Estúdio",
+      "description": "Sempre parece estar a uma câmera de distância de transformar o debate em programa de opinião.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-046",
+      "sequence": 46,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Coronel Tadeu",
+      "satirical_name": "Coronel do Regulamento",
+      "description": "Quer estabelecer regras claras para todos, especialmente para quem discorda dele.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-047",
+      "sequence": 47,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Coronel Chrisóstomo",
+      "satirical_name": "Chrisóstomo da Tribuna",
+      "description": "Usa o plenário como espaço para defender suas prioridades e cobrar respostas.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-048",
+      "sequence": 48,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Carlos Alberto da Cunha, o Delegado da Cunha",
+      "satirical_name": "Delegado do Plantão",
+      "description": "Aborda a política com o ritmo de uma ocorrência em andamento.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-049",
+      "sequence": 49,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Delegado Palumbo",
+      "satirical_name": "Palumbo Investigativo",
+      "description": "Trata qualquer controvérsia como uma nova pauta para apurar e comentar.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-050",
+      "sequence": 50,
+      "group": "Grupo 2 — Direita digital, liberais e novos personagens do debate",
+      "real_reference": "Sargento Fahur",
+      "satirical_name": "Fahur da Sirene",
+      "description": "Sua linguagem é direta, seu discurso é duro e sua tolerância para debates vagos é pequena.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-051",
+      "sequence": 51,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Duda Salabert",
+      "satirical_name": "Duda da Sala de Aula",
+      "description": "Tenta transformar discussões sobre direitos e educação em propostas concretas.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-052",
+      "sequence": 52,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Sônia Guajajara",
+      "satirical_name": "Sônia da Floresta",
+      "description": "Leva pautas indígenas e ambientais à mesa, mesmo quando os demais só querem falar de economia.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-053",
+      "sequence": 53,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Célia Xakriabá",
+      "satirical_name": "Célia da Ancestralidade",
+      "description": "Defende território, cultura e direitos indígenas com discurso firme e presença pública.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-054",
+      "sequence": 54,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Jandira Feghali",
+      "satirical_name": "Jandira da Comissão",
+      "description": "Conhece o caminho das discussões legislativas e sabe como manter uma pauta viva.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-055",
+      "sequence": 55,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Benedita da Silva",
+      "satirical_name": "Benedita da Base",
+      "description": "Valoriza a mobilização social e a ligação histórica com os movimentos populares.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-056",
+      "sequence": 56,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Chico Alencar",
+      "satirical_name": "Chico do Debate Ético",
+      "description": "Questiona privilégios, insiste em princípios e sempre encontra um ângulo moral para a discussão.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-057",
+      "sequence": 57,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Ivan Valente",
+      "satirical_name": "Ivan da Resistência",
+      "description": "Continua defendendo suas bandeiras mesmo quando a pauta política muda de direção.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-058",
+      "sequence": 58,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Glauber Braga",
+      "satirical_name": "Glauber Sem Pausa",
+      "description": "Discute com intensidade e raramente entrega ao adversário a última palavra.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-059",
+      "sequence": 59,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Reimont",
+      "satirical_name": "Reimont do Bairro",
+      "description": "Procura conectar o debate legislativo às necessidades cotidianas da população.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-060",
+      "sequence": 60,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Paulo Teixeira",
+      "satirical_name": "Paulo da Costura",
+      "description": "Tenta conciliar pautas partidárias, negociações institucionais e prioridades governamentais.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-061",
+      "sequence": 61,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Alencar Santana",
+      "satirical_name": "Alencar da Articulação",
+      "description": "Trabalha para transformar propostas da bancada em apoio suficiente para avançar.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-062",
+      "sequence": 62,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Rogério Correia",
+      "satirical_name": "Rogério do Contraponto",
+      "description": "Não deixa uma crítica ao seu campo político sem uma resposta detalhada.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-063",
+      "sequence": 63,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Padre João",
+      "satirical_name": "Padre do Mutirão",
+      "description": "Defende políticas sociais e trata a mobilização comunitária como parte central da política.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-064",
+      "sequence": 64,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Reginaldo Lopes",
+      "satirical_name": "Reginaldo da Reforma",
+      "description": "Está sempre procurando uma mudança estrutural para colocar na agenda.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-065",
+      "sequence": 65,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Odair Cunha",
+      "satirical_name": "Odair do Acordo",
+      "description": "Tenta equilibrar lealdade partidária com a matemática necessária para aprovar propostas.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-066",
+      "sequence": 66,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Patrus Ananias",
+      "satirical_name": "Patrus do Social",
+      "description": "Coloca a proteção social no centro das discussões e lembra que políticas públicas têm consequências humanas.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-067",
+      "sequence": 67,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Jean Paul Prates",
+      "satirical_name": "Jean Paul da Energia",
+      "description": "Gosta de discutir petróleo, energia e transição econômica até a conversa virar uma aula técnica.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-068",
+      "sequence": 68,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Luciana Genro",
+      "satirical_name": "Luciana da Ruptura",
+      "description": "Questiona o consenso e sustenta que mudar apenas os detalhes não resolve os problemas estruturais.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-069",
+      "sequence": 69,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Roberto Robaina",
+      "satirical_name": "Robaina da Militância",
+      "description": "Quer transformar indignação política em organização contínua.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-070",
+      "sequence": 70,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Pedro Ruas",
+      "satirical_name": "Pedro do Direito Social",
+      "description": "Usa argumentos jurídicos para defender políticas públicas e direitos coletivos.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-071",
+      "sequence": 71,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Fernanda Melchionna",
+      "satirical_name": "Fernanda da Denúncia Política",
+      "description": "Procura dar visibilidade às desigualdades e às contradições do poder.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-072",
+      "sequence": 72,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Matheus Gomes",
+      "satirical_name": "Matheus da Mobilização",
+      "description": "Leva debates sobre periferia, juventude e serviços públicos para a arena política.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-073",
+      "sequence": 73,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Juliana Cardoso",
+      "satirical_name": "Juliana da Comunidade",
+      "description": "Acredita que a política precisa ouvir a base antes de anunciar a solução.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-074",
+      "sequence": 74,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Ana Pimentel",
+      "satirical_name": "Ana da Política Pública",
+      "description": "Quer discutir como transformar boas intenções em serviços que realmente funcionem.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-075",
+      "sequence": 75,
+      "group": "Grupo 3 — Esquerda, movimentos sociais e política identitária",
+      "real_reference": "Dandara Tonantzin",
+      "satirical_name": "Dandara da Representatividade",
+      "description": "Defende que representação política deve vir acompanhada de mudanças percebidas no cotidiano.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-076",
+      "sequence": 76,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Marina Helena",
+      "satirical_name": "Marina do Mercado",
+      "description": "Quer reduzir a burocracia e explicar a cidade como se fosse uma grande planilha de gestão.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-077",
+      "sequence": 77,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Cristina Graeml",
+      "satirical_name": "Cristina do Contraponto",
+      "description": "Busca espaço no debate com posições próprias e uma comunicação direta.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-078",
+      "sequence": 78,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Eduardo Pimentel",
+      "satirical_name": "Pimentel do Cronograma",
+      "description": "Precisa provar que os projetos anunciados têm prazo, orçamento e entrega.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-079",
+      "sequence": 79,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Ney Leprevost",
+      "satirical_name": "Ney da Reapresentação",
+      "description": "Conhece o jogo eleitoral e sabe que uma ideia pode ganhar nova vida em outra campanha.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-080",
+      "sequence": 80,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Goura",
+      "satirical_name": "Goura da Bicicleta",
+      "description": "Quer uma cidade sustentável, mesmo quando a política parece andar na contramão.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-081",
+      "sequence": 81,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Luciano Zucco",
+      "satirical_name": "Zucco da Mobilização",
+      "description": "Procura reunir apoiadores em torno de pautas de segurança e posicionamentos conservadores.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-082",
+      "sequence": 82,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Tarcísio Motta",
+      "satirical_name": "Tarcísio da Cidade",
+      "description": "Tenta conectar transporte, moradia e serviços públicos numa mesma conversa.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-083",
+      "sequence": 83,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Rodrigo Amorim",
+      "satirical_name": "Amorim do Embate",
+      "description": "Faz do confronto público uma forma de afirmar posição política.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-084",
+      "sequence": 84,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Carol Sponza",
+      "satirical_name": "Carol da Renovação",
+      "description": "Busca demonstrar que uma nova candidatura pode trazer uma agenda diferente.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-085",
+      "sequence": 85,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Cyro Garcia",
+      "satirical_name": "Cyro do Trabalhador",
+      "description": "Defende pautas trabalhistas e desconfia de soluções que deixam a maioria para depois.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-086",
+      "sequence": 86,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Bruno Engler",
+      "satirical_name": "Bruno do Palanque",
+      "description": "Quer transformar uma base mobilizada em influência institucional duradoura.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-087",
+      "sequence": 87,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Mauro Tramonte",
+      "satirical_name": "Tramonte da Comunicação",
+      "description": "Sabe que explicar problemas de forma simples é parte importante da disputa política.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-088",
+      "sequence": 88,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Carlos Viana",
+      "satirical_name": "Viana do Microfone",
+      "description": "Gosta de posicionamentos claros e de debates que chegam rapidamente ao público.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-089",
+      "sequence": 89,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Daniel Coelho",
+      "satirical_name": "Daniel da Proposta",
+      "description": "Apresenta soluções para os problemas urbanos e precisa convencer o eleitor de que elas podem sair do papel.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-090",
+      "sequence": 90,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Dani Portela",
+      "satirical_name": "Dani da Participação",
+      "description": "Procura ampliar a presença dos movimentos sociais nas decisões públicas.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-091",
+      "sequence": 91,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Gilson Machado",
+      "satirical_name": "Gilson do Evento",
+      "description": "Mistura comunicação, mobilização e identidade política numa agenda cheia de aparições públicas.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-092",
+      "sequence": 92,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "João Arnaldo",
+      "satirical_name": "João do Programa",
+      "description": "Quer mostrar que uma campanha também pode ser feita de propostas e organização de base.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-093",
+      "sequence": 93,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Jô Cavalcanti",
+      "satirical_name": "Jô da Luta Popular",
+      "description": "Procura transformar demandas de movimentos sociais em prioridades políticas.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-094",
+      "sequence": 94,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Felipe Camozzato",
+      "satirical_name": "Camozzato da Eficiência",
+      "description": "Quer simplificar regras e reduzir custos até o debate virar uma revisão administrativa.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-095",
+      "sequence": 95,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Altino Prazeres",
+      "satirical_name": "Altino da Assembleia",
+      "description": "Prefere mobilização popular e organização coletiva a acordos feitos longe do público.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-096",
+      "sequence": 96,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Ricardo Senese",
+      "satirical_name": "Senese da Campanha",
+      "description": "Procura espaço numa disputa em que visibilidade e estrutura nem sempre caminham juntas.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-097",
+      "sequence": 97,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Thiago Araújo",
+      "satirical_name": "Thiago do Bairro",
+      "description": "Faz das necessidades locais uma plataforma para cobrar mais atenção do governo.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-098",
+      "sequence": 98,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Everaldo Eguchi",
+      "satirical_name": "Eguchi da Fiscalização",
+      "description": "Entra nas discussões prometendo examinar decisões e cobrar explicações.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-099",
+      "sequence": 99,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Guilherme Kilter",
+      "satirical_name": "Kilter da Nova Guarda",
+      "description": "Quer mostrar que uma liderança jovem pode transformar presença digital em atuação institucional.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-100",
+      "sequence": 100,
+      "group": "Grupo 4 — Eleições municipais, novas lideranças e política regional",
+      "real_reference": "Thomaz Henrique",
+      "satirical_name": "Thomaz do Engajamento",
+      "description": "Sabe que a internet abre portas, mas precisa manter o público interessado depois da eleição.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-101",
+      "sequence": 101,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Joice Hasselmann",
+      "satirical_name": "Joice da Reviravolta",
+      "description": "Já viu alianças mudarem de lado e aprendeu que a política pode mudar de roteiro rapidamente.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-102",
+      "sequence": 102,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Alexandre Frota",
+      "satirical_name": "Frota em Movimento",
+      "description": "Está sempre procurando o próximo capítulo para uma trajetória pública cheia de mudanças.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-103",
+      "sequence": 103,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Deltan Dallagnol",
+      "satirical_name": "Deltan do PowerPoint",
+      "description": "Organiza sua mensagem em argumentos, esquemas e apresentações que parecem não terminar.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-104",
+      "sequence": 104,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Daniel Silveira",
+      "satirical_name": "Daniel do Confronto",
+      "description": "Seu personagem aposta numa retórica de enfrentamento e em disputas que não passam despercebidas.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-105",
+      "sequence": 105,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Monark",
+      "satirical_name": "Monark sem Filtro",
+      "description": "Transforma uma conversa de internet em uma discussão sobre os limites da liberdade de expressão.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-106",
+      "sequence": 106,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Caio Coppolla",
+      "satirical_name": "Coppolla do Argumento",
+      "description": "Quer explicar o país em poucos minutos, com a confiança de quem preparou vinte gráficos.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-107",
+      "sequence": 107,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Adrilles Jorge",
+      "satirical_name": "Adrilles das Metáforas",
+      "description": "Usa referências culturais e discursos longos até a discussão original parecer outra.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-108",
+      "sequence": 108,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Rodrigo Constantino",
+      "satirical_name": "Constantino do Contraponto",
+      "description": "Sempre encontra uma tese alternativa para desafiar a interpretação dominante de um acontecimento.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-109",
+      "sequence": 109,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Paulo Figueiredo",
+      "satirical_name": "Figueiredo Internacional",
+      "description": "Leva a disputa política brasileira para uma conversa maior sobre o mundo e suas alianças.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-110",
+      "sequence": 110,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Allan dos Santos",
+      "satirical_name": "Allan da Transmissão",
+      "description": "Trata a internet como um estúdio permanente de comentários políticos.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-111",
+      "sequence": 111,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Sara Winter",
+      "satirical_name": "Sara da Mobilização",
+      "description": "Busca chamar atenção para suas causas e transforma cada aparição em uma declaração de posicionamento.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-112",
+      "sequence": 112,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Oswaldo Eustáquio",
+      "satirical_name": "Oswaldo do Plantão Digital",
+      "description": "Está sempre pronto para publicar uma nova interpretação dos acontecimentos do dia.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-113",
+      "sequence": 113,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Nando Moura",
+      "satirical_name": "Nando do Desabafo",
+      "description": "Faz críticas com intensidade e não costuma economizar palavras quando discorda de alguém.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-114",
+      "sequence": 114,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Felipe Neto",
+      "satirical_name": "Felipe do Trending Topic",
+      "description": "Consegue colocar um tema político na conversa de milhões de pessoas, mesmo quando o assunto começou longe da internet.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-115",
+      "sequence": 115,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Gregório Duvivier",
+      "satirical_name": "Gregório da Ironia",
+      "description": "Usa humor e referências culturais para criticar o poder e provocar reações.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-116",
+      "sequence": 116,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Rita Von Hunty",
+      "satirical_name": "Rita da Aula Infinita",
+      "description": "Transforma um assunto cotidiano numa conversa sobre história, cultura e ideologia.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-117",
+      "sequence": 117,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Jones Manoel",
+      "satirical_name": "Jones do Debate Histórico",
+      "description": "Puxa a discussão para a história das ideias e raramente aceita explicações superficiais.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-118",
+      "sequence": 118,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Sabrina Fernandes",
+      "satirical_name": "Sabrina do Contexto",
+      "description": "Quando o debate parece simples, ela apresenta mais três camadas de análise.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-119",
+      "sequence": 119,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Ian Neves",
+      "satirical_name": "Ian do Arquivo",
+      "description": "Sempre tem uma referência histórica para explicar por que o acontecimento atual não surgiu do nada.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-120",
+      "sequence": 120,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Breno Altman",
+      "satirical_name": "Breno do Comentário",
+      "description": "Analisa os acontecimentos com posições marcadas e provoca discussões entre diferentes correntes da esquerda.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-121",
+      "sequence": 121,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "André Marinho",
+      "satirical_name": "Marinho da Entrevista",
+      "description": "Faz perguntas desconfortáveis e deixa o entrevistado administrar o resto da repercussão.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-122",
+      "sequence": 122,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Guga Noblat",
+      "satirical_name": "Guga dos Bastidores",
+      "description": "Procura os detalhes da política que normalmente ficam fora do discurso oficial.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-123",
+      "sequence": 123,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Diego Rox",
+      "satirical_name": "Rox da Reação",
+      "description": "Publica comentários rápidos e transforma o acontecimento do dia em mais um capítulo da disputa digital.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-124",
+      "sequence": 124,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Janaína Paschoal",
+      "satirical_name": "Janaína da Tese",
+      "description": "Tem uma interpretação jurídica para debates que outros tentam resolver apenas com slogans.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-125",
+      "sequence": 125,
+      "group": "Grupo 5 — Influenciadores, comentaristas e figuras de controvérsia digital",
+      "real_reference": "Marcelo Freixo",
+      "satirical_name": "Freixo da Pauta Social",
+      "description": "Procura manter segurança pública, direitos humanos e desigualdade no centro das discussões.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-126",
+      "sequence": 126,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Guilherme Afif de Oliveira",
+      "satirical_name": "Afif do Empreendedorismo",
+      "description": "Enxerga a burocracia como um obstáculo e acredita que simplificar formulários pode mudar o país.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-127",
+      "sequence": 127,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Paulo Rabello de Castro",
+      "satirical_name": "Rabello das Contas",
+      "description": "Apresenta diagnósticos econômicos e tenta convencer todos a olhar primeiro para a matemática.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-128",
+      "sequence": 128,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Rodrigo Garcia",
+      "satirical_name": "Garcia da Segunda Chance",
+      "description": "Conhece a disputa eleitoral e sabe que uma derrota pode virar argumento para uma nova tentativa.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-129",
+      "sequence": 129,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Márcio França",
+      "satirical_name": "França do Acordo",
+      "description": "Procura uma saída negociada e tenta construir pontes quando os grupos já escolheram seus lados.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-130",
+      "sequence": 130,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Fernando Capez",
+      "satirical_name": "Capez do Artigo",
+      "description": "Cada discussão vira uma oportunidade de explicar o que diz a lei e por que alguém deveria ter lido antes.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-131",
+      "sequence": 131,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Orlando Morando",
+      "satirical_name": "Morando da Gestão",
+      "description": "Prefere resultados mensuráveis e quer mostrar que administrar bem também pode render capital político.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-132",
+      "sequence": 132,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Celso Russomanno",
+      "satirical_name": "Russomanno do Consumidor",
+      "description": "Enxerga um problema cotidiano e imediatamente procura um responsável para prestar esclarecimentos.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-133",
+      "sequence": 133,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Ricardo Tripoli",
+      "satirical_name": "Tripoli da Causa",
+      "description": "Defende suas pautas com persistência e tenta impedir que temas importantes desapareçam do noticiário.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-134",
+      "sequence": 134,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Paulo Skaf",
+      "satirical_name": "Skaf do Setor Produtivo",
+      "description": "Procura aproximar a política das demandas empresariais e apresentar desenvolvimento como prioridade.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-135",
+      "sequence": 135,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "José Aníbal",
+      "satirical_name": "Aníbal da Experiência",
+      "description": "Conhece diferentes ciclos partidários e costuma comparar a crise atual com as anteriores.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-136",
+      "sequence": 136,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Marcelo Crivella",
+      "satirical_name": "Crivella da Aliança",
+      "description": "Tenta equilibrar identidade política, compromissos com apoiadores e a necessidade de ampliar sua base.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-137",
+      "sequence": 137,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Marcelo Ramos",
+      "satirical_name": "Ramos da Negociação",
+      "description": "Sabe que o resultado de uma votação depende tanto dos argumentos quanto das conversas anteriores.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-138",
+      "sequence": 138,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Arthur Virgílio Neto",
+      "satirical_name": "Arthur da Velha Guarda",
+      "description": "Entra numa discussão atual carregando décadas de histórias, rivalidades e acordos políticos.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-139",
+      "sequence": 139,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "José Ricardo",
+      "satirical_name": "José da Comunidade",
+      "description": "Procura transformar reivindicações locais em políticas públicas com orçamento e execução.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-140",
+      "sequence": 140,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Alex Manente",
+      "satirical_name": "Manente do Centro",
+      "description": "Tenta ocupar o espaço entre os extremos e precisa explicar a diferença entre moderação e falta de posição.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-141",
+      "sequence": 141,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "André do Prado",
+      "satirical_name": "Prado da Assembleia",
+      "description": "Conhece o funcionamento do Legislativo e sabe que a pauta pode mudar durante uma reunião.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-142",
+      "sequence": 142,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Carlos Sampaio",
+      "satirical_name": "Sampaio do Parecer",
+      "description": "Quer que os argumentos passem pelo filtro jurídico antes de se transformarem em promessas.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-143",
+      "sequence": 143,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Miguel Lombardi",
+      "satirical_name": "Lombardi da Base",
+      "description": "Trabalha para manter a representação regional e a articulação política em equilíbrio.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-144",
+      "sequence": 144,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Marcos Pereira",
+      "satirical_name": "Pereira da Coalizão",
+      "description": "Sabe que um partido precisa de identidade, mas também precisa de espaço para negociar.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-145",
+      "sequence": 145,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Eli Corrêa Filho",
+      "satirical_name": "Eli do Interior",
+      "description": "Procura manter proximidade com lideranças locais e defender suas demandas no debate estadual.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-146",
+      "sequence": 146,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Mário Frias",
+      "satirical_name": "Frias da Cultura",
+      "description": "Transforma questões culturais em disputas políticas e sempre encontra um novo capítulo para o debate.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-147",
+      "sequence": 147,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "André Mendonça",
+      "satirical_name": "Mendonça do Voto",
+      "description": "Cada decisão institucional vira uma oportunidade para que todos discutam interpretação, princípios e consequências.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-148",
+      "sequence": 148,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Alexandre de Moraes",
+      "satirical_name": "Xandão do Despacho",
+      "description": "No jogo, suas decisões movimentam o tabuleiro institucional e fazem todos os outros personagens reagirem.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-149",
+      "sequence": 149,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Gilmar Mendes",
+      "satirical_name": "Gilmar do Argumento",
+      "description": "Conhece os caminhos jurídicos e transforma cada discussão constitucional em uma longa disputa de interpretações.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "NEW-150",
+      "sequence": 150,
+      "group": "Grupo 6 — Ex-candidatos, veteranos e figuras institucionais",
+      "real_reference": "Dias Toffoli",
+      "satirical_name": "Toffoli do Processo",
+      "description": "Precisa administrar os efeitos institucionais de cada decisão enquanto o debate público tenta antecipar o próximo capítulo.",
+      "catalogue_batch": "150_adicionais",
+      "reference_type": "figura pública usada como inspiração satírica"
+    },
+    {
+      "id": "PREV-001",
+      "sequence": 1,
+      "group": "Personagens definidos anteriormente",
+      "real_reference": "Kim Kataguiri",
+      "satirical_name": "Kim Kategorizador",
+      "description": "",
+      "catalogue_batch": "anteriores",
+      "reference_type": "figura pública usada como inspiração satírica",
+      "notes": "Manter no elenco; a descrição original não foi incluída nesta mensagem."
+    },
+    {
+      "id": "PREV-002",
+      "sequence": 2,
+      "group": "Personagens definidos anteriormente",
+      "real_reference": "Nikolas Ferreira",
+      "satirical_name": "Nikolas Viralreira",
+      "description": "",
+      "catalogue_batch": "anteriores",
+      "reference_type": "figura pública usada como inspiração satírica",
+      "notes": "Manter no elenco; a descrição original não foi incluída nesta mensagem."
+    },
+    {
+      "id": "PREV-003",
+      "sequence": 3,
+      "group": "Personagens definidos anteriormente",
+      "real_reference": "Pablo Marçal",
+      "satirical_name": "Pablo do Pódio",
+      "description": "",
+      "catalogue_batch": "anteriores",
+      "reference_type": "figura pública usada como inspiração satírica",
+      "notes": "Manter no elenco; a descrição original não foi incluída nesta mensagem."
+    },
+    {
+      "id": "PREV-004",
+      "sequence": 4,
+      "group": "Personagens definidos anteriormente",
+      "real_reference": "André Janones",
+      "satirical_name": "Janones do Zap",
+      "description": "",
+      "catalogue_batch": "anteriores",
+      "reference_type": "figura pública usada como inspiração satírica",
+      "notes": "Manter no elenco; a descrição original não foi incluída nesta mensagem."
+    },
+    {
+      "id": "PREV-005",
+      "sequence": 5,
+      "group": "Personagens definidos anteriormente",
+      "real_reference": "Carla Zambelli",
+      "satirical_name": "Carla Zambelétrica",
+      "description": "",
+      "catalogue_batch": "anteriores",
+      "reference_type": "figura pública usada como inspiração satírica",
+      "notes": "Manter no elenco; a descrição original não foi incluída nesta mensagem."
+    },
+    {
+      "id": "PREV-006",
+      "sequence": 6,
+      "group": "Personagens definidos anteriormente",
+      "real_reference": "Ciro Gomes",
+      "satirical_name": "Ciro Explosivo",
+      "description": "",
+      "catalogue_batch": "anteriores",
+      "reference_type": "figura pública usada como inspiração satírica",
+      "notes": "Manter no elenco; a descrição original não foi incluída nesta mensagem."
+    },
+    {
+      "id": "PREV-007",
+      "sequence": 7,
+      "group": "Personagens definidos anteriormente",
+      "real_reference": "André Fernandes",
+      "satirical_name": "André dos Cortes",
+      "description": "",
+      "catalogue_batch": "anteriores",
+      "reference_type": "figura pública usada como inspiração satírica",
+      "notes": "Manter no elenco; a descrição original não foi incluída nesta mensagem."
+    },
+    {
+      "id": "PREV-008",
+      "sequence": 8,
+      "group": "Personagens definidos anteriormente",
+      "real_reference": "Cabo Daciolo",
+      "satirical_name": "Daciolo das Revelações",
+      "description": "",
+      "catalogue_batch": "anteriores",
+      "reference_type": "figura pública usada como inspiração satírica",
+      "notes": "Manter no elenco; a descrição original não foi incluída nesta mensagem."
+    }
+  ]
+}
