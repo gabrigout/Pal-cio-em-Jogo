@@ -14,11 +14,12 @@ import type { PartySelection, PoliticalOrientation } from '../state/types'
 
 interface CampaignSetupProps {
   onStart: (orientation: PoliticalOrientation, party: PartySelection) => void
+  onBackToLibrary: () => void
 }
 
 const steps = ['Orientação', 'Partido', 'Posse']
 
-export default function CampaignSetup({ onStart }: CampaignSetupProps) {
+export default function CampaignSetup({ onStart, onBackToLibrary }: CampaignSetupProps) {
   const [step, setStep] = useState(1)
   const [orientation, setOrientation] = useState<PoliticalOrientation | null>(null)
   const [selectedParty, setSelectedParty] = useState<PartySelection | null>(null)
@@ -76,6 +77,7 @@ export default function CampaignSetup({ onStart }: CampaignSetupProps) {
           <span className="setup-brand-mark"><Landmark aria-hidden="true" size={22} /></span>
           <span><strong>PALÁCIO <b>EM JOGO</b></strong><small>Palácio do Planalto · Brasília</small></span>
         </a>
+        <button className="setup-library-link" onClick={onBackToLibrary} type="button"><ArrowLeft aria-hidden="true" size={14} /> Campanhas salvas</button>
         <span className="setup-date">JANEIRO 2027 <i>·</i> INÍCIO DE MANDATO</span>
       </header>
 

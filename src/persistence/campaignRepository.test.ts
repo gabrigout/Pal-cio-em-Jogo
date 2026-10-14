@@ -1,0 +1,169 @@
+import assert from 'node:assert/strict'
+import test from 'node:test'
+import { createCampaign } from '../engine/campaign'
+import type { PartySelection } from '../state/types'
+import {
+  exportCampaignJson,
+  importCampaignJson,
+  listSavedCampaigns,
+  loadCampaign,
+  migrateSave,
+  saveCampaign,
+  type StorageLike,
+} from './campaignRepository'
+
+class MemoryStorage implements StorageLike {
+  private readonly entries = new Map<string, string>()
+  failWrites = false
+
+  get length(): number {
+    return this.entries.size
+  }
+
+  key(index: number): string | null {
+    return [...this.entries.keys()][index] ?? null
+  }
+
+  getItem(key: string): string | null {
+    return this.entries.get(key) ?? null
+  }
+
+  setItem(key: string, value: string): void {
+    if (this.failWrites) {
+      const error = new Error('Quota excedida') as Error & { name: string }
+      error.name = 'QuotaExceededError'
+      throw error
+    }
+    this.entries.set(key, value)
+  }
+
+  removeItem(key: string): void {
+    this.entries.delete(key)
+  }
+}
+
+class QuotaStorage extends MemoryStorage {
+  setItem(): void {
+    const error = new Error('Quota excedida') as Error & { name: string }
+    error.name = 'QuotaExceededError'
+    throw error
+  }
+}
+
+const party: PartySelection = {
+  id: 'test-party',
+  fullName: 'Partido de Teste',
+  acronym: 'PDT',
+  description: 'Partido para testes de persistência.',
+  colors: ['#8bd4af', '#e5a05c'],
+  custom: true,
+}
+
+function createTestCampaign() {
+  return createCampaign('left', party, () => 0.5)
+}
+
+test('salva e carrega campanhas separadamente com o estado completo', () => {
+  const storage = new MemoryStorage()
+  const firstCampaign = createTestCampaign()
+  const secondCampaign = { ...createTestCampaign(), id: 'campaign-second' }
+  const timestamp = new Date('2027-01-02T12:00:00.000Z')
+
+  assert.equal(saveCampaign(firstCampaign, storage, timestamp).ok, true)
+  assert.equal(saveCampaign(secondCampaign, storage, timestamp).ok, true)
+
+  const loaded = loadCampaign(firstCampaign.id, storage)
+  assert.equal(loaded.ok, true)
+  if (!loaded.ok) return
+  assert.deepEqual(loaded.value.campaign, firstCampaign)
+  assert.equal(loaded.value.savedAt, timestamp.toISOString())
+  assert.equal(listSavedCampaigns(storage).campaigns.length, 2)
+})
+
+test('migra campanha legada sem versão para o save atual', () => {
+  const current = createTestCampaign()
+  const legacy = structuredClone(current) as unknown as Record<string, unknown>
+  const legacyCountry = { ...(legacy.country as Record<string, unknown>) }
+  delete legacyCountry.executiveSupport
+  delete legacyCountry.judiciaryRelation
+  delete legacy.theme
+  delete legacy.turn
+  delete legacy.news
+  delete legacy.pendingEffects
+  delete legacy.weeklySummary
+  legacy.country = legacyCountry
+
+  const result = migrateSave(legacy)
+  assert.equal(result.ok, true)
+  if (!result.ok) return
+  assert.equal(result.migrated, true)
+  assert.equal(result.save.versaoDoSave, 1)
+  assert.equal(result.save.campaign.country.executiveSupport, 50)
+  assert.equal(result.save.campaign.country.judiciaryRelation, 50)
+  assert.ok(result.save.campaign.turn.activeDecisionId)
+  assert.ok(Array.isArray(result.save.campaign.news))
+})
+
+test('rejeita import inválido e não altera campanhas existentes', () => {
+  const storage = new MemoryStorage()
+  const existingCampaign = createTestCampaign()
+  saveCampaign(existingCampaign, storage)
+
+  const invalidJson = importCampaignJson('{ arquivo quebrado', storage)
+  const invalidSave = importCampaignJson(JSON.stringify({ versaoDoSave: 1, campaign: { id: 'incompleta' } }), storage)
+
+  assert.equal(invalidJson.ok, false)
+  assert.equal(invalidSave.ok, false)
+  assert.equal(listSavedCampaigns(storage).campaigns.length, 1)
+})
+
+test('uma campanha corrompida não impede carregar as demais', () => {
+  const storage = new MemoryStorage()
+  const validCampaign = createTestCampaign()
+  saveCampaign(validCampaign, storage)
+  storage.setItem('palacio-em-jogo:campaign:broken', '{ JSON inválido')
+
+  const result = listSavedCampaigns(storage)
+  assert.equal(result.campaigns.length, 1)
+  assert.equal(result.issues.length, 1)
+})
+
+test('importa backup validado como uma campanha independente e preserva o tema', () => {
+  const storage = new MemoryStorage()
+  const original = createTestCampaign()
+  saveCampaign(original, storage)
+
+  const result = importCampaignJson(exportCampaignJson(original), storage)
+  assert.equal(result.ok, true)
+  if (!result.ok) return
+  assert.notEqual(result.value.campaign.id, original.id)
+  assert.deepEqual(result.value.campaign.theme, original.theme)
+  assert.equal(listSavedCampaigns(storage).campaigns.length, 2)
+})
+
+test('avisa quando a quota estoura ou o armazenamento local está indisponível', () => {
+  const quotaResult = saveCampaign(createTestCampaign(), new QuotaStorage())
+  const unavailableResult = listSavedCampaigns()
+
+  assert.equal(quotaResult.ok, false)
+  if (!quotaResult.ok) assert.match(quotaResult.error, /cheio/)
+  assert.match(unavailableResult.error ?? '', /indisponível/)
+})
+
+test('campanhas recém-criadas têm identificadores diferentes', () => {
+  assert.notEqual(createTestCampaign().id, createTestCampaign().id)
+})
+
+test('abre save legado mesmo quando a migração não pode ser regravada', () => {
+  const storage = new MemoryStorage()
+  const campaign = createTestCampaign()
+  const legacy = { ...campaign } as unknown as Record<string, unknown>
+  delete legacy.theme
+  const key = `palacio-em-jogo:campaign:${encodeURIComponent(campaign.id)}`
+  storage.setItem(key, JSON.stringify(legacy))
+  storage.failWrites = true
+
+  const result = loadCampaign(campaign.id, storage)
+  assert.equal(result.ok, true)
+  if (result.ok) assert.match(result.warning ?? '', /cheio/)
+})

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "tsx --test src/engine/turn.test.ts",
+    "test": "tsx --test src/engine/turn.test.ts src/persistence/campaignRepository.test.ts",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },

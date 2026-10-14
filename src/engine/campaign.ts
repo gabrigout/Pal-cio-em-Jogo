@@ -16,6 +16,12 @@ function randomInRange(min: number, max: number, random: () => number): number {
   return Math.floor(random() * (max - min + 1)) + min
 }
 
+function createCampaignId(random: () => number): string {
+  const uniqueId = globalThis.crypto?.randomUUID?.()
+    ?? `${Date.now()}-${randomInRange(1000, 9999, random)}-${Math.random().toString(36).slice(2)}`
+  return `campaign-${uniqueId}`
+}
+
 export function getCompatibleParties(orientation: PoliticalOrientation): PartyDefinition[] {
   return parties
     .filter((party) => party.ideology === orientation || party.ideology === 'center')
@@ -106,7 +112,7 @@ export function createCampaign(
   }
 
   const campaign: CampaignState = {
-    id: `campaign-${Date.now()}-${randomInRange(1000, 9999, random)}`,
+    id: createCampaignId(random),
     orientation,
     party,
     calendar: { ...initialCalendar },

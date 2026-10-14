@@ -1,11 +1,21 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { CSSProperties } from 'react'
-import { Landmark } from 'lucide-react'
+import { ArrowLeft, Landmark } from 'lucide-react'
+import CampaignLibrary from './components/CampaignLibrary'
 import CampaignSetup from './components/CampaignSetup'
 import Dashboard from './components/Dashboard'
 import TopNavigation from './components/TopNavigation'
 import { createCampaign } from './engine/campaign'
 import { advanceWeek, chooseWeeklyDecision, dismissWeeklySummary, executeAction } from './engine/turn'
+import { downloadCampaignBackup } from './persistence/backup'
+import {
+  deleteCampaign,
+  importCampaignJson,
+  listSavedCampaigns,
+  loadCampaign,
+  saveCampaign,
+  type SavedCampaign,
+} from './persistence/campaignRepository'
 import type { CampaignState, PartySelection, PoliticalOrientation, SectionId } from './state/types'
 
 const sectionTitles: Record<Exclude<SectionId, 'brasil'>, string> = {
@@ -18,34 +28,165 @@ const sectionTitles: Record<Exclude<SectionId, 'brasil'>, string> = {
 }
 
 export default function App() {
+  const [screen, setScreen] = useState<'library' | 'setup' | 'game'>('library')
   const [campaign, setCampaign] = useState<CampaignState | null>(null)
   const [activeSection, setActiveSection] = useState<SectionId>('brasil')
+  const [savedCampaigns, setSavedCampaigns] = useState<SavedCampaign[]>([])
+  const [storageIssues, setStorageIssues] = useState<string[]>([])
+  const [storageError, setStorageError] = useState<string | null>(null)
+  const [libraryNotice, setLibraryNotice] = useState<string | null>(null)
+  const [saveStatus, setSaveStatus] = useState<'saved' | null>(null)
+  const [lastSavedAt, setLastSavedAt] = useState<string | null>(null)
+
+  function refreshLibrary() {
+    const result = listSavedCampaigns()
+    setSavedCampaigns(result.campaigns)
+    setStorageIssues(result.issues)
+    setStorageError(result.error)
+  }
+
+  useEffect(() => {
+    refreshLibrary()
+  }, [])
+
+  function persistCampaign(nextCampaign: CampaignState): boolean {
+    setCampaign(nextCampaign)
+    const result = saveCampaign(nextCampaign)
+    if (!result.ok) {
+      setSaveStatus(null)
+      setStorageError(result.error)
+      return false
+    }
+    setSaveStatus('saved')
+    setLastSavedAt(result.value.savedAt)
+    setStorageError(null)
+    return true
+  }
 
   function startCampaign(orientation: PoliticalOrientation, party: PartySelection) {
-    setCampaign(createCampaign(orientation, party))
+    const newCampaign = createCampaign(orientation, party)
+    persistCampaign(newCampaign)
+    setActiveSection('brasil')
+    setScreen('game')
   }
 
   function runAction(actionId: string) {
-    setCampaign((current) => current ? executeAction(current, actionId) ?? current : current)
+    if (!campaign) return
+    const nextCampaign = executeAction(campaign, actionId)
+    if (nextCampaign) persistCampaign(nextCampaign)
   }
 
   function chooseDecision(optionId: string) {
-    setCampaign((current) => current ? chooseWeeklyDecision(current, optionId) ?? current : current)
+    if (!campaign) return
+    const nextCampaign = chooseWeeklyDecision(campaign, optionId)
+    if (nextCampaign) persistCampaign(nextCampaign)
   }
 
   function moveToNextWeek() {
-    setCampaign((current) => current ? advanceWeek(current) : current)
+    if (campaign) persistCampaign(advanceWeek(campaign))
   }
 
   function closeWeeklySummary() {
-    setCampaign((current) => current ? dismissWeeklySummary(current) : current)
+    if (campaign) persistCampaign(dismissWeeklySummary(campaign))
+  }
+
+  function returnToLibrary() {
+    if (campaign && !persistCampaign(campaign)) return
+    refreshLibrary()
+    setScreen('library')
+    setSaveStatus(null)
+  }
+
+  function continueCampaign(campaignId: string) {
+    const result = loadCampaign(campaignId)
+    if (!result.ok) {
+      setStorageError(result.error)
+      refreshLibrary()
+      return
+    }
+    setCampaign(result.value.campaign)
+    setLastSavedAt(result.value.savedAt)
+    setSaveStatus(result.warning ? null : 'saved')
+    setStorageError(result.warning ?? null)
+    setActiveSection('brasil')
+    setScreen('game')
+  }
+
+  function removeCampaign(campaignId: string) {
+    if (!window.confirm('Essa ação não pode ser desfeita')) return
+    const result = deleteCampaign(campaignId)
+    if (!result.ok) {
+      setStorageError(result.error)
+      return
+    }
+    setStorageError(null)
+    setLibraryNotice('Campanha excluída.')
+    refreshLibrary()
+  }
+
+  function exportCampaign(savedCampaign: SavedCampaign) {
+    try {
+      downloadCampaignBackup(savedCampaign.campaign, savedCampaign.savedAt)
+      setLibraryNotice('Backup exportado como arquivo JSON.')
+    } catch {
+      setStorageError('Não foi possível exportar o backup neste navegador.')
+    }
+  }
+
+  async function importCampaign(file: File) {
+    try {
+      const result = importCampaignJson(await file.text())
+      if (!result.ok) {
+        setStorageError(result.error)
+        return
+      }
+      setStorageError(null)
+      setLibraryNotice(`Backup de ${result.value.campaign.party.acronym} importado.`)
+      refreshLibrary()
+    } catch {
+      setStorageError('Não foi possível ler esse arquivo. Selecione um backup JSON válido.')
+    }
+  }
+
+  if (screen === 'library') {
+    return (
+      <div className="app-shell setup-shell">
+        <CampaignLibrary
+          campaigns={savedCampaigns}
+          error={storageError}
+          issues={storageIssues}
+          notice={libraryNotice}
+          onContinue={continueCampaign}
+          onDelete={removeCampaign}
+          onExport={exportCampaign}
+          onImport={importCampaign}
+          onNewCampaign={() => {
+            setStorageError(null)
+            setLibraryNotice(null)
+            setScreen('setup')
+          }}
+        />
+        <div aria-hidden="true" className="site-bottom-line" />
+      </div>
+    )
+  }
+
+  if (screen === 'setup') {
+    return (
+      <div className="app-shell setup-shell">
+        <CampaignSetup onBackToLibrary={() => setScreen('library')} onStart={startCampaign} />
+        <div aria-hidden="true" className="site-bottom-line" />
+      </div>
+    )
   }
 
   if (!campaign) {
     return (
       <div className="app-shell setup-shell">
-        <CampaignSetup onStart={startCampaign} />
-        <div aria-hidden="true" className="site-bottom-line" />
+        <main className="library-empty-state">
+          <p role="alert">A campanha ativa não está disponível.</p>
+          <button className="library-new-button" onClick={() => setScreen('library')} type="button">Voltar às campanhas</button>
+        </main>
       </div>
     )
   }
@@ -79,9 +220,15 @@ export default function App() {
             <span className="party-acronym">{campaign.party.acronym}</span>
             <span className="party-name">{campaign.party.fullName}</span>
           </div>
+          <div className="header-utility">
+            <button className="game-menu-button" onClick={returnToLibrary} type="button"><ArrowLeft aria-hidden="true" size={14} /> Menu</button>
+            {saveStatus === 'saved' && <span aria-label={`Salvo${lastSavedAt ? ` em ${lastSavedAt}` : ''}`} className="save-indicator" role="status">Salvo</span>}
+          </div>
         </div>
         <TopNavigation activeSection={activeSection} onNavigate={setActiveSection} />
       </header>
+
+      {storageError && <p className="storage-error-banner" role="alert">{storageError}</p>}
 
       {activeSection === 'brasil' ? (
         <Dashboard
