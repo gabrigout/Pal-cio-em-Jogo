@@ -4,7 +4,7 @@ import { Landmark } from 'lucide-react'
 import CampaignSetup from './components/CampaignSetup'
 import Dashboard from './components/Dashboard'
 import TopNavigation from './components/TopNavigation'
-import { createCampaign, getReadableTextColor } from './engine/campaign'
+import { createCampaign } from './engine/campaign'
 import type { CampaignState, PartySelection, PoliticalOrientation, SectionId } from './state/types'
 
 const sectionTitles: Record<Exclude<SectionId, 'brasil'>, string> = {
@@ -35,9 +35,9 @@ export default function App() {
 
   const { month, year, week, weeksPerMonth } = campaign.calendar
   const themeStyle = {
-    '--party-primary': campaign.party.colors[0],
-    '--party-secondary': campaign.party.colors[1],
-    '--party-on-primary': getReadableTextColor(campaign.party.colors[0]),
+    '--cor-primaria': campaign.theme.primary,
+    '--cor-secundaria': campaign.theme.secondary,
+    '--cor-botao-texto': campaign.theme.buttonText,
   } as CSSProperties
 
   return (

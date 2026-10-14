@@ -28,6 +28,14 @@ export interface CampaignParty extends PartySelection {
   resources: number
 }
 
+export interface CampaignTheme {
+  officialPrimary: string
+  officialSecondary: string
+  primary: string
+  secondary: string
+  buttonText: string
+}
+
 export interface CountryIndicators {
   presidentialApproval: number
   congressSupport: number
@@ -53,6 +61,7 @@ export interface CampaignState {
     weeksPerMonth: number
   }
   country: CountryIndicators
+  theme: CampaignTheme
 }
 
 export interface PartyDefinition {
@@ -72,6 +81,7 @@ export interface DashboardMetric {
   value: string
   detail: string
   change: string
+  statusLabel: string
   tone: MetricTone
   progress: number
 }

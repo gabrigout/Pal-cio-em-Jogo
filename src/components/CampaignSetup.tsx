@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { CSSProperties } from 'react'
 import { ArrowLeft, ArrowRight, Check, Landmark, Palette, Sparkles } from 'lucide-react'
 import {
   createCustomPartySelection,
@@ -7,6 +8,7 @@ import {
   selectPartyColor,
   selectionFromDefinition,
 } from '../engine/campaign'
+import { createCampaignTheme, getButtonTextColor } from '../engine/theme'
 import { partyPalette, politicalOrientationLabels, satiricalIntroductions } from '../data/campaignConfig'
 import type { PartySelection, PoliticalOrientation } from '../state/types'
 
@@ -28,6 +30,16 @@ export default function CampaignSetup({ onStart }: CampaignSetupProps) {
 
   const compatibleParties = orientation ? getCompatibleParties(orientation) : []
   const customPartyValid = isCustomPartyValid(customName, customAcronym, customColors)
+  const selectedDefinition = compatibleParties.find((party) => party.id === selectedPartyId)
+  const previewColors = customSelected
+    ? customColors.length === 2 ? customColors : null
+    : selectedDefinition?.colors ?? null
+  const previewTheme = previewColors ? createCampaignTheme(previewColors[0], previewColors[1]) : null
+  const setupThemeStyle = previewTheme ? {
+    '--cor-primaria': previewTheme.primary,
+    '--cor-secundaria': previewTheme.secondary,
+    '--cor-botao-texto': previewTheme.buttonText,
+  } as CSSProperties : undefined
 
   function chooseOrientation(value: PoliticalOrientation) {
     setOrientation(value)
@@ -58,7 +70,7 @@ export default function CampaignSetup({ onStart }: CampaignSetupProps) {
   const currentIntroduction = orientation ? satiricalIntroductions[orientation] : null
 
   return (
-    <main className="setup-page page-enter">
+    <main className="setup-page page-enter" style={setupThemeStyle}>
       <header className="setup-header">
         <a aria-label="Palácio em Jogo" className="setup-brand" href="#inicio">
           <span className="setup-brand-mark"><Landmark aria-hidden="true" size={22} /></span>
@@ -185,7 +197,7 @@ export default function CampaignSetup({ onStart }: CampaignSetupProps) {
                       title={name}
                       type="button"
                     >
-                      <span style={{ backgroundColor: color }}>{customColors.includes(color) && <Check aria-hidden="true" size={16} />}</span>
+                      <span style={{ backgroundColor: color, color: getButtonTextColor(color) }}>{customColors.includes(color) && <Check aria-hidden="true" size={16} />}</span>
                       <small>{name}</small>
                     </button>
                   ))}

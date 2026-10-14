@@ -1,6 +1,7 @@
 import { countryRanges, partyRanges } from '../data/campaignConfig'
 import { parties } from '../data/parties'
 import { initialCalendar } from '../state/initialState'
+import { createCampaignTheme } from './theme'
 import type {
   CampaignState,
   CountryIndicators,
@@ -106,19 +107,8 @@ export function createCampaign(
     party,
     calendar: { ...initialCalendar },
     country: rollCountryIndicators(random),
+    theme: createCampaignTheme(selection.colors[0], selection.colors[1]),
   }
-}
-
-export function getReadableTextColor(hexColor: string): string {
-  const normalized = hexColor.replace('#', '')
-  if (!/^[0-9a-fA-F]{6}$/.test(normalized)) return '#101414'
-
-  const channels = [0, 2, 4].map((offset) => Number.parseInt(normalized.slice(offset, offset + 2), 16) / 255)
-  const luminance = channels
-    .map((channel) => channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4)
-    .reduce((total, channel, index) => total + channel * [0.2126, 0.7152, 0.0722][index], 0)
-
-  return luminance > 0.42 ? '#101414' : '#ffffff'
 }
 
 export function isCustomPartyValid(name: string, acronym: string, colors: string[]): boolean {
