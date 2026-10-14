@@ -7,6 +7,63 @@ export type SectionId =
   | 'relacoes'
   | 'historico'
 
+export type PoliticalOrientation = 'left' | 'right'
+export type PartyColorPair = [string, string]
+
+export interface PartySelection {
+  id: string
+  fullName: string
+  acronym: string
+  description: string
+  colors: PartyColorPair
+  custom: boolean
+}
+
+export interface CampaignParty extends PartySelection {
+  orientation: PoliticalOrientation
+  popularity: number
+  influence: number
+  parliamentarySupport: number
+  seats: number
+  resources: number
+}
+
+export interface CountryIndicators {
+  presidentialApproval: number
+  congressSupport: number
+  economicOutlook: number
+  budget: number
+  politicalCapital: number
+  administrativeCapacity: number
+  institutionalStability: number
+  polarization: number
+  publicTrust: number
+  publicIntegrity: number
+  foreignRelations: number
+}
+
+export interface CampaignState {
+  id: string
+  orientation: PoliticalOrientation
+  party: CampaignParty
+  calendar: {
+    month: string
+    year: number
+    week: number
+    weeksPerMonth: number
+  }
+  country: CountryIndicators
+}
+
+export interface PartyDefinition {
+  id: string
+  acronym: string
+  fullName: string
+  ideology: PoliticalOrientation | 'center'
+  description: string
+  colors: readonly [string, string]
+}
+
 export type MetricTone = 'positive' | 'warning' | 'critical' | 'neutral'
 
 export interface DashboardMetric {

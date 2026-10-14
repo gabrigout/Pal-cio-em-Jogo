@@ -1,10 +1,11 @@
 import { useState } from 'react'
+import type { CSSProperties } from 'react'
 import { Landmark } from 'lucide-react'
+import CampaignSetup from './components/CampaignSetup'
 import Dashboard from './components/Dashboard'
 import TopNavigation from './components/TopNavigation'
-import { playerParty } from './data/campaign'
-import { initialCampaignState } from './state/initialState'
-import type { SectionId } from './state/types'
+import { createCampaign, getReadableTextColor } from './engine/campaign'
+import type { CampaignState, PartySelection, PoliticalOrientation, SectionId } from './state/types'
 
 const sectionTitles: Record<Exclude<SectionId, 'brasil'>, string> = {
   estado: 'Estado',
@@ -16,11 +17,31 @@ const sectionTitles: Record<Exclude<SectionId, 'brasil'>, string> = {
 }
 
 export default function App() {
+  const [campaign, setCampaign] = useState<CampaignState | null>(null)
   const [activeSection, setActiveSection] = useState<SectionId>('brasil')
-  const { month, year, week, weeksPerMonth } = initialCampaignState
+
+  function startCampaign(orientation: PoliticalOrientation, party: PartySelection) {
+    setCampaign(createCampaign(orientation, party))
+  }
+
+  if (!campaign) {
+    return (
+      <div className="app-shell setup-shell">
+        <CampaignSetup onStart={startCampaign} />
+        <div aria-hidden="true" className="site-bottom-line" />
+      </div>
+    )
+  }
+
+  const { month, year, week, weeksPerMonth } = campaign.calendar
+  const themeStyle = {
+    '--party-primary': campaign.party.colors[0],
+    '--party-secondary': campaign.party.colors[1],
+    '--party-on-primary': getReadableTextColor(campaign.party.colors[0]),
+  } as CSSProperties
 
   return (
-    <div className="app-shell">
+    <div className="app-shell" style={themeStyle}>
       <header className="site-header">
         <div className="header-main">
           <a aria-label="Palácio em Jogo, início" className="brand" href="#brasil" onClick={() => setActiveSection('brasil')}>
@@ -34,19 +55,19 @@ export default function App() {
             <span className="date-label">CALENDÁRIO PRESIDENCIAL</span>
             <strong>{month} de {year} <span>—</span> Semana {week}/{weeksPerMonth}</strong>
           </div>
-          <div aria-label={`Partido ${playerParty.name}`} className="party-identity">
+          <div aria-label={`Partido ${campaign.party.fullName}`} className="party-identity">
             <span className="party-colors" aria-hidden="true">
-              {playerParty.colors.map((color) => <i key={color} style={{ backgroundColor: color }} />)}
+              {campaign.party.colors.map((color) => <span key={color} style={{ backgroundColor: color }} />)}
             </span>
-            <span className="party-acronym">{playerParty.acronym}</span>
-            <span className="party-name">{playerParty.name}</span>
+            <span className="party-acronym">{campaign.party.acronym}</span>
+            <span className="party-name">{campaign.party.fullName}</span>
           </div>
         </div>
         <TopNavigation activeSection={activeSection} onNavigate={setActiveSection} />
       </header>
 
       {activeSection === 'brasil' ? (
-        <Dashboard onAdvanceWeek={() => undefined} />
+        <Dashboard campaign={campaign} onAdvanceWeek={() => undefined} />
       ) : (
         <main className="section-placeholder page-enter">
           <span className="section-placeholder-mark"><Landmark aria-hidden="true" size={23} /></span>

@@ -8,14 +8,14 @@ import {
   Flag,
   Radio,
 } from 'lucide-react'
+import { getDashboardMetrics } from '../engine/dashboard'
 import {
   activeWork,
   closedWork,
-  dashboardMetrics,
   dashboardNews,
   waitingWork,
 } from '../data/dashboard'
-import type { WorkItem } from '../state/types'
+import type { CampaignState, WorkItem } from '../state/types'
 import MetricCard from './MetricCard'
 
 function WorkColumn({ title, items, icon: Icon }: {
@@ -47,13 +47,15 @@ function WorkColumn({ title, items, icon: Icon }: {
   )
 }
 
-export default function Dashboard({ onAdvanceWeek }: { onAdvanceWeek: () => void }) {
+export default function Dashboard({ campaign, onAdvanceWeek }: { campaign: CampaignState; onAdvanceWeek: () => void }) {
+  const dashboardMetrics = getDashboardMetrics(campaign)
+
   return (
     <main className="dashboard page-enter">
       <section aria-labelledby="overview-title" className="overview-section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">VISÃO GERAL <span>·</span> SEMANA 01</p>
+            <p className="eyebrow">VISÃO GERAL <span>·</span> SEMANA {String(campaign.calendar.week).padStart(2, '0')}</p>
             <h2 id="overview-title">O país, agora.</h2>
           </div>
           <div className="live-indicator"><span /> Brasília, DF <b>·</b> ao vivo</div>
