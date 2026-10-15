@@ -1,5 +1,6 @@
 import { economicRanges, economicRules } from '../data/campaignConfig'
 import { budgetSectorCatalog, initialTaxes, sectorEconomicWeights, taxReformProposal } from '../data/economy'
+import { formatBRLMoney } from '../utils/money'
 import type {
   AnnualBudget,
   BudgetSector,
@@ -304,7 +305,7 @@ function createLoan(
       availableFunds: campaign.economy.availableFunds + terms.amount,
       indicators: { ...campaign.economy.indicators, publicDebt: campaign.economy.indicators.publicDebt + terms.amount },
       loans: [...campaign.economy.loans, loan],
-      lastMonthlyReport: [`Empréstimo de ${terms.amount} u. contratado com ${terms.lender}; taxa anual ${terms.annualInterestRate}%, prazo ${terms.termMonths} meses.`, ...campaign.economy.lastMonthlyReport].slice(0, 8),
+      lastMonthlyReport: [`Empréstimo de ${formatBRLMoney(terms.amount)} contratado com ${terms.lender}; taxa anual ${terms.annualInterestRate}%, prazo ${terms.termMonths} meses.`, ...campaign.economy.lastMonthlyReport].slice(0, 8),
     },
     country: { ...campaign.country, budget: campaign.country.budget + terms.amount },
   }
@@ -346,7 +347,7 @@ export function deferEconomicPayments(campaign: CampaignState): CampaignState | 
     economy: {
       ...campaign.economy,
       deferredPayments: campaign.economy.deferredPayments + economicRules.deferredPaymentAmount,
-      lastMonthlyReport: [`Medida emergencial: ${economicRules.deferredPaymentAmount} u. de compromissos adiadas para o próximo mês; confiança e execução serão pressionadas.`, ...campaign.economy.lastMonthlyReport].slice(0, 8),
+      lastMonthlyReport: [`Medida emergencial: ${formatBRLMoney(economicRules.deferredPaymentAmount)} em compromissos adiados para o próximo mês; confiança e execução serão pressionadas.`, ...campaign.economy.lastMonthlyReport].slice(0, 8),
     },
     country: {
       ...campaign.country,
@@ -356,7 +357,7 @@ export function deferEconomicPayments(campaign: CampaignState): CampaignState | 
     turn: {
       ...campaign.turn,
       availableActionPoints: campaign.turn.availableActionPoints - economicRules.deferredPaymentActionPoints,
-      actionsTaken: [...campaign.turn.actionsTaken, `Adiar ${economicRules.deferredPaymentAmount} u. de compromissos para o próximo mês`],
+      actionsTaken: [...campaign.turn.actionsTaken, `Adiar ${formatBRLMoney(economicRules.deferredPaymentAmount)} em compromissos para o próximo mês`],
     },
   }
 }
@@ -379,7 +380,7 @@ export function applyEconomicDecision(
       ...campaign,
       economy: {
         ...campaign.economy,
-        pendingBudgetRequests: [`${sector.name}: pedido de ${effect.amount} u.; sujeito à próxima janela de revisão.`, ...campaign.economy.pendingBudgetRequests].slice(0, 8),
+        pendingBudgetRequests: [`${sector.name}: pedido de ${formatBRLMoney(effect.amount)}; sujeito à próxima janela de revisão.`, ...campaign.economy.pendingBudgetRequests].slice(0, 8),
         pressures: { ...campaign.economy.pressures, notes: [...campaign.economy.pressures.notes, effect.note] },
       },
     }
@@ -390,7 +391,7 @@ export function applyEconomicDecision(
     pressures.inflation += effect.inflation
   } else if (effect.kind === 'public-service-strike') {
     pressures.growth -= 0.15 * effect.months
-    pressures.expenses += 2 * effect.months
+    pressures.expenses += 20 * effect.months
     pressures.notes.push('Paralisação reduziu entregas e acrescentou custo de negociação e continuidade.')
   } else if (effect.kind === 'food-price-pressure') {
     pressures.inflation += effect.inflation
@@ -574,13 +575,13 @@ export function closeEconomicMonth(campaign: CampaignState): { campaign: Campaig
     incomeInequality: Math.round(clamp(previous.incomeInequality + inequalityChange, 20, 80) * 10) / 10,
   }
   const report = [
-    `Receita de ${revenue} u. e despesa de ${expenses} u.; saldo ${fiscalBalance >= 0 ? 'superavitário' : 'deficitário'} em ${fiscalBalance} u.`,
+    `Receita de ${formatBRLMoney(revenue)} e despesa de ${formatBRLMoney(expenses)}; saldo ${fiscalBalance >= 0 ? 'superavitário' : 'deficitário'} em ${formatBRLMoney(fiscalBalance)}.`,
     `Execução ministerial e composição do orçamento: custo setorial médio ${costWeighted.toFixed(2)}; execução financiada de ${Math.round(sectorFundingRatio * 100)}%.`,
     `Confiança ${context.publicTrust}, integridade ${context.publicIntegrity}, polarização ${context.polarization} e estabilidade ${context.institutionalStability} influenciaram inflação, crescimento e execução.`,
-    `Dívida em ${indicators.publicDebt} u. (${debtRisk.toFixed(1)} vezes a receita anual); juros pagos ${interestPaid} u.${unpaidInterest ? ` Juros não pagos capitalizados: ${unpaidInterest} u.` : ''}`,
-    ...(projectExpensesPaid > 0 ? [`Projetos públicos executaram ${projectExpensesPaid.toFixed(1)} u. já descontadas do caixa semanal.`] : []),
+    `Dívida de ${formatBRLMoney(indicators.publicDebt)} (${debtRisk.toFixed(1)} vezes a receita anual); juros pagos ${formatBRLMoney(interestPaid)}.${unpaidInterest ? ` Juros não pagos capitalizados: ${formatBRLMoney(unpaidInterest)}.` : ''}`,
+    ...(projectExpensesPaid > 0 ? [`Projetos públicos executaram ${formatBRLMoney(projectExpensesPaid)} já descontados do caixa semanal.`] : []),
     `Mudanças do mês: crescimento ${growthChange >= 0 ? '+' : ''}${growthChange.toFixed(1)} p.p.; inflação ${inflationChange >= 0 ? '+' : ''}${inflationChange.toFixed(1)} p.p.; desemprego ${unemploymentChange >= 0 ? '+' : ''}${unemploymentChange.toFixed(1)} p.p.; desigualdade ${inequalityChange >= 0 ? '+' : ''}${inequalityChange.toFixed(1)} p.p.`,
-    ...(unpaidCommitments > 0 ? [`Compromissos não financiados de ${Math.round(unpaidCommitments)} u. foram adiados; nenhuma despesa excedeu o caixa disponível.`] : []),
+    ...(unpaidCommitments > 0 ? [`Compromissos não financiados de ${formatBRLMoney(unpaidCommitments)} foram adiados; nenhuma despesa excedeu o caixa disponível.`] : []),
     ...economy.pressures.notes,
   ]
   if (debtRisk >= 4) report.push('Risco fiscal elevado: dívida acima de quatro vezes a receita anual pode pressionar confiança, custo de crédito e apoio político.')

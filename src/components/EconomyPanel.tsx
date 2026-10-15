@@ -3,12 +3,13 @@ import { ArrowDown, ArrowUp, Banknote, ChartNoAxesCombined, Landmark, Scale } fr
 import { economicRules } from '../data/campaignConfig'
 import { canReviseBudget } from '../engine/economy'
 import type { CampaignState, EconomicIndicators } from '../state/types'
+import { formatBRLMoney, formatBRLMoneyDelta } from '../utils/money'
 
 const indicatorMeta: Array<{ id: keyof EconomicIndicators; label: string; suffix: string }> = [
-  { id: 'publicRevenue', label: 'Receitas públicas', suffix: ' u./mês' },
-  { id: 'publicExpenses', label: 'Despesas públicas', suffix: ' u./mês' },
-  { id: 'fiscalBalance', label: 'Déficit / superávit', suffix: ' u./mês' },
-  { id: 'publicDebt', label: 'Dívida pública', suffix: ' u.' },
+  { id: 'publicRevenue', label: 'Receitas públicas', suffix: '' },
+  { id: 'publicExpenses', label: 'Despesas públicas', suffix: '' },
+  { id: 'fiscalBalance', label: 'Déficit / superávit', suffix: '' },
+  { id: 'publicDebt', label: 'Dívida pública', suffix: '' },
   { id: 'growth', label: 'Crescimento', suffix: '%' },
   { id: 'inflation', label: 'Inflação', suffix: '%' },
   { id: 'unemployment', label: 'Desemprego', suffix: '%' },
@@ -71,7 +72,7 @@ export default function EconomyPanel({
     <main className="economy-panel page-enter">
       <header className="economy-heading">
         <div><p className="eyebrow">TESOURO NACIONAL <span>·</span> {campaign.calendar.month.toUpperCase()} DE {campaign.calendar.year}</p><h1>Economia</h1></div>
-        <div className="economy-cash"><Banknote aria-hidden="true" size={17} /><span>Caixa disponível<strong>{economy.availableFunds.toFixed(1)} u.</strong></span></div>
+        <div className="economy-cash"><Banknote aria-hidden="true" size={17} /><span>Caixa disponível<strong>{formatBRLMoney(economy.availableFunds)}</strong></span></div>
       </header>
 
       <section aria-label="Indicadores econômicos" className="economy-indicators">
@@ -83,10 +84,10 @@ export default function EconomyPanel({
           return (
             <article className="economy-indicator-card" key={meta.id}>
               <span>{meta.label}</span>
-              <strong>{current.toFixed(1)}{meta.suffix}</strong>
+              <strong>{(['publicRevenue', 'publicExpenses', 'fiscalBalance', 'publicDebt'] as Array<keyof EconomicIndicators>).includes(meta.id) ? formatBRLMoney(current) : current.toFixed(1) + meta.suffix}</strong>
               <small aria-label={`Tendência: ${direction}`}>
                 {delta > 0 ? <ArrowUp aria-hidden="true" size={12} /> : delta < 0 ? <ArrowDown aria-hidden="true" size={12} /> : <span aria-hidden="true">—</span>}
-                {direction} {delta ? `${Math.abs(delta).toFixed(1)} desde o último mês` : 'no último mês'}
+                {direction} {delta ? `${(['publicRevenue', 'publicExpenses', 'fiscalBalance', 'publicDebt'] as Array<keyof EconomicIndicators>).includes(meta.id) ? formatBRLMoneyDelta(Math.abs(delta)) : Math.abs(delta).toFixed(1)} desde o último mês` : 'no último mês'}
               </small>
               <TrendChart campaign={campaign} indicator={meta.id} />
             </article>
@@ -99,14 +100,14 @@ export default function EconomyPanel({
           <div><p className="eyebrow">CICLO ANUAL · {economy.annualBudget.year}</p><h2 id="economy-budget-title">Orçamento por setor</h2></div>
           <span className="executive-action-type"><Landmark aria-hidden="true" size={12} /> {economicActionType}</span>
         </div>
-        <p className="economy-caption">Envelope anual: {economy.annualBudget.total} u. · compromissos fixos: {economy.annualBudget.fixedCommitments} u. · execução mensal financiada pelo caixa.</p>
+        <p className="economy-caption">Envelope anual: {formatBRLMoney(economy.annualBudget.total)} · compromissos fixos: {formatBRLMoney(economy.annualBudget.fixedCommitments)} · execução mensal financiada pelo caixa.</p>
         <div className="economy-sector-list">
           {economy.annualBudget.sectors.map((sector) => {
             const share = shares[sector.id] ?? sector.share
             const execution = sector.annualAllocation > 0 ? Math.min(100, sector.executedThisYear / sector.annualAllocation * 100) : 0
             return (
               <div className="economy-sector-row" key={sector.id}>
-                <div className="economy-sector-title"><strong>{sector.name}</strong><span>{sector.annualAllocation} u. · executado {sector.executedThisYear.toFixed(1)} u.</span></div>
+                <div className="economy-sector-title"><strong>{sector.name}</strong><span>{formatBRLMoney(sector.annualAllocation)} · executado {formatBRLMoney(sector.executedThisYear)}</span></div>
                 <div aria-label={`${execution.toFixed(0)}% executado`} className="economy-progress"><span style={{ width: `${execution}%` }} /></div>
                 <label className="economy-share-input">{share}%<input aria-label={`Percentual do setor ${sector.name}`} max={economicRules.maximumSectorShare} min={economicRules.minimumSectorShare} onChange={(event) => setShares((current) => ({ ...current, [sector.id]: Number(event.target.value) }))} step="1" type="number" value={share} /></label>
               </div>
@@ -151,21 +152,21 @@ export default function EconomyPanel({
         </div>
         <div className="economy-debt-overview">
           <span>Dívida / receita anual<strong>{debtRatio.toFixed(2)}×</strong></span>
-          <span>Parcelas mensais contratadas<strong>{monthlyPayments.toFixed(1)} u.</strong></span>
-          <span>Pagamentos adiados<strong>{economy.deferredPayments.toFixed(1)} u.</strong></span>
+          <span>Parcelas mensais contratadas<strong>{formatBRLMoney(monthlyPayments)}</strong></span>
+          <span>Pagamentos adiados<strong>{formatBRLMoney(economy.deferredPayments)}</strong></span>
         </div>
         {economy.loans.length ? (
           <div className="economy-loan-list">
             {economy.loans.map((loan) => (
-              <article key={loan.id}><strong>{loan.lender}</strong><span>{loan.outstandingPrincipal.toFixed(1)} u. restantes · {loan.annualInterestRate}% a.a. · {loan.remainingMonths} meses</span><small>{loan.conditions.join(' ')}</small></article>
+              <article key={loan.id}><strong>{loan.lender}</strong><span>{formatBRLMoney(loan.outstandingPrincipal)} restantes · {loan.annualInterestRate}% a.a. · {loan.remainingMonths} meses</span><small>{loan.conditions.join(' ')}</small></article>
             ))}
           </div>
         ) : <p className="economy-caption">Nenhum empréstimo contratado.</p>}
         {cashIsLow && (
           <div className="economy-emergency-actions">
             <p>Caixa baixo. As alternativas são limitadas e geram custos futuros.</p>
-            <button className="economy-button" disabled={campaign.turn.availableActionPoints < economicRules.emergencyLoanActionPoints || campaign.country.politicalCapital < economicRules.emergencyLoanPoliticalCapital} onClick={onEmergencyLoan} type="button">Crédito emergencial: {economicRules.emergencyLoanAmount} u., juros de {economicRules.emergencyLoanAnnualInterestRate}%, custa {economicRules.emergencyLoanActionPoints} PA e {economicRules.emergencyLoanPoliticalCapital} de capital político</button>
-            <button className="economy-button economy-button-secondary" disabled={campaign.turn.availableActionPoints < economicRules.deferredPaymentActionPoints || campaign.country.politicalCapital < economicRules.deferredPaymentPoliticalCapital || economy.deferredPayments > 0} onClick={onDeferPayments} type="button">Adiar {economicRules.deferredPaymentAmount} u. de compromissos: custa {economicRules.deferredPaymentActionPoints} PA e {economicRules.deferredPaymentPoliticalCapital} de capital político</button>
+            <button className="economy-button" disabled={campaign.turn.availableActionPoints < economicRules.emergencyLoanActionPoints || campaign.country.politicalCapital < economicRules.emergencyLoanPoliticalCapital} onClick={onEmergencyLoan} type="button">Crédito emergencial: {formatBRLMoney(economicRules.emergencyLoanAmount)}, juros de {economicRules.emergencyLoanAnnualInterestRate}%, custa {economicRules.emergencyLoanActionPoints} PA e {economicRules.emergencyLoanPoliticalCapital} de capital político</button>
+            <button className="economy-button economy-button-secondary" disabled={campaign.turn.availableActionPoints < economicRules.deferredPaymentActionPoints || campaign.country.politicalCapital < economicRules.deferredPaymentPoliticalCapital || economy.deferredPayments > 0} onClick={onDeferPayments} type="button">Adiar {formatBRLMoney(economicRules.deferredPaymentAmount)} em compromissos: custa {economicRules.deferredPaymentActionPoints} PA e {economicRules.deferredPaymentPoliticalCapital} de capital político</button>
           </div>
         )}
         {economy.congressProposals.length > 0 && <p className="economy-action-label">Propostas legislativas registradas: {economy.congressProposals.join(' · ')}.</p>}
