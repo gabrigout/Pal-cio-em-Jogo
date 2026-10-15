@@ -20,20 +20,20 @@ Atualizado conforme `docs/STATUS.md` em 2026-10-15. A fundação jogável (Fase 
 
 - **Executivo e ministérios: implementados.** Há 17 ministérios de referência, ministros e candidatos ficcionais, nomeação, negociação e exoneração, decisões executivas, desempenho e fechamento mensal, além de proposta de reorganização sujeita ao Congresso. Implementação principal em `src/engine/executive.ts`, `src/data/ministries.ts`, `src/data/executiveDecisions.ts` e `src/components/ExecutivePanel.tsx`.
 - **Economia e orçamento base: implementados.** Há indicadores e histórico, orçamento anual por setor e dotações ministeriais, execução mensal, ajustes tributários limitados, propostas legislativas, empréstimos e pagamentos adiados. Implementação principal em `src/engine/economy.ts`, `src/data/economy.ts`, `src/data/economicDecisions.ts` e `src/components/EconomyPanel.tsx`. Isso ainda não equivale ao sistema econômico completo previsto no documento mestre.
-- **Políticas públicas e projetos: primeira versão implementada e validada na branch `codex/phase-2a-public-projects`.**
-- **Sociedade e grupos de pressão: não implementados como sistema.** Não há estado serializável de classes/grupos nem cálculo de aprovação por grupo.
+- **Políticas públicas e projetos: implementados e validados na base da branch `codex/phase-2a-public-projects`.**
+- **Sociedade e grupos de pressão: primeira versão implementada na branch `codex/phase-2b-society-finance`; validação final pendente.** O sistema acompanha cinco classes, sete grupos organizados, diálogo/acordos, aprovação, pressão, manifestação e paralisação.
 
-Brasil, Estado/Executivo, Economia e Políticas Públicas têm telas funcionais. Sociedade, Relações e Notícias/Histórico seguem como placeholders. A Fase 2A foi validada com 37 testes e build aprovado; save v5 migra campanhas das versões anteriores.
+Brasil, Estado/Executivo, Economia, Políticas Públicas e Sociedade têm telas funcionais na branch de trabalho. Relações e Notícias/Histórico seguem como placeholders. A migração de saves foi atualizada para v6, incluindo conversão de valores monetários e criação determinística do estado social.
 
 ## Restante da Fase 2
 
-A etapa **2A — Políticas públicas e projetos** está validada na branch `codex/phase-2a-public-projects`. Próxima etapa: implementar 2B em uma branch separada.
+A Fase 2A está na base da branch `codex/phase-2a-public-projects`; a Fase 2B e revisão financeira estão na branch `codex/phase-2b-society-finance`. Não mesclar até `npm run test` e `npm run build` passarem na última execução.
 
 ### 2A. Políticas públicas e projetos — implementação inicial na branch de trabalho
 
-Referência: seção 11 do Documento Mestre. Catálogo com 15 programas por setor, investimentos e prioridade, estado serializável, execução semanal, avaliação mensal, histórico, riscos contextuais, custos finitos e migração de save. GitHub Actions confirmou 37 testes e build aprovado no commit `72a3a37`.
+Referência: seção 11 do Documento Mestre. Catálogo com 15 programas por setor, investimentos e prioridade, estado serializável, execução semanal, avaliação mensal, histórico, riscos contextuais, custos finitos e migração de save. A Fase 2A havia passado 37 testes e build no commit `319dae2`; a validação da Fase 2B está em andamento.
 
-### 2B. Sociedade e grupos de pressão — próximo passo
+### 2B. Sociedade e grupos de pressão — implementação inicial na branch de trabalho
 
 Referência: seção 12 de `docs/Palacio_em_Jogo_Documento_Mestre.md`.
 

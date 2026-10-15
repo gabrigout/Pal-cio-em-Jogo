@@ -10,7 +10,7 @@ O jogador inicia na Presidência e governa em turnos semanais, tomando decisões
 
 ## Última etapa registrada
 
-A aba Economia foi implementada e integrada à campanha: indicadores e histórico, orçamento anual com execução setorial e dotações ministeriais, ajustes tributários limitados, propostas legislativas sem tramitação, caixa e empréstimos finitos, fechamento mensal contextualizado, seis decisões econômicas e interface com tendências, gráficos SVG e explicações. A migração determinística para saves v4 preserva campanhas anteriores.
+A aba Economia foi implementada e integrada à campanha: indicadores e histórico, orçamento anual com execução setorial e dotações ministeriais, ajustes tributários limitados, propostas legislativas sem tramitação, caixa e empréstimos finitos, fechamento mensal contextualizado, seis decisões econômicas e interface com tendências, gráficos SVG e explicações. A migração v6 acrescenta classes e grupos sociais e converte valores monetários de saves legados para reais.
 
 Validação: `npm run test` passou com 33 testes e `npm run build` concluiu com sucesso. Commit: `d75f12e` (`Implement economic governance system`, reaplicado sobre `origin/main`).
 
@@ -77,7 +77,7 @@ npm run build
 ## Plano de fases
 
 - **Fase 1 — Fundação jogável: completa.** Criação de campanha, dashboard, calendário, recursos/pontos, decisões, avanço semanal, notícias e saves múltiplos estão implementados. As ações e os conteúdos seguem como exemplos.
-- **Fase 2 — Governo e execução: parcial.** Executivo, economia e primeira versão de Políticas Públicas/Projetos estão implementados; Sociedade e grupos de pressão continuam pendentes.
+- **Fase 2 — Governo e execução: implementação 2A+2B em validação.** Executivo, economia, políticas públicas e primeira versão da simulação social estão na branch de trabalho; validação final do build pendente.
 - **Fase 3 — Instituições e crises: não iniciada como sistema completo.** Criar procedimentos próprios do Congresso, Judiciário e demais órgãos, respeitando competências.
 - **Fase 4 — Política viva: parcial.** Há cartões de reação, notícias e encadeamentos; faltam personagens autônomos, alianças, memória, imprensa sistêmica e modelos globais de corrupção/interesses.
 - **Fase 5 — Eleições e Maré Ideológica: não iniciada.** Pesquisas, candidatos, regras eleitorais, composição pós-eleição e ciclo de oito anos.
@@ -85,9 +85,9 @@ npm run build
 
 ## Próximo passo
 
-Próximo passo: Fase 2B — Sociedade e grupos de pressão. Modelar classes econômicas e grupos organizados separadamente, conectar interesses e aprovação por grupo às políticas e acontecimentos, e manter efeitos na simulação existente.
+Próximo passo, após validar esta branch: fazer revisão de balanceamento econômico com campanhas longas e então iniciar a Fase 3 — Congresso, legislação e orçamento legislativo.
 
 
-## Trabalho em andamento — Fase 2A
+## Trabalho em andamento — Fase 2B e revisão financeira
 
-A branch `codex/phase-2a-public-projects` inclui catálogo de 15 programas, carteira serializável, execução semanal, revisão mensal, histórico, pausa/retomada e ajuste de prioridade; os custos dependem do caixa, saldo anual do setor, capital político, capacidade administrativa e pontos de ação. Save v5 migra campanhas anteriores. **GitHub Actions: 37 testes passaram e `npm run build` concluiu com sucesso no commit `72a3a37`.**
+A branch `codex/phase-2b-society-finance` conclui a primeira versão do sistema social: cinco classes econômicas, sete grupos organizados, diálogo e compromissos setoriais pagos, pressão pública, manifestações/paralisações e revisão mensal. A economia agora usa R$ bilhões como unidade interna, mostra valores em R$ mi/bi/tri, normaliza caixa por meses de cobertura e migra saves anteriores para v6. A fase depende da validação final de testes/build pelo GitHub Actions.

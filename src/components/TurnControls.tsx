@@ -152,7 +152,7 @@ export default function TurnControls({ campaign, data, onRunAction, onChooseDeci
         <div className="global-resources">
           <div className="global-resource">
             <Banknote aria-hidden="true" size={15} />
-            <span><small>ORÇAMENTO</small><strong>{campaign.country.budget} <i>u.</i></strong></span>
+            <span><small>CAIXA DISPONÍVEL</small><strong>{formatBRLMoney(campaign.country.budget)}</strong></span>
           </div>
           <div className="global-resource">
             <Coins aria-hidden="true" size={15} />

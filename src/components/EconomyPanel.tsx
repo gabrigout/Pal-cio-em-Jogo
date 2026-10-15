@@ -87,7 +87,7 @@ export default function EconomyPanel({
               <strong>{(['publicRevenue', 'publicExpenses', 'fiscalBalance', 'publicDebt'] as Array<keyof EconomicIndicators>).includes(meta.id) ? formatBRLMoney(current) : current.toFixed(1) + meta.suffix}</strong>
               <small aria-label={`Tendência: ${direction}`}>
                 {delta > 0 ? <ArrowUp aria-hidden="true" size={12} /> : delta < 0 ? <ArrowDown aria-hidden="true" size={12} /> : <span aria-hidden="true">—</span>}
-                {direction} {delta ? `${(['publicRevenue', 'publicExpenses', 'fiscalBalance', 'publicDebt'] as Array<keyof EconomicIndicators>).includes(meta.id) ? formatBRLMoneyDelta(Math.abs(delta)) : Math.abs(delta).toFixed(1)} desde o último mês` : 'no último mês'}
+                {direction} {delta ? `${(['publicRevenue', 'publicExpenses', 'fiscalBalance', 'publicDebt'] as Array<keyof EconomicIndicators>).includes(meta.id) ? formatBRLMoney(Math.abs(delta)) : Math.abs(delta).toFixed(1)} desde o último mês` : 'no último mês'}
               </small>
               <TrendChart campaign={campaign} indicator={meta.id} />
             </article>
