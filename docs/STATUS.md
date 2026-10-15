@@ -12,7 +12,7 @@ O jogador inicia na Presidência e governa em turnos semanais, tomando decisões
 
 A aba Economia foi implementada e integrada à campanha: indicadores e histórico, orçamento anual com execução setorial e dotações ministeriais, ajustes tributários limitados, propostas legislativas sem tramitação, caixa e empréstimos finitos, fechamento mensal contextualizado, seis decisões econômicas e interface com tendências, gráficos SVG e explicações. A migração determinística para saves v4 preserva campanhas anteriores.
 
-Validação: `npm run test` passou com 33 testes e `npm run build` concluiu com sucesso. Commit: `d071ce4` (`Implement economic governance system`).
+Validação: `npm run test` passou com 33 testes e `npm run build` concluiu com sucesso. Commit: `d75f12e` (`Implement economic governance system`, reaplicado sobre `origin/main`).
 
 ## Implementado
 
