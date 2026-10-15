@@ -220,9 +220,9 @@ function formatLegacyMoneyText(raw: string): string {
   })
 }
 
-function scaleLegacyMoneyDeep(value: unknown, path: string[] = [], recordContext?: Record<string, unknown>): unknown {
+function scaleLegacyMoneyDeep(value: unknown, path: string[] = []): unknown {
   if (typeof value === 'string') return formatLegacyMoneyText(value)
-  if (Array.isArray(value)) return value.map((item) => scaleLegacyMoneyDeep(item, path, recordContext))
+  if (Array.isArray(value)) return value.map((item) => scaleLegacyMoneyDeep(item, path))
   if (!isRecord(value)) return value
 
   const result: Record<string, unknown> = {}
@@ -232,7 +232,7 @@ function scaleLegacyMoneyDeep(value: unknown, path: string[] = [], recordContext
     if (typeof item === 'number' && (legacyMoneyKeys.has(key) || indicatorMoney || loanMoney)) {
       result[key] = scaleLegacyMoneyNumber(item)
     } else {
-      result[key] = scaleLegacyMoneyDeep(item, [...path, key], value)
+      result[key] = scaleLegacyMoneyDeep(item, [...path, key])
     }
   }
   return result

@@ -80,13 +80,13 @@ test('crédito emergencial aumenta caixa e dívida com juros e custo de ação',
 
   assert.ok(loan)
   if (!loan) return
-  assert.equal(loan.economy.availableFunds, 24)
-  assert.equal(loan.country.budget, 24)
-  assert.equal(loan.economy.indicators.publicDebt, lowCash.economy.indicators.publicDebt + 24)
+  assert.equal(loan.economy.availableFunds, 240)
+  assert.equal(loan.country.budget, 240)
+  assert.equal(loan.economy.indicators.publicDebt, lowCash.economy.indicators.publicDebt + 240)
   assert.equal(loan.economy.loans[0]?.annualInterestRate, 9.5)
   assert.equal(loan.turn.availableActionPoints, lowCash.turn.availableActionPoints - 1)
   const closed = closeEconomicMonth(loan)
-  assert.ok(closed.campaign.economy.loans[0]?.outstandingPrincipal < 24)
+  assert.ok(closed.campaign.economy.loans[0]?.outstandingPrincipal < 240)
   assert.ok(closed.report.some((entry) => /juros pagos/.test(entry)))
 })
 
