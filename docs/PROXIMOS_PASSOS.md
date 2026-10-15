@@ -6,7 +6,7 @@ Este documento permite que outra IA continue o projeto sem depender do históric
 
 - Trabalhe em **um pedido por vez** e implemente partes pequenas, completas e verificáveis. Não tente concluir uma fase inteira em uma única mudança.
 - Ao terminar cada parte, execute os testes pertinentes e `npm run build`; corrija falhas antes de encerrar. Atualize `docs/STATUS.md` com o que foi feito, o resultado dos testes e o próximo passo; então crie um commit.
-- O estado da campanha é serializado e salvo automaticamente. A versão atual é `versaoDoSave: 4`, definida em `src/persistence/campaignRepository.ts`. Sempre que mudar o formato do estado salvo, aumente a versão e implemente/teste a migração de saves antigos. Preserve campanhas e dados existentes; migrações devem ser determinísticas quando gerarem valores.
+- O estado da campanha é serializado e salvo automaticamente. A versão atual é `versaoDoSave: 5`, definida em `src/persistence/campaignRepository.ts`. Sempre que mudar o formato do estado salvo, aumente a versão e implemente/teste a migração de saves antigos. Preserve campanhas e dados existentes; migrações devem ser determinísticas quando gerarem valores.
 - Siga a arquitetura existente: estado e tipos em `src/state/`, regras e simulação em `src/engine/`, catálogos e configuração em `src/data/`, apresentação em `src/components/` e persistência/migrações em `src/persistence/`. Componentes exibem estado e encaminham ações; não contêm lógica política.
 - Use somente as cores oficiais do partido ativo e tons neutros na interface. Não introduza cores fixas para sucesso/alerta/erro; comunique estados também por rótulos e ícones. Mantenha contraste e legibilidade.
 - Preserve as regras institucionais e a separação entre pontos de ação, dinheiro, capital político e capacidade administrativa; aprovação, Maré Ideológica e força eleitoral também são indicadores diferentes. Partidos, eventos e acusações são ficcionais e satíricos.
@@ -20,20 +20,20 @@ Atualizado conforme `docs/STATUS.md` em 2026-10-15. A fundação jogável (Fase 
 
 - **Executivo e ministérios: implementados.** Há 17 ministérios de referência, ministros e candidatos ficcionais, nomeação, negociação e exoneração, decisões executivas, desempenho e fechamento mensal, além de proposta de reorganização sujeita ao Congresso. Implementação principal em `src/engine/executive.ts`, `src/data/ministries.ts`, `src/data/executiveDecisions.ts` e `src/components/ExecutivePanel.tsx`.
 - **Economia e orçamento base: implementados.** Há indicadores e histórico, orçamento anual por setor e dotações ministeriais, execução mensal, ajustes tributários limitados, propostas legislativas, empréstimos e pagamentos adiados. Implementação principal em `src/engine/economy.ts`, `src/data/economy.ts`, `src/data/economicDecisions.ts` e `src/components/EconomyPanel.tsx`. Isso ainda não equivale ao sistema econômico completo previsto no documento mestre.
-- **Políticas públicas e projetos: implementação inicial na branch `codex/phase-2a-public-projects`; validação automatizada pendente.**
+- **Políticas públicas e projetos: primeira versão implementada e validada na branch `codex/phase-2a-public-projects`.**
 - **Sociedade e grupos de pressão: não implementados como sistema.** Não há estado serializável de classes/grupos nem cálculo de aprovação por grupo.
 
-No código, apenas Brasil, Estado/Executivo e Economia têm telas funcionais. Políticas Públicas, Sociedade, Relações e Notícias/Histórico ainda caem na tela genérica com título, em `src/App.tsx`. A última etapa registrada em `docs/STATUS.md` foi a Economia, com 33 testes e build aprovados; save v4 e migrações anteriores. Confira o status e rode a validação no começo de cada nova etapa, pois o repositório pode ter avançado.
+Brasil, Estado/Executivo, Economia e Políticas Públicas têm telas funcionais. Sociedade, Relações e Notícias/Histórico seguem como placeholders. A Fase 2A foi validada com 37 testes e build aprovado; save v5 migra campanhas das versões anteriores.
 
 ## Restante da Fase 2
 
-A etapa **2A — Políticas públicas e projetos** está na branch `codex/phase-2a-public-projects`. Confirme testes e build antes de mesclar; depois implemente 2B em outra branch.
+A etapa **2A — Políticas públicas e projetos** está validada na branch `codex/phase-2a-public-projects`. Próxima etapa: implementar 2B em uma branch separada.
 
 ### 2A. Políticas públicas e projetos — implementação inicial na branch de trabalho
 
-Referência: seção 11 do Documento Mestre. Catálogo por setor, investimento e prioridade ajustáveis, estado serializável, execução semanal, avaliação mensal, histórico, riscos contextuais, custos finitos e migração de save. Testes/build devem passar antes de mesclar.
+Referência: seção 11 do Documento Mestre. Catálogo com 15 programas por setor, investimentos e prioridade, estado serializável, execução semanal, avaliação mensal, histórico, riscos contextuais, custos finitos e migração de save. GitHub Actions confirmou 37 testes e build aprovado no commit `72a3a37`.
 
-### 2B. Sociedade e grupos de pressão
+### 2B. Sociedade e grupos de pressão — próximo passo
 
 Referência: seção 12 de `docs/Palacio_em_Jogo_Documento_Mestre.md`.
 
