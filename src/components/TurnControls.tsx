@@ -22,6 +22,7 @@ import {
 import type { LucideIcon } from 'lucide-react'
 import { getOptionConsequences } from '../engine/turn'
 import type { CampaignState, DecisionIcon, DecisionResult, NarrativeDecision, TurnDashboardData } from '../state/types'
+import { formatBRLMoney, formatBRLMoneyDelta } from '../utils/money'
 
 const actionTypeLabels = {
   administrative: 'Ação administrativa do Executivo',
@@ -85,7 +86,7 @@ function DecisionChoiceCard({
             && !ministries.some((ministry) => ministry.id === option.executiveEffect?.ministryId && ministry.minister)
           const executiveOptionType = option.executiveEffect ? actionTypeLabels.administrative : null
           const consequences = getOptionConsequences(option).map((consequence) => ({
-            label: `${consequence.direction === 'up' ? '↑' : '↓'} ${consequence.amount > 0 ? '+' : ''}${consequence.amount} ${consequence.label}`,
+            label: (consequence.direction === 'up' ? '↑ ' : '↓ ') + (['Caixa disponível', 'Orçamento'].includes(consequence.label) ? formatBRLMoneyDelta(consequence.amount) : (consequence.amount > 0 ? '+' : '') + consequence.amount + ' ' + consequence.label),
             direction: consequence.direction,
           }))
           if (option.uncertainConsequences?.length) {
@@ -228,9 +229,9 @@ export default function TurnControls({ campaign, data, onRunAction, onChooseDeci
             <p>{data.monthlyEvent.description}</p>
             <div className="economy-balance-preview">
               <span><Scale aria-hidden="true" size={13} /> Previsão do balanço</span>
-              <span>Receitas <strong>+{data.monthlyEconomyPreview.revenue}</strong></span>
-              <span>Despesas <strong>−{data.monthlyEconomyPreview.expenses}</strong></span>
-              <span>Orçamento final <strong>{data.monthlyEconomyPreview.closingBudget} u.</strong></span>
+              <span>Receitas <strong>{formatBRLMoneyDelta(data.monthlyEconomyPreview.revenue)}</strong></span>
+              <span>Despesas <strong>{formatBRLMoney(data.monthlyEconomyPreview.expenses)}</strong></span>
+              <span>Caixa final <strong>{formatBRLMoney(data.monthlyEconomyPreview.closingBudget)}</strong></span>
             </div>
           </div>
           <DecisionChoiceCard

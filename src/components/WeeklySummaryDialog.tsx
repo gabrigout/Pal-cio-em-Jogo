@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Check, ChevronRight, Clock3, Coins, FileText, Landmark } from 'lucide-react'
 import type { WeeklySummary } from '../state/types'
+import { formatBRLMoney, formatBRLMoneyDelta } from '../utils/money'
 
 interface WeeklySummaryDialogProps {
   summary: WeeklySummary
@@ -29,7 +30,7 @@ export default function WeeklySummaryDialog({ summary, onDismiss }: WeeklySummar
             <ul className="summary-change-list">
               {summary.changes.map((change, index) => (
                 <li key={`${change.indicator}-${change.reason}-${index}`}>
-                  <span className="summary-change-value">{change.amount > 0 ? '+' : ''}{change.amount}</span>
+                  <span className="summary-change-value">{['budget', 'publicRevenue', 'publicExpenses', 'fiscalBalance', 'publicDebt'].includes(change.indicator) ? formatBRLMoneyDelta(change.amount) : (change.amount > 0 ? '+' : '') + change.amount}</span>
                   <span><strong>{change.label}</strong><small>{change.reason}</small></span>
                 </li>
               ))}
@@ -72,7 +73,7 @@ export default function WeeklySummaryDialog({ summary, onDismiss }: WeeklySummar
         {summary.economyBalance && (
           <section className="summary-economy">
             <Coins aria-hidden="true" size={16} />
-            <span><strong>Balanço do mês</strong><small>Orçamento {summary.economyBalance.openingBudget} + receitas {summary.economyBalance.revenue} − despesas {summary.economyBalance.expenses} = {summary.economyBalance.closingBudget} u.</small></span>
+            <span><strong>Balanço do mês</strong><small>Caixa inicial {formatBRLMoney(summary.economyBalance.openingBudget)} + receitas {formatBRLMoney(summary.economyBalance.revenue)} − despesas {formatBRLMoney(summary.economyBalance.expenses)} = {formatBRLMoney(summary.economyBalance.closingBudget)}</small></span>
           </section>
         )}
 
