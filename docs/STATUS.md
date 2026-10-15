@@ -8,7 +8,7 @@ O jogador inicia na Presidência e governa em turnos semanais, tomando decisões
 
 **Stack:** React 18, TypeScript 5, Vite 6 e `lucide-react`. Persistência local versionada em LocalStorage; não há backend, banco de dados nem API externa de IA. Os testes usam `node:test` com `tsx`.
 
-## Última etapa concluída
+## Última etapa registrada
 
 A aba Economia foi implementada e integrada à campanha: indicadores e histórico, orçamento anual com execução setorial e dotações ministeriais, ajustes tributários limitados, propostas legislativas sem tramitação, caixa e empréstimos finitos, fechamento mensal contextualizado, seis decisões econômicas e interface com tendências, gráficos SVG e explicações. A migração determinística para saves v4 preserva campanhas anteriores.
 
@@ -67,7 +67,7 @@ npm run build
 
 ## Pendências e retoques conhecidos
 
-- Políticas Públicas, Sociedade, Relações e Notícias/Histórico ainda mostram apenas o título da seção; programas e projetos ministeriais aguardam etapa posterior.
+- Políticas Públicas recebeu implementação inicial na branch `codex/phase-2a-public-projects`; Sociedade, Relações e Notícias/Histórico seguem como placeholders.
 - Alertas e cartões “Em andamento”, “Aguardando resposta” e “Encerrado” ainda usam conteúdo demonstrativo. Há textos/contadores estáticos no dashboard, como o total anunciado de atualizações.
 - As ações, decisões, reações e eventos são conteúdo inicial, sujeito a balanceamento. A economia implementa orçamento, dívida e execução base, mas não simula programas/projetos nem todo o sistema tributário e macroeconômico.
 - Personagens ainda não têm memória/autonomia real, relações persistentes ou efeitos de promessas; imprensa, investigações, crises entre poderes e eleições também não têm sistemas completos.
@@ -77,7 +77,7 @@ npm run build
 ## Plano de fases
 
 - **Fase 1 — Fundação jogável: completa.** Criação de campanha, dashboard, calendário, recursos/pontos, decisões, avanço semanal, notícias e saves múltiplos estão implementados. As ações e os conteúdos seguem como exemplos.
-- **Fase 2 — Governo e execução: parcial.** Executivo e sistema econômico/orçamentário base, nomeações, decisões ministeriais, cartões econômicos e desempenho mensal estão implementados. Faltam políticas/projetos e grupos sociais conectados aos recursos e indicadores.
+- **Fase 2 — Governo e execução: parcial.** Executivo e economia estão implementados; Políticas Públicas e Projetos estão na branch de trabalho, aguardando validação automatizada. Sociedade e grupos de pressão continuam pendentes.
 - **Fase 3 — Instituições e crises: não iniciada como sistema completo.** Criar procedimentos próprios do Congresso, Judiciário e demais órgãos, respeitando competências.
 - **Fase 4 — Política viva: parcial.** Há cartões de reação, notícias e encadeamentos; faltam personagens autônomos, alianças, memória, imprensa sistêmica e modelos globais de corrupção/interesses.
 - **Fase 5 — Eleições e Maré Ideológica: não iniciada.** Pesquisas, candidatos, regras eleitorais, composição pós-eleição e ciclo de oito anos.
@@ -86,3 +86,8 @@ npm run build
 ## Próximo passo
 
 Implementar a etapa inicial de Políticas Públicas: catálogo de programas e projetos por setor, propostas e acompanhamento de execução mensal, conectando custos e resultados ao orçamento, à capacidade administrativa e aos indicadores sem permitir gastos acima do caixa disponível.
+
+
+## Trabalho em andamento — Fase 2A
+
+A branch `codex/phase-2a-public-projects` inclui catálogo de programas, projetos serializáveis, execução semanal, revisão mensal, histórico e riscos contextuais, com integração a caixa, dotação setorial, capital político e capacidade administrativa. A versão do save passa para v5 com migração determinística das campanhas existentes. **Testes e build desta etapa ainda dependem da execução do GitHub Actions.**

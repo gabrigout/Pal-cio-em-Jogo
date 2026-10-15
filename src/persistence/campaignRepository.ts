@@ -6,7 +6,7 @@ import { initializeCampaignTurn } from '../engine/turn'
 import { calendarMonths } from '../state/initialState'
 import type { CampaignState, CampaignTurnState } from '../state/types'
 
-export const CURRENT_SAVE_VERSION = 4
+export const CURRENT_SAVE_VERSION = 5
 const SAVE_KEY_PREFIX = 'palacio-em-jogo:campaign:'
 
 export interface StorageLike {
@@ -115,6 +115,7 @@ function isEconomicIndicators(value: unknown): boolean {
 function isEconomicState(value: unknown): boolean {
   if (!isRecord(value) || !isEconomicIndicators(value.indicators)
     || !isNumber(value.availableFunds) || value.availableFunds < 0
+    || !isNumber(value.projectExpensesPaidThisMonth) || value.projectExpensesPaidThisMonth < 0
     || !isNumber(value.deferredPayments) || value.deferredPayments < 0
     || !isStringArray(value.congressProposals) || !isStringArray(value.socialEffects)
     || !isStringArray(value.pendingBudgetRequests) || !isStringArray(value.lastMonthlyReport)
@@ -190,6 +191,9 @@ function isWeeklySummary(value: unknown): boolean {
     && isStringArray(value.economicReport)
 }
 
+const projectHistoryTypes=['launch','milestone','delay','overrun','protest','investigation','conflict','early-success','priority-change','paused','resumed','completed']
+function isProjectEffectMap(v:unknown,keys:string[]):boolean{return isRecord(v)&&Object.entries(v).every(([k,n])=>keys.includes(k)&&isNumber(n))}
+function isPublicProject(v:unknown):boolean{if(!isRecord(v))return false;if(!['id','programId','name','sectorId','sectorName','ministryId','ministryName','summary','launchMonth'].every(k=>typeof v[k]==='string'))return false;if(!['low','normal','high'].includes(String(v.priority))||!['active','paused','completed','cancelled'].includes(String(v.status))||!['low','medium','high'].includes(String(v.riskLevel)))return false;const nums=['approvedInvestment','estimatedBudget','budgetSpent','baseDurationWeeks','durationWeeks','weeksElapsed','progress','politicalCapitalInvested','administrativeCapacityInvested','delayWeeks','launchYear','launchWeek'];if(!nums.every(k=>isNumber(v[k])))return false;if(Number(v.approvedInvestment)<=0||Number(v.estimatedBudget)<=0||Number(v.budgetSpent)<0||Number(v.budgetSpent)>Number(v.estimatedBudget)+.11||Number(v.baseDurationWeeks)<=0||Number(v.durationWeeks)<=0||Number(v.weeksElapsed)<0||Number(v.progress)<0||Number(v.progress)>100||Number(v.delayWeeks)<0||!Number.isInteger(v.launchYear)||!Number.isInteger(v.launchWeek))return false;if(!(typeof v.lastMonthlyReviewKey==='string'||v.lastMonthlyReviewKey===null)||!(typeof v.completedAt==='string'||v.completedAt===null)||typeof v.outcomesApplied!=='boolean')return false;if(!isProjectEffectMap(v.completionEffects,['presidentialApproval','congressSupport','executiveSupport','judiciaryRelation','economicOutlook','budget','politicalCapital','administrativeCapacity','institutionalStability','polarization','publicTrust','publicIntegrity','foreignRelations'])||!isProjectEffectMap(v.economicEffects,['growth','inflation','unemployment','incomeInequality'])||!isStringArray(v.risks)||!Array.isArray(v.history))return false;return v.history.every(e=>isRecord(e)&&typeof e.dateLabel==='string'&&projectHistoryTypes.includes(String(e.type))&&typeof e.title==='string'&&typeof e.summary==='string'&&['positive','warning','critical','neutral'].includes(String(e.tone)))}
 function isMinisterCandidate(value: unknown): boolean {
   if (!isRecord(value) || typeof value.id !== 'string' || typeof value.name !== 'string'
     || typeof value.partyId !== 'string' || typeof value.partyName !== 'string'
@@ -267,6 +271,7 @@ function isCampaignState(
   if (!Array.isArray(value.ministries)
     || (!allowEmptyMinistries && value.ministries.length === 0)
     || !value.ministries.every(isMinistry)
+    || !Array.isArray(value.projects) || !value.projects.every(isPublicProject)
     || !isStringArray(value.executiveProposals)) return false
   if (!isEconomicState(value.economy) && !allowMissingEconomy) return false
   return true
@@ -312,11 +317,14 @@ function migrateLegacyCampaign(value: unknown): CampaignState | null {
     ? value.theme
     : createCampaignTheme(party.colors[0], party.colors[1])
 
+  const normalizedEconomy = isRecord(value.economy) ? { ...value.economy, projectExpensesPaidThisMonth: isNumber(value.economy.projectExpensesPaidThisMonth) && value.economy.projectExpensesPaidThisMonth >= 0 ? value.economy.projectExpensesPaidThisMonth : 0 } : undefined
+
   const candidate = {
     ...value,
     country,
     theme,
     ministries: Array.isArray(value.ministries) ? value.ministries : [],
+    projects: Array.isArray(value.projects) && value.projects.every(isPublicProject) ? value.projects : [],
     executiveProposals: isStringArray(value.executiveProposals) ? value.executiveProposals : [],
     turn: isRecord(value.turn) ? { ...freshTurnState(), ...value.turn } : freshTurnState(),
     news: Array.isArray(value.news) ? value.news : dashboardNews.map((item) => ({ ...item })),
@@ -328,7 +336,7 @@ function migrateLegacyCampaign(value: unknown): CampaignState | null {
         economicReport: isStringArray(value.weeklySummary.economicReport) ? value.weeklySummary.economicReport : [],
       }
       : null,
-    economy: isEconomicState(value.economy) ? value.economy : undefined,
+    economy: isEconomicState(normalizedEconomy) ? normalizedEconomy as CampaignState['economy'] : undefined,
   }
 
   if (!isCampaignState(candidate, candidate.ministries.length === 0, true)) return null

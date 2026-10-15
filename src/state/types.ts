@@ -65,6 +65,7 @@ export interface CampaignState {
   country: CountryIndicators
   theme: CampaignTheme
   ministries: MinistryState[]
+  projects: PublicProjectState[]
   executiveProposals: string[]
   economy: EconomicState
   turn: CampaignTurnState
@@ -306,6 +307,7 @@ export interface EconomicPressures {
 export interface EconomicState {
   indicators: EconomicIndicators
   availableFunds: number
+  projectExpensesPaidThisMonth: number
   annualBudget: AnnualBudget
   taxes: EconomicTax[]
   loans: PublicLoan[]
@@ -317,6 +319,34 @@ export interface EconomicState {
   pressures: EconomicPressures
   deferredPayments: number
 }
+
+export type ProjectPriority = 'low' | 'normal' | 'high'
+export type PublicProjectStatus = 'active' | 'paused' | 'completed' | 'cancelled'
+export type ProjectRiskLevel = 'low' | 'medium' | 'high'
+export interface PublicProgramDefinition {
+  id: string; name: string; sectorId: string; ministryId: string; summary: string
+  minInvestment: number; maxInvestment: number; defaultInvestment: number; durationWeeks: number
+  politicalCapitalCost: number; administrativeCapacityCost: number; riskLevel: ProjectRiskLevel
+  completionEffects: Partial<Record<keyof CountryIndicators, number>>
+  economicEffects: Partial<Pick<EconomicIndicators, 'growth' | 'inflation' | 'unemployment' | 'incomeInequality'>>
+}
+export type ProjectHistoryType = 'launch' | 'milestone' | 'delay' | 'overrun' | 'protest' | 'investigation' | 'conflict' | 'early-success' | 'priority-change' | 'paused' | 'resumed' | 'completed'
+export interface PublicProjectHistoryEntry {
+  dateLabel: string; type: ProjectHistoryType; title: string; summary: string; tone: MetricTone
+}
+export interface PublicProjectState {
+  id: string; programId: string; name: string; sectorId: string; sectorName: string; ministryId: string; ministryName: string
+  summary: string; approvedInvestment: number; estimatedBudget: number; budgetSpent: number
+  baseDurationWeeks: number; durationWeeks: number; weeksElapsed: number; progress: number
+  priority: ProjectPriority; status: PublicProjectStatus; riskLevel: ProjectRiskLevel
+  politicalCapitalInvested: number; administrativeCapacityInvested: number; delayWeeks: number
+  launchYear: number; launchMonth: string; launchWeek: number; lastMonthlyReviewKey: string | null
+  completedAt: string | null; outcomesApplied: boolean
+  completionEffects: Partial<Record<keyof CountryIndicators, number>>
+  economicEffects: Partial<Pick<EconomicIndicators, 'growth' | 'inflation' | 'unemployment' | 'incomeInequality'>>
+  risks: string[]; history: PublicProjectHistoryEntry[]
+}
+export interface ProjectStartAvailability { allowed: boolean; reason: string | null; kickoffCost: number; estimatedBudget: number; durationWeeks: number }
 
 export type EconomicDecisionEffect =
   | { kind: 'market-confidence'; growth: number; inflation: number; note: string }

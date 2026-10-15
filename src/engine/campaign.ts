@@ -121,6 +121,7 @@ export function createCampaign(
     country: rollCountryIndicators(random),
     theme: createCampaignTheme(selection.colors[0], selection.colors[1]),
     ministries: [],
+    projects: [],
     executiveProposals: [],
     turn: {
       availableActionPoints: 0,

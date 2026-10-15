@@ -9,6 +9,7 @@ import { reactionEvents, scheduledNarrativeEvents } from '../data/reactionEvents
 import { calendarMonths } from '../state/initialState'
 import { applyExecutiveDecision, closeExecutiveMonth, proposeMinistryReorganization } from './executive'
 import { applyEconomicDecision, closeEconomicMonth, prepareEconomicYear } from './economy'
+import { advancePublicProjectsWeek, closePublicProjectsMonth } from './projects'
 import type {
   ActionAvailability,
   ActionPointCalculation,
@@ -545,6 +546,10 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
   workingCampaign = contextual.campaign
   changes.push(...contextual.changes)
   events.push(...contextual.changes.map((change) => change.reason))
+  const projectWeek = advancePublicProjectsWeek(workingCampaign)
+  workingCampaign = projectWeek.campaign
+  changes.push(...projectWeek.changes)
+  events.push(...projectWeek.events)
 
   const isMonthEnd = endingCalendar.week === endingCalendar.weeksPerMonth
   const monthEndEvent = isMonthEnd ? endingMonthlyEvent ?? null : null
@@ -559,9 +564,13 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
     workingCampaign = executiveClose.campaign
     executiveReport = executiveClose.report
     changes.push(...executiveClose.changes)
+    const projectClose = closePublicProjectsMonth(workingCampaign)
+    workingCampaign = projectClose.campaign
+    changes.push(...projectClose.changes)
+    events.push(...projectClose.events)
     const economicClose = closeEconomicMonth(workingCampaign)
     workingCampaign = economicClose.campaign
-    economicReport = economicClose.report
+    economicReport = [...projectClose.report, ...economicClose.report]
     changes.push(...economicClose.changes)
     const nextMonthIndex = calendarMonths.findIndex((month) => month === endingCalendar.month) + 1
     const nextYear = nextMonthIndex >= calendarMonths.length ? endingCalendar.year + 1 : endingCalendar.year

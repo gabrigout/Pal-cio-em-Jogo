@@ -127,6 +127,7 @@ export function createEconomicState(
   const economy: EconomicState = {
     indicators,
     availableFunds: roll(economicRanges.availableFunds.min, economicRanges.availableFunds.max, random),
+    projectExpensesPaidThisMonth: 0,
     annualBudget,
     taxes: initialTaxes.map((tax) => ({ ...tax, affectedGroups: [...tax.affectedGroups] })),
     loans: [],
@@ -509,8 +510,9 @@ export function closeEconomicMonth(campaign: CampaignState): { campaign: Campaig
   const paidNominalSectorTotal = plannedSectorSpending.reduce((sum, item) => sum + item.nominalExecuted * sectorFundingRatio, 0)
   const unpaidCommitments = Math.max(0, fixedPlanned - fixedPaid)
     + Math.max(0, nominalSectorTotal - paidNominalSectorTotal)
-  const expenses = Math.round((fixedPaid + sectorExpenses + interestPaid) * 10) / 10
-  const fiscalBalance = Math.round((revenue - fixedPaid - sectorExpenses - interestPaid) * 10) / 10
+  const projectExpensesPaid = Math.max(0, economy.projectExpensesPaidThisMonth)
+  const expenses = Math.round((fixedPaid + sectorExpenses + interestPaid + projectExpensesPaid) * 10) / 10
+  const fiscalBalance = Math.round((revenue - fixedPaid - sectorExpenses - interestPaid - projectExpensesPaid) * 10) / 10
   const surplusDebtRepayment = fiscalBalance > 0
     ? Math.max(0, Math.min(previous.publicDebt - principalPaid, Math.floor(fiscalBalance * 0.25)))
     : 0
@@ -576,6 +578,7 @@ export function closeEconomicMonth(campaign: CampaignState): { campaign: Campaig
     `Execução ministerial e composição do orçamento: custo setorial médio ${costWeighted.toFixed(2)}; execução financiada de ${Math.round(sectorFundingRatio * 100)}%.`,
     `Confiança ${context.publicTrust}, integridade ${context.publicIntegrity}, polarização ${context.polarization} e estabilidade ${context.institutionalStability} influenciaram inflação, crescimento e execução.`,
     `Dívida em ${indicators.publicDebt} u. (${debtRisk.toFixed(1)} vezes a receita anual); juros pagos ${interestPaid} u.${unpaidInterest ? ` Juros não pagos capitalizados: ${unpaidInterest} u.` : ''}`,
+    ...(projectExpensesPaid > 0 ? [`Projetos públicos executaram ${projectExpensesPaid.toFixed(1)} u. já descontadas do caixa semanal.`] : []),
     `Mudanças do mês: crescimento ${growthChange >= 0 ? '+' : ''}${growthChange.toFixed(1)} p.p.; inflação ${inflationChange >= 0 ? '+' : ''}${inflationChange.toFixed(1)} p.p.; desemprego ${unemploymentChange >= 0 ? '+' : ''}${unemploymentChange.toFixed(1)} p.p.; desigualdade ${inequalityChange >= 0 ? '+' : ''}${inequalityChange.toFixed(1)} p.p.`,
     ...(unpaidCommitments > 0 ? [`Compromissos não financiados de ${Math.round(unpaidCommitments)} u. foram adiados; nenhuma despesa excedeu o caixa disponível.`] : []),
     ...economy.pressures.notes,
@@ -589,6 +592,7 @@ export function closeEconomicMonth(campaign: CampaignState): { campaign: Campaig
     ...economy,
     indicators,
     availableFunds: Math.round(funds * 10) / 10,
+    projectExpensesPaidThisMonth: 0,
     annualBudget: updatedAnnualBudget,
     loans: updatedLoans,
     history: [...economy.history, makeSnapshot(campaign.calendar.year, campaign.calendar.month, indicators)]

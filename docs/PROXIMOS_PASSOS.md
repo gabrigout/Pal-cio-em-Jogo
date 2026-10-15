@@ -20,25 +20,18 @@ Atualizado conforme `docs/STATUS.md` em 2026-10-15. A fundação jogável (Fase 
 
 - **Executivo e ministérios: implementados.** Há 17 ministérios de referência, ministros e candidatos ficcionais, nomeação, negociação e exoneração, decisões executivas, desempenho e fechamento mensal, além de proposta de reorganização sujeita ao Congresso. Implementação principal em `src/engine/executive.ts`, `src/data/ministries.ts`, `src/data/executiveDecisions.ts` e `src/components/ExecutivePanel.tsx`.
 - **Economia e orçamento base: implementados.** Há indicadores e histórico, orçamento anual por setor e dotações ministeriais, execução mensal, ajustes tributários limitados, propostas legislativas, empréstimos e pagamentos adiados. Implementação principal em `src/engine/economy.ts`, `src/data/economy.ts`, `src/data/economicDecisions.ts` e `src/components/EconomyPanel.tsx`. Isso ainda não equivale ao sistema econômico completo previsto no documento mestre.
-- **Políticas públicas e projetos: não implementados como sistema.** O orçamento já tem setores, mas ainda não existe catálogo de programas/projetos, acompanhamento de execução ou resultados de políticas.
+- **Políticas públicas e projetos: implementação inicial na branch `codex/phase-2a-public-projects`; validação automatizada pendente.**
 - **Sociedade e grupos de pressão: não implementados como sistema.** Não há estado serializável de classes/grupos nem cálculo de aprovação por grupo.
 
 No código, apenas Brasil, Estado/Executivo e Economia têm telas funcionais. Políticas Públicas, Sociedade, Relações e Notícias/Histórico ainda caem na tela genérica com título, em `src/App.tsx`. A última etapa registrada em `docs/STATUS.md` foi a Economia, com 33 testes e build aprovados; save v4 e migrações anteriores. Confira o status e rode a validação no começo de cada nova etapa, pois o repositório pode ter avançado.
 
 ## Restante da Fase 2
 
-Implemente primeiro **2A**, valide e registre o estado; depois faça **2B** em outro pedido/commit. Ambas devem se conectar aos recursos e indicadores já existentes, sem criar recursos duplicados.
+A etapa **2A — Políticas públicas e projetos** está na branch `codex/phase-2a-public-projects`. Confirme testes e build antes de mesclar; depois implemente 2B em outra branch.
 
-### 2A. Políticas públicas e projetos
+### 2A. Políticas públicas e projetos — implementação inicial na branch de trabalho
 
-Referência: seção 11 de `docs/Palacio_em_Jogo_Documento_Mestre.md`.
-
-- Criar catálogo de programas por setor, usando os setores existentes como referência e dados/configuração em `src/data/`.
-- Permitir definir investimento, duração e prioridade. Representar cada projeto ativo no estado serializável.
-- Avançar projetos semanalmente e avaliar resultados de maior alcance no fechamento mensal.
-- Modelar consequências possíveis: atrasos, aumento de custo, protestos, investigação, conflito político, sucesso antecipado ou mudança de prioridade. Não transformar cada tarefa rotineira em microgerenciamento.
-- Conectar os projetos a dinheiro/caixa, capital político e capacidade administrativa. Respeitar a disponibilidade financeira e explicar custos, atrasos e resultados; não criar dinheiro ilimitado.
-- Testar regras no engine, persistência e migração, e apresentar o estado em componentes sem colocar regras políticas na UI.
+Referência: seção 11 do Documento Mestre. Catálogo por setor, investimento e prioridade ajustáveis, estado serializável, execução semanal, avaliação mensal, histórico, riscos contextuais, custos finitos e migração de save. Testes/build devem passar antes de mesclar.
 
 ### 2B. Sociedade e grupos de pressão
 
