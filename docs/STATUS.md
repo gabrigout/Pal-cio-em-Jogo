@@ -8,6 +8,12 @@ O jogador inicia na Presidência e governa em turnos semanais, tomando decisões
 
 **Stack:** React 18, TypeScript 5, Vite 6 e `lucide-react`. Persistência local versionada em LocalStorage; não há backend, banco de dados nem API externa de IA. Os testes usam `node:test` com `tsx`.
 
+## Última etapa concluída
+
+A aba Economia foi implementada e integrada à campanha: indicadores e histórico, orçamento anual com execução setorial e dotações ministeriais, ajustes tributários limitados, propostas legislativas sem tramitação, caixa e empréstimos finitos, fechamento mensal contextualizado, seis decisões econômicas e interface com tendências, gráficos SVG e explicações. A migração determinística para saves v4 preserva campanhas anteriores.
+
+Validação: `npm run test` passou com 33 testes e `npm run build` concluiu com sucesso. Commit: `d071ce4` (`Implement economic governance system`).
+
 ## Implementado
 
 - **Criação de campanha:** escolha entre esquerda/direita, seleção entre seis partidos ficcionais compatíveis ou criação de partido personalizado com nome, sigla e exatamente duas cores. A abertura satírica varia conforme a orientação. Indicadores e atributos iniciais são sorteados em faixas configuradas.
@@ -76,3 +82,7 @@ npm run build
 - **Fase 4 — Política viva: parcial.** Há cartões de reação, notícias e encadeamentos; faltam personagens autônomos, alianças, memória, imprensa sistêmica e modelos globais de corrupção/interesses.
 - **Fase 5 — Eleições e Maré Ideológica: não iniciada.** Pesquisas, candidatos, regras eleitorais, composição pós-eleição e ciclo de oito anos.
 - **Fase 6 — Conteúdo, balanceamento e revisão: não iniciada.** Importar/validar o catálogo de 150 personagens, ampliar conteúdo, testar campanhas longas e revisar regras legais/eleitorais.
+
+## Próximo passo
+
+Implementar a etapa inicial de Políticas Públicas: catálogo de programas e projetos por setor, propostas e acompanhamento de execução mensal, conectando custos e resultados ao orçamento, à capacidade administrativa e aos indicadores sem permitir gastos acima do caixa disponível.
