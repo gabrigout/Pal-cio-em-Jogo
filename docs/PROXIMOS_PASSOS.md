@@ -6,7 +6,7 @@ Este documento permite que outra IA continue o projeto sem depender do históric
 
 - Trabalhe em **um pedido por vez** e implemente partes pequenas, completas e verificáveis. Não tente concluir uma fase inteira em uma única mudança.
 - Ao terminar cada parte, execute os testes pertinentes e `npm run build`; corrija falhas antes de encerrar. Atualize `docs/STATUS.md` com o que foi feito, o resultado dos testes e o próximo passo; então crie um commit.
-- O estado da campanha é serializado e salvo automaticamente. A versão atual é `versaoDoSave: 5`, definida em `src/persistence/campaignRepository.ts`. Sempre que mudar o formato do estado salvo, aumente a versão e implemente/teste a migração de saves antigos. Preserve campanhas e dados existentes; migrações devem ser determinísticas quando gerarem valores.
+- O estado da campanha é serializado e salvo automaticamente. A versão atual é `versaoDoSave: 6`, definida em `src/persistence/campaignRepository.ts`. Sempre que mudar o formato do estado salvo, aumente a versão e implemente/teste a migração de saves antigos. Preserve campanhas e dados existentes; migrações devem ser determinísticas quando gerarem valores.
 - Siga a arquitetura existente: estado e tipos em `src/state/`, regras e simulação em `src/engine/`, catálogos e configuração em `src/data/`, apresentação em `src/components/` e persistência/migrações em `src/persistence/`. Componentes exibem estado e encaminham ações; não contêm lógica política.
 - Use somente as cores oficiais do partido ativo e tons neutros na interface. Não introduza cores fixas para sucesso/alerta/erro; comunique estados também por rótulos e ícones. Mantenha contraste e legibilidade.
 - Preserve as regras institucionais e a separação entre pontos de ação, dinheiro, capital político e capacidade administrativa; aprovação, Maré Ideológica e força eleitoral também são indicadores diferentes. Partidos, eventos e acusações são ficcionais e satíricos.
@@ -21,21 +21,21 @@ Atualizado conforme `docs/STATUS.md` em 2026-10-15. A fundação jogável (Fase 
 - **Executivo e ministérios: implementados.** Há 17 ministérios de referência, ministros e candidatos ficcionais, nomeação, negociação e exoneração, decisões executivas, desempenho e fechamento mensal, além de proposta de reorganização sujeita ao Congresso. Implementação principal em `src/engine/executive.ts`, `src/data/ministries.ts`, `src/data/executiveDecisions.ts` e `src/components/ExecutivePanel.tsx`.
 - **Economia e orçamento base: implementados.** Há indicadores e histórico, orçamento anual por setor e dotações ministeriais, execução mensal, ajustes tributários limitados, propostas legislativas, empréstimos e pagamentos adiados. Implementação principal em `src/engine/economy.ts`, `src/data/economy.ts`, `src/data/economicDecisions.ts` e `src/components/EconomyPanel.tsx`. Isso ainda não equivale ao sistema econômico completo previsto no documento mestre.
 - **Políticas públicas e projetos: implementados e validados na base da branch `codex/phase-2a-public-projects`.**
-- **Sociedade e grupos de pressão: primeira versão implementada na branch `codex/phase-2b-society-finance`; validação final pendente.** O sistema acompanha cinco classes, sete grupos organizados, diálogo/acordos, aprovação, pressão, manifestação e paralisação.
+- **Sociedade e grupos de pressão: primeira versão implementada e validada** na branch `codex/phase-2b-society-finance`. O sistema acompanha cinco classes, sete grupos, diálogo/acordos, apoio, pressão, manifestação e paralisação.
 
-Brasil, Estado/Executivo, Economia, Políticas Públicas e Sociedade têm telas funcionais na branch de trabalho. Relações e Notícias/Histórico seguem como placeholders. A migração de saves foi atualizada para v6, incluindo conversão de valores monetários e criação determinística do estado social.
+Brasil, Estado/Executivo, Economia, Políticas Públicas e Sociedade têm telas funcionais na branch de trabalho. Relações e Notícias/Histórico seguem como placeholders. Save v6 migra valores monetários antigos para reais e cria estado social determinístico. O GitHub Actions passou 45 testes e build no commit `bffec5e`.
 
 ## Restante da Fase 2
 
-A Fase 2A está na base da branch `codex/phase-2a-public-projects`; a Fase 2B e revisão financeira estão na branch `codex/phase-2b-society-finance`. Não mesclar até `npm run test` e `npm run build` passarem na última execução.
+A Fase 2A está na base da branch `codex/phase-2a-public-projects`; a Fase 2B e revisão financeira estão validadas na branch `codex/phase-2b-society-finance`. A `main` ainda não foi alterada.
 
 ### 2A. Políticas públicas e projetos — implementação inicial na branch de trabalho
 
-Referência: seção 11 do Documento Mestre. Catálogo com 15 programas por setor, investimentos e prioridade, estado serializável, execução semanal, avaliação mensal, histórico, riscos contextuais, custos finitos e migração de save. A Fase 2A havia passado 37 testes e build no commit `319dae2`; a validação da Fase 2B está em andamento.
+Referência: seção 11 do Documento Mestre. Catálogo com 15 programas por setor, investimentos e prioridade, estado serializável, execução semanal, avaliação mensal, histórico, riscos contextuais, custos finitos e migração de save. A Fase 2A passou 37 testes e build no commit `319dae2`.
 
-### 2B. Sociedade e grupos de pressão — implementação inicial na branch de trabalho
+### 2B. Sociedade e grupos de pressão — implementada e validada
 
-Referência: seção 12 de `docs/Palacio_em_Jogo_Documento_Mestre.md`.
+Referência: seção 12 de `docs/Palacio_em_Jogo_Documento_Mestre.md`. Validação da Fase 2B: 45 testes e build aprovados no commit `bffec5e`.
 
 - Representar separadamente as classes econômicas (baixa renda, classe média, ricos/empresários, milionários e bilionários) e grupos organizados (por exemplo, sindicatos, entidades empresariais, estudantes, servidores e grupos rurais).
 - Dar aos grupos interesses e reações contextualizados: pressão, apoio a propostas, negociação e manifestações. Não reduzir classes a categorias morais nem fazer eventos sem causa compreensível.
@@ -47,7 +47,7 @@ Referência: seção 12 de `docs/Palacio_em_Jogo_Documento_Mestre.md`.
 
 A sequência abaixo segue as Fases 3 a 6 da seção 19 do documento mestre. As subdivisões são entregas menores: faça cada uma em um pedido separado e na ordem indicada. Releia também as regras específicas das seções citadas antes de implementar.
 
-### Fase 3 — Instituições e crises
+### Fase 3 — Instituições e crises (próxima entrega)
 
 1. **Congresso, legislação e orçamento legislativo** — seção 7. Modelar Casas, propostas, negociação, tramitação e votações com requisitos próprios; incluir orçamento/emendas conforme escopo e regras configuráveis.
 2. **Judiciário e indicações** — seção 8. Modelar processos, decisões, recursos e nomeações aplicáveis sem permitir controle presidencial sobre julgamentos.
