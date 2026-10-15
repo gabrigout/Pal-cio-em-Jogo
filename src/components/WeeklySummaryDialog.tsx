@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { Check, ChevronRight, Clock3, Coins, FileText } from 'lucide-react'
 import type { WeeklySummary } from '../state/types'
 
@@ -7,12 +8,18 @@ interface WeeklySummaryDialogProps {
 }
 
 export default function WeeklySummaryDialog({ summary, onDismiss }: WeeklySummaryDialogProps) {
+  const titleRef = useRef<HTMLHeadingElement>(null)
+
+  useEffect(() => {
+    titleRef.current?.focus({ preventScroll: true })
+  }, [])
+
   return (
     <div className="summary-backdrop">
       <section aria-labelledby="summary-title" aria-modal="true" className="weekly-summary-dialog" role="dialog">
         <div className="summary-heading">
           <span className="summary-icon"><FileText aria-hidden="true" size={18} /></span>
-          <div><p className="eyebrow">RELATÓRIO DE GOVERNO <span>·</span> SEMANA {summary.week}</p><h2 id="summary-title">Semana encerrada.</h2></div>
+          <div><p className="eyebrow">RELATÓRIO DE GOVERNO <span>·</span> SEMANA {summary.week}</p><h2 id="summary-title" ref={titleRef} tabIndex={-1}>Semana encerrada.</h2></div>
         </div>
         <p className="summary-date">{summary.month} de {summary.year}</p>
 

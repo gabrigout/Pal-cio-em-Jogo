@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { ArrowDown, ArrowUp, Check, ChevronRight, Sparkles } from 'lucide-react'
 import type { DecisionResult } from '../state/types'
 
@@ -7,6 +8,12 @@ interface DecisionResultDialogProps {
 }
 
 export default function DecisionResultDialog({ result, onContinue }: DecisionResultDialogProps) {
+  const titleRef = useRef<HTMLHeadingElement>(null)
+
+  useEffect(() => {
+    titleRef.current?.focus({ preventScroll: true })
+  }, [])
+
   return (
     <div className="summary-backdrop decision-result-backdrop">
       <section aria-labelledby="decision-result-title" aria-modal="true" className="decision-result-dialog" role="dialog">
@@ -14,7 +21,7 @@ export default function DecisionResultDialog({ result, onContinue }: DecisionRes
           <span className="decision-result-icon"><Sparkles aria-hidden="true" size={18} /></span>
           <div>
             <p className="eyebrow">RESULTADO <span>·</span> {result.category.toUpperCase()}</p>
-            <h2 id="decision-result-title">{result.title}</h2>
+            <h2 id="decision-result-title" ref={titleRef} tabIndex={-1}>{result.title}</h2>
           </div>
         </div>
         <p className="decision-result-choice">Escolha: <strong>{result.choice}</strong></p>

@@ -56,6 +56,11 @@ export const economyRules = {
   maximumBudget: 100,
 } as const
 
+export const dashboardStatusBands = {
+  criticalBelow: 35,
+  attentionBelow: 50,
+} as const
+
 export const indicatorLabels = {
   presidentialApproval: 'Aprovação presidencial',
   congressSupport: 'Apoio no Congresso',

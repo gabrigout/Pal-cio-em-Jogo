@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import {
   ArrowUpRight,
   Check,
@@ -60,8 +61,19 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ campaign, onAdvanceWeek, onRunAction, onChooseDecision, onDismissDecisionResult, onDismissSummary }: DashboardProps) {
+  const overviewTitleRef = useRef<HTMLHeadingElement>(null)
   const dashboardMetrics = getDashboardMetrics(campaign)
   const turnDashboardData = getTurnDashboardData(campaign)
+
+  function dismissSummary() {
+    onDismissSummary()
+    requestAnimationFrame(() => overviewTitleRef.current?.focus({ preventScroll: true }))
+  }
+
+  function dismissDecisionResult() {
+    onDismissDecisionResult()
+    requestAnimationFrame(() => overviewTitleRef.current?.focus({ preventScroll: true }))
+  }
 
   return (
     <main className="dashboard page-enter">
@@ -69,7 +81,7 @@ export default function Dashboard({ campaign, onAdvanceWeek, onRunAction, onChoo
         <div className="section-heading">
           <div>
             <p className="eyebrow">VISÃO GERAL <span>·</span> SEMANA {String(campaign.calendar.week).padStart(2, '0')}</p>
-            <h2 id="overview-title">O país, agora.</h2>
+            <h2 id="overview-title" ref={overviewTitleRef} tabIndex={-1}>O país, agora.</h2>
           </div>
           <div className="live-indicator"><span /> Brasília, DF <b>·</b> ao vivo</div>
         </div>
@@ -147,12 +159,12 @@ export default function Dashboard({ campaign, onAdvanceWeek, onRunAction, onChoo
       </footer>
       {campaign.weeklySummary && (
         <WeeklySummaryDialog
-          onDismiss={onDismissSummary}
+          onDismiss={dismissSummary}
           summary={campaign.weeklySummary}
         />
       )}
       {campaign.turn.decisionResult && (
-        <DecisionResultDialog onContinue={onDismissDecisionResult} result={campaign.turn.decisionResult} />
+        <DecisionResultDialog onContinue={dismissDecisionResult} result={campaign.turn.decisionResult} />
       )}
     </main>
   )

@@ -12,6 +12,7 @@ O jogador inicia na Presidência e governa em turnos semanais, tomando decisões
 
 - **Criação de campanha:** escolha entre esquerda/direita, seleção entre seis partidos ficcionais compatíveis ou criação de partido personalizado com nome, sigla e exatamente duas cores. A abertura satírica varia conforme a orientação. Indicadores e atributos iniciais são sorteados em faixas configuradas.
 - **Tema visual:** primária e secundária derivadas do partido, com variantes calculadas por contraste; a aplicação usa tema e neutros. Texto de botão é escolhido conforme contraste. Os hexadecimais fixos da interface são neutros.
+- **Estados do dashboard:** todos os indicadores usam faixas configuradas: abaixo de 35 = Crítico, 35–49 = Atenção e 50 ou mais = Estável. Recursos globais e Polarização/Confiança calculam um score agregado coerente com o valor exibido.
 - **Calendário:** quatro semanas por mês, virada de mês/ano, avanço semanal, resumo semanal e balanço econômico simplificado no fechamento do mês.
 - **Pontos e recursos:** 2 pontos de ação base, bônus para os quatro apoios acima de 49%, teto de 6 novos pontos, até 2 carregados e máximo de 8 disponíveis. Dinheiro/orçamento, capital político e capacidade administrativa são recursos separados.
 - **Ações:** cinco ações de exemplo em `data/actions.ts`, com custos, efeitos imediatos ou pendentes, bloqueio por falta de recurso e motivo apresentado ao jogador.
@@ -28,7 +29,7 @@ O jogador inicia na Presidência e governa em turnos semanais, tomando decisões
 - `src/styles.css`: tema neutro/partidário, layout responsivo e estilos das telas.
 - `src/components/`: `CampaignLibrary.tsx` (saves e backups), `CampaignSetup.tsx` (nova campanha), `Dashboard.tsx` (painel), `TurnControls.tsx` (recursos, ações e cartões), `DecisionResultDialog.tsx` e `WeeklySummaryDialog.tsx` (resultados), além de `MetricCard.tsx` e `TopNavigation.tsx`.
 - `src/state/`: `types.ts` define o estado serializável e os contratos; `initialState.ts` define calendário inicial e meses.
-- `src/engine/`: `campaign.ts` cria e valida seleções de partido; `theme.ts` calcula contraste e variantes; `dashboard.ts` deriva indicadores de apresentação; `turn.ts` implementa calendário, recursos, condições/pesos, decisões, reações, encadeamentos, eventos mensais e resultados. `turn.test.ts` testa pontos, calendário e eventos.
+- `src/engine/`: `campaign.ts` cria e valida seleções de partido; `theme.ts` calcula contraste e variantes; `dashboard.ts` deriva indicadores e estados; `turn.ts` implementa calendário, recursos, condições/pesos, decisões, reações, encadeamentos, eventos mensais e resultados. `turn.test.ts` testa pontos, calendário e eventos; `dashboard.test.ts` testa as faixas dos indicadores.
 - `src/data/`: `campaignConfig.ts` contém paletas, faixas e regras; `parties.ts` contém partidos; `actions.ts` ações de exemplo; `decisions.ts` e `additionalDecisions.ts` decisões; `reactionEvents.ts` reações e eventos encadeados; `monthlyEvents.ts` eventos mensais; `dashboard.ts` notícias e cards demonstrativos.
 - `src/persistence/`: `campaignRepository.ts` valida, salva, lista, carrega, exclui e migra saves; `backup.ts` exporta JSON; `campaignRepository.test.ts` cobre persistência, migração, backup e falhas.
 - Raiz: `package.json` define comandos e dependências; `vite.config.ts` e `tsconfig*.json` configuram build; `index.html` é a entrada Vite.
@@ -43,12 +44,13 @@ npm run test
 npm run build
 ```
 
-`npm run test` executa os testes de `src/engine/turn.test.ts` e `src/persistence/campaignRepository.test.ts`. O LocalStorage é específico do navegador; exporte um backup JSON para cópia externa.
+`npm run test` executa os testes de `src/engine/turn.test.ts`, `src/engine/dashboard.test.ts` e `src/persistence/campaignRepository.test.ts`. O LocalStorage é específico do navegador; exporte um backup JSON para cópia externa.
 
 ## Decisões de design
 
 - Estado da campanha é serializável; regras ficam em `engine/`, conteúdo em `data/`, componentes em `components/` e saves em `persistence/`.
 - Tema oficial fica no estado da campanha e é reaplicado ao reabrir/importar. Cores de interface vêm das duas cores partidárias ou de neutros; estados positivos/negativos usam rótulo e ícone, não verde/vermelho fixos.
+- Status dos indicadores usa faixas comuns definidas em `src/data/campaignConfig.ts`: `<35` Crítico, `35–49` Atenção e `>=50` Estável. Métricas inversas ou compostas, como polarização/confiança, são normalizadas antes da classificação.
 - Os pontos de ação não são dinheiro, capital político ou capacidade administrativa. Navegação e consulta não custam pontos; a decisão narrativa semanal é gratuita.
 - Seleção de eventos combina condições, pesos e desempate estável por campanha/semana; reações recentes são evitadas. Eventos futuros são dados serializados no estado.
 - Os conteúdos, ações e indicadores atuais são demonstrativos e equilibrados para a fundação, não uma simulação política completa.
@@ -59,7 +61,7 @@ npm run build
 - Alertas e cartões “Em andamento”, “Aguardando resposta” e “Encerrado” ainda usam conteúdo demonstrativo. Há textos/contadores estáticos no dashboard, como o total anunciado de atualizações.
 - As cinco ações, 32 decisões, reações e eventos mensais são conteúdo inicial. A economia usa receita e despesa agregadas simples; não há orçamento anual completo, dívida ou execução detalhada.
 - Personagens ainda não têm memória/autonomia real, relações persistentes ou efeitos de promessas; imprensa, investigações, crises entre poderes e eleições também não têm sistemas completos.
-- Não há testes automatizados de interação visual nem screenshots em desktop/celular. O tema calcula contraste em código, mas merece revisão visual nas telas densas e com cores extremas.
+- Não há testes automatizados de interação visual nem screenshots em desktop/celular. O tema calcula contraste em código, mas merece revisão visual nas telas densas e com cores extremas. O resumo semanal agora recebe foco sem scroll ao abrir e devolve o foco ao título do dashboard ao fechar.
 - A folha importa Manrope e DM Mono do Google Fonts; sem rede, o fallback local é usado.
 
 ## Plano de fases
