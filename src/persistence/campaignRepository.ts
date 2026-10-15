@@ -210,7 +210,7 @@ function scaleLegacyMoneyNumber(value: number): number {
 }
 
 function formatLegacyMoneyText(raw: string): string {
-  return raw.replace(/(-?\\d+(?:[.,]\\d+)?)\\s*u\\./g, (_match, original: string) => {
+  return raw.replace(/(-?[0-9]+(?:[.,][0-9]+)?)\s*u\./g, (_match, original: string) => {
     const amount = Number(original.replace(',', '.')) * 10
     const sign = amount < 0 ? '−' : ''
     const absolute = Math.abs(amount)

@@ -162,7 +162,12 @@ export function applySocietyAction(
   const capacity = isAgreement ? societyRules.agreementAdministrativeCapacity : societyRules.dialogueAdministrativeCapacity
   const next: CampaignState = {
     ...campaign, society, economy,
-    country: { ...countryResult.country, budget: economy.availableFunds },
+    country: {
+      ...countryResult.country,
+      budget: economy.availableFunds,
+      politicalCapital: campaign.country.politicalCapital - capital,
+      administrativeCapacity: campaign.country.administrativeCapacity - capacity,
+    },
     turn: {
       ...campaign.turn,
       availableActionPoints: campaign.turn.availableActionPoints - points,
