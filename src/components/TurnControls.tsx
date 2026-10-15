@@ -1,22 +1,113 @@
 import {
+  ArrowDown,
+  ArrowUp,
   Banknote,
   BriefcaseBusiness,
+  Cloud,
   Check,
+  ClipboardList,
   CircleAlert,
   Coins,
   Gauge,
   Landmark,
+  Megaphone,
+  MessageCircle,
+  Newspaper,
   Scale,
+  Shield,
   Sparkles,
   Swords,
+  UsersRound,
 } from 'lucide-react'
-import type { CampaignState, TurnDashboardData } from '../state/types'
+import type { LucideIcon } from 'lucide-react'
+import { getOptionConsequences } from '../engine/turn'
+import type { CampaignState, DecisionIcon, DecisionResult, NarrativeDecision, TurnDashboardData } from '../state/types'
+
+const decisionIcons: Record<DecisionIcon, LucideIcon> = {
+  briefcase: BriefcaseBusiness,
+  landmark: Landmark,
+  scale: Scale,
+  megaphone: Megaphone,
+  users: UsersRound,
+  newspaper: Newspaper,
+  coins: Coins,
+  shield: Shield,
+  message: MessageCircle,
+  clipboard: ClipboardList,
+  cloud: Cloud,
+}
+
+function DecisionChoiceCard({
+  decision,
+  category,
+  selectedLabel,
+  onChoose,
+  eyebrow,
+}: {
+  decision: NarrativeDecision
+  category: DecisionResult['category']
+  selectedLabel: string | null
+  onChoose: (optionId: string, category: DecisionResult['category']) => void
+  eyebrow: string
+}) {
+  return (
+    <section aria-labelledby={`decision-${decision.id}`} className={`narrative-decision-card decision-${category}`}>
+      <div className="decision-card-heading">
+        <div>
+          <p className="eyebrow">{eyebrow} <span>·</span> GRATUITA</p>
+          <h2 id={`decision-${decision.id}`}>{decision.title}</h2>
+        </div>
+        <Sparkles aria-hidden="true" className="decision-mark" size={18} />
+      </div>
+      <p className="decision-prompt">{decision.prompt}</p>
+      <div className="decision-options">
+        {decision.options.map((option) => {
+          const OptionIcon = option.icon ? decisionIcons[option.icon] : Sparkles
+          const selected = selectedLabel === option.label
+          const consequences = getOptionConsequences(option).map((consequence) => ({
+            label: `${consequence.direction === 'up' ? '↑' : '↓'} ${consequence.amount > 0 ? '+' : ''}${consequence.amount} ${consequence.label}`,
+            direction: consequence.direction,
+          }))
+          if (option.uncertainConsequences?.length) {
+            consequences.push({ label: option.uncertainConsequences[0], direction: 'down' })
+          } else if (option.schedule) {
+            consequences.push({ label: 'Pode gerar reação', direction: 'down' })
+          }
+          return (
+            <button
+              aria-pressed={selected}
+              className={`decision-option${selected ? ' is-chosen' : ''}`}
+              disabled={Boolean(selectedLabel)}
+              key={option.id}
+              onClick={() => onChoose(option.id, category)}
+              type="button"
+            >
+              <span className="decision-option-icon"><OptionIcon aria-hidden="true" size={17} /></span>
+              <span className="decision-option-copy"><strong>{option.label}</strong><small>{option.description}</small></span>
+              <span className="decision-consequences">
+                {consequences.slice(0, 4).map((consequence, index) => (
+                  <small className={`consequence-tag${index >= getOptionConsequences(option).length ? ' is-uncertain' : ` is-${consequence.direction}`}`} key={`${consequence.label}-${index}`}>
+                    {index < getOptionConsequences(option).length
+                      ? consequence.direction === 'up' ? <ArrowUp aria-hidden="true" size={11} /> : <ArrowDown aria-hidden="true" size={11} />
+                      : <CircleAlert aria-hidden="true" size={11} />}
+                    {consequence.label}
+                  </small>
+                ))}
+              </span>
+              <span className="decision-option-select">{selected ? 'Escolhido' : 'Escolher'} <Check aria-hidden="true" size={13} /></span>
+            </button>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
 
 interface TurnControlsProps {
   campaign: CampaignState
   data: TurnDashboardData
   onRunAction: (actionId: string) => void
-  onChooseDecision: (optionId: string) => void
+  onChooseDecision: (optionId: string, category: DecisionResult['category']) => void
 }
 
 export default function TurnControls({ campaign, data, onRunAction, onChooseDecision }: TurnControlsProps) {
@@ -78,34 +169,23 @@ export default function TurnControls({ campaign, data, onRunAction, onChooseDeci
         </div>
       </section>
 
-      <section aria-labelledby="decision-title" className="weekly-decision-panel">
-        <div className="turn-section-heading">
-          <div>
-            <p className="eyebrow">DECISÃO NARRATIVA <span>·</span> GRATUITA <span>·</span> SEMANA {campaign.calendar.week}</p>
-            <h2 id="decision-title">{data.decision.title}</h2>
-          </div>
-          <Sparkles aria-hidden="true" className="decision-mark" size={18} />
-        </div>
-        <p className="decision-prompt">{data.decision.prompt}</p>
-        {data.selectedDecisionOptionLabel && (
-          <p className="decision-confirmation"><Check aria-hidden="true" size={14} /> Escolha registrada: {data.selectedDecisionOptionLabel}</p>
-        )}
-        <div className="decision-options">
-          {data.decision.options.map((option) => (
-            <button
-              aria-pressed={data.selectedDecisionOptionLabel === option.label}
-              className={`decision-option${data.selectedDecisionOptionLabel === option.label ? ' is-chosen' : ''}`}
-              disabled={Boolean(data.selectedDecisionOptionLabel)}
-              key={option.id}
-              onClick={() => onChooseDecision(option.id)}
-              type="button"
-            >
-              <span className="decision-option-copy"><strong>{option.label}</strong><small>{option.description}</small></span>
-              <span className="decision-option-icon"><Check aria-hidden="true" size={15} /></span>
-            </button>
-          ))}
-        </div>
-      </section>
+      <DecisionChoiceCard
+        category="decisão"
+        decision={data.decision}
+        eyebrow={`DECISÃO DA SEMANA ${campaign.calendar.week}`}
+        onChoose={onChooseDecision}
+        selectedLabel={data.selectedDecisionOptionLabel}
+      />
+
+      {data.reactionEvent && (
+        <DecisionChoiceCard
+          category="reação"
+          decision={data.reactionEvent}
+          eyebrow="REAÇÃO DO PAÍS"
+          onChoose={onChooseDecision}
+          selectedLabel={data.selectedReactionOptionLabel}
+        />
+      )}
 
       {data.monthlyEvent && data.monthlyEconomyPreview && (
         <section aria-labelledby="month-end-title" className="month-end-panel">
@@ -121,6 +201,13 @@ export default function TurnControls({ campaign, data, onRunAction, onChooseDeci
               <span>Orçamento final <strong>{data.monthlyEconomyPreview.closingBudget} u.</strong></span>
             </div>
           </div>
+          <DecisionChoiceCard
+            category="mensal"
+            decision={data.monthlyEvent}
+            eyebrow="EVENTO DE ENCERRAMENTO"
+            onChoose={onChooseDecision}
+            selectedLabel={data.selectedMonthlyOptionLabel}
+          />
         </section>
       )}
     </div>

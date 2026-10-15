@@ -76,6 +76,15 @@ export interface CampaignTurnState {
   carriedActionPoints: number
   activeDecisionId: string
   chosenDecisionOptionId: string | null
+  activeReactionEventId: string | null
+  chosenReactionOptionId: string | null
+  activeMonthlyEventId: string | null
+  chosenMonthlyOptionId: string | null
+  recentDecisionIds: string[]
+  recentReactionEventIds: string[]
+  recentMonthlyEventIds: string[]
+  scheduledNarrativeEvents: ScheduledNarrativeEvent[]
+  decisionResult: DecisionResult | null
   actionsTaken: string[]
   weeklyChanges: IndicatorChange[]
 }
@@ -123,8 +132,35 @@ export interface TurnDashboardData {
   actions: ActionAvailability[]
   decision: NarrativeDecision
   selectedDecisionOptionLabel: string | null
+  reactionEvent: NarrativeDecision | null
+  selectedReactionOptionLabel: string | null
   monthlyEvent: MonthlyEvent | null
+  selectedMonthlyOptionLabel: string | null
   monthlyEconomyPreview: EconomyBalance | null
+}
+
+export type DecisionIcon = 'briefcase' | 'landmark' | 'scale' | 'megaphone' | 'users' | 'newspaper' | 'coins' | 'shield' | 'message' | 'clipboard' | 'cloud'
+
+export interface ScheduledNarrativeEvent {
+  eventId: string
+  weeksRemaining: number
+  scheduledBy: string
+}
+
+export interface DecisionResult {
+  category: 'decisão' | 'reação' | 'mensal'
+  title: string
+  choice: string
+  message: string
+  reasons: string[]
+  changes: IndicatorChange[]
+  scheduledEventTitle: string | null
+}
+
+export interface ConsequencePreview {
+  label: string
+  amount: number
+  direction: 'up' | 'down'
 }
 
 export interface DecisionOption {
@@ -132,6 +168,10 @@ export interface DecisionOption {
   label: string
   description: string
   effects: IndicatorEffects
+  icon?: DecisionIcon
+  uncertainConsequences?: string[]
+  resultText?: string
+  schedule?: { eventId: string; delayWeeks: number }
 }
 
 export interface DecisionCondition {
@@ -140,20 +180,29 @@ export interface DecisionCondition {
   value: number
 }
 
+export interface DecisionConditions {
+  all?: DecisionCondition[]
+  any?: DecisionCondition[]
+}
+
 export interface NarrativeDecision {
   id: string
   title: string
   prompt: string
   condition: DecisionCondition
+  weight: number
+  category?: string
   options: DecisionOption[]
 }
 
 export interface MonthlyEvent {
   id: string
   title: string
+  prompt: string
   description: string
   condition: DecisionCondition
-  effects: IndicatorEffects
+  weight: number
+  options: DecisionOption[]
 }
 
 export interface IndicatorChange {

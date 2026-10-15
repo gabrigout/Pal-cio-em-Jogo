@@ -4,7 +4,7 @@ import { initializeCampaignTurn } from '../engine/turn'
 import { calendarMonths } from '../state/initialState'
 import type { CampaignState, CampaignTurnState } from '../state/types'
 
-export const CURRENT_SAVE_VERSION = 1
+export const CURRENT_SAVE_VERSION = 2
 const SAVE_KEY_PREFIX = 'palacio-em-jogo:campaign:'
 
 export interface StorageLike {
@@ -104,6 +104,17 @@ function isEconomyBalance(value: unknown): boolean {
     && isNumber(value.closingBudget)
 }
 
+function isDecisionResult(value: unknown): boolean {
+  return isRecord(value)
+    && ['decisão', 'reação', 'mensal'].includes(String(value.category))
+    && typeof value.title === 'string'
+    && typeof value.choice === 'string'
+    && typeof value.message === 'string'
+    && isStringArray(value.reasons)
+    && Array.isArray(value.changes) && value.changes.every(isIndicatorChange)
+    && (typeof value.scheduledEventTitle === 'string' || value.scheduledEventTitle === null)
+}
+
 function isWeeklySummary(value: unknown): boolean {
   if (!isRecord(value)) return false
   return typeof value.month === 'string'
@@ -147,6 +158,18 @@ function isCampaignState(value: unknown): value is CampaignState {
   if (!isRecord(value.turn) || !isNumber(value.turn.availableActionPoints) || !isNumber(value.turn.newActionPoints)
     || !isNumber(value.turn.carriedActionPoints) || typeof value.turn.activeDecisionId !== 'string'
     || !(typeof value.turn.chosenDecisionOptionId === 'string' || value.turn.chosenDecisionOptionId === null)
+    || !(typeof value.turn.activeReactionEventId === 'string' || value.turn.activeReactionEventId === null)
+    || !(typeof value.turn.chosenReactionOptionId === 'string' || value.turn.chosenReactionOptionId === null)
+    || !(typeof value.turn.activeMonthlyEventId === 'string' || value.turn.activeMonthlyEventId === null)
+    || !(typeof value.turn.chosenMonthlyOptionId === 'string' || value.turn.chosenMonthlyOptionId === null)
+    || !isStringArray(value.turn.recentDecisionIds)
+    || !isStringArray(value.turn.recentReactionEventIds)
+    || !isStringArray(value.turn.recentMonthlyEventIds)
+    || !Array.isArray(value.turn.scheduledNarrativeEvents)
+    || !value.turn.scheduledNarrativeEvents.every((event) => isRecord(event)
+      && typeof event.eventId === 'string' && Number.isInteger(event.weeksRemaining)
+      && isNumber(event.weeksRemaining) && event.weeksRemaining >= 1 && typeof event.scheduledBy === 'string')
+    || !(value.turn.decisionResult === null || isDecisionResult(value.turn.decisionResult))
     || !isStringArray(value.turn.actionsTaken)
     || !Array.isArray(value.turn.weeklyChanges) || !value.turn.weeklyChanges.every(isIndicatorChange)) return false
   if (!Array.isArray(value.news) || !value.news.every(isNewsItem)
@@ -162,6 +185,15 @@ function freshTurnState(): CampaignTurnState {
     carriedActionPoints: 0,
     activeDecisionId: '',
     chosenDecisionOptionId: null,
+    activeReactionEventId: null,
+    chosenReactionOptionId: null,
+    activeMonthlyEventId: null,
+    chosenMonthlyOptionId: null,
+    recentDecisionIds: [],
+    recentReactionEventIds: [],
+    recentMonthlyEventIds: [],
+    scheduledNarrativeEvents: [],
+    decisionResult: null,
     actionsTaken: [],
     weeklyChanges: [],
   }
@@ -190,14 +222,15 @@ function migrateLegacyCampaign(value: unknown): CampaignState | null {
     ...value,
     country,
     theme,
-    turn: isRecord(value.turn) ? value.turn : freshTurnState(),
+    turn: isRecord(value.turn) ? { ...freshTurnState(), ...value.turn } : freshTurnState(),
     news: Array.isArray(value.news) ? value.news : dashboardNews.map((item) => ({ ...item })),
     pendingEffects: Array.isArray(value.pendingEffects) ? value.pendingEffects : [],
     weeklySummary: isRecord(value.weeklySummary) ? value.weeklySummary : null,
   }
 
   if (!isCampaignState(candidate)) return null
-  if (!isRecord(value.turn)) return initializeCampaignTurn(candidate)
+  const hasDecisionStateV2 = isRecord(value.turn) && 'activeReactionEventId' in value.turn
+  if (!hasDecisionStateV2) return initializeCampaignTurn(candidate)
   return candidate
 }
 

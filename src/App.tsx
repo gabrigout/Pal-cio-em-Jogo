@@ -6,7 +6,7 @@ import CampaignSetup from './components/CampaignSetup'
 import Dashboard from './components/Dashboard'
 import TopNavigation from './components/TopNavigation'
 import { createCampaign } from './engine/campaign'
-import { advanceWeek, chooseWeeklyDecision, dismissWeeklySummary, executeAction } from './engine/turn'
+import { advanceWeek, chooseNarrativeOption, dismissDecisionResult, dismissWeeklySummary, executeAction } from './engine/turn'
 import { downloadCampaignBackup } from './persistence/backup'
 import {
   deleteCampaign,
@@ -76,10 +76,14 @@ export default function App() {
     if (nextCampaign) persistCampaign(nextCampaign)
   }
 
-  function chooseDecision(optionId: string) {
+  function chooseDecision(optionId: string, category: 'decisão' | 'reação' | 'mensal') {
     if (!campaign) return
-    const nextCampaign = chooseWeeklyDecision(campaign, optionId)
+    const nextCampaign = chooseNarrativeOption(campaign, category, optionId)
     if (nextCampaign) persistCampaign(nextCampaign)
+  }
+
+  function closeDecisionResult() {
+    if (campaign) persistCampaign(dismissDecisionResult(campaign))
   }
 
   function moveToNextWeek() {
@@ -235,6 +239,7 @@ export default function App() {
           campaign={campaign}
           onAdvanceWeek={moveToNextWeek}
           onChooseDecision={chooseDecision}
+          onDismissDecisionResult={closeDecisionResult}
           onDismissSummary={closeWeeklySummary}
           onRunAction={runAction}
         />

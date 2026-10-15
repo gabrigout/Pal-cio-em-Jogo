@@ -97,11 +97,35 @@ test('migra campanha legada sem versão para o save atual', () => {
   assert.equal(result.ok, true)
   if (!result.ok) return
   assert.equal(result.migrated, true)
-  assert.equal(result.save.versaoDoSave, 1)
+  assert.equal(result.save.versaoDoSave, 2)
   assert.equal(result.save.campaign.country.executiveSupport, 50)
   assert.equal(result.save.campaign.country.judiciaryRelation, 50)
   assert.ok(result.save.campaign.turn.activeDecisionId)
   assert.ok(Array.isArray(result.save.campaign.news))
+})
+
+test('migra save versão 1 preservando pontos e inicializando o modelo de eventos', () => {
+  const campaign = createTestCampaign()
+  const versionOneTurn = { ...campaign.turn } as unknown as Record<string, unknown>
+  delete versionOneTurn.activeReactionEventId
+  delete versionOneTurn.chosenReactionOptionId
+  delete versionOneTurn.activeMonthlyEventId
+  delete versionOneTurn.chosenMonthlyOptionId
+  delete versionOneTurn.recentDecisionIds
+  delete versionOneTurn.recentReactionEventIds
+  delete versionOneTurn.recentMonthlyEventIds
+  delete versionOneTurn.scheduledNarrativeEvents
+  delete versionOneTurn.decisionResult
+  versionOneTurn.availableActionPoints = 3
+  const versionOneCampaign = { ...campaign, turn: versionOneTurn }
+
+  const result = migrateSave({ versaoDoSave: 1, savedAt: '2027-01-01T00:00:00.000Z', campaign: versionOneCampaign })
+  assert.equal(result.ok, true)
+  if (!result.ok) return
+  assert.equal(result.migrated, true)
+  assert.equal(result.save.versaoDoSave, 2)
+  assert.equal(result.save.campaign.turn.availableActionPoints, 3)
+  assert.ok(Array.isArray(result.save.campaign.turn.scheduledNarrativeEvents))
 })
 
 test('rejeita import inválido e não altera campanhas existentes', () => {
@@ -166,4 +190,19 @@ test('abre save legado mesmo quando a migração não pode ser regravada', () =>
   const result = loadCampaign(campaign.id, storage)
   assert.equal(result.ok, true)
   if (result.ok) assert.match(result.warning ?? '', /cheio/)
+})
+
+test('salva e carrega os eventos narrativos agendados', () => {
+  const storage = new MemoryStorage()
+  const campaign = createTestCampaign()
+  campaign.turn.scheduledNarrativeEvents = [{
+    eventId: 'rain-follow-up',
+    weeksRemaining: 2,
+    scheduledBy: 'Chuva, mapa e três sirenes',
+  }]
+
+  assert.equal(saveCampaign(campaign, storage).ok, true)
+  const loaded = loadCampaign(campaign.id, storage)
+  assert.equal(loaded.ok, true)
+  if (loaded.ok) assert.deepEqual(loaded.value.campaign.turn.scheduledNarrativeEvents, campaign.turn.scheduledNarrativeEvents)
 })

@@ -15,10 +15,11 @@ import {
   closedWork,
   waitingWork,
 } from '../data/dashboard'
-import type { CampaignState, WorkItem } from '../state/types'
+import type { CampaignState, DecisionResult, WorkItem } from '../state/types'
 import MetricCard from './MetricCard'
 import TurnControls from './TurnControls'
 import WeeklySummaryDialog from './WeeklySummaryDialog'
+import DecisionResultDialog from './DecisionResultDialog'
 
 function WorkColumn({ title, items, icon: Icon }: {
   title: string
@@ -53,11 +54,12 @@ interface DashboardProps {
   campaign: CampaignState
   onAdvanceWeek: () => void
   onRunAction: (actionId: string) => void
-  onChooseDecision: (optionId: string) => void
+  onChooseDecision: (optionId: string, category: DecisionResult['category']) => void
+  onDismissDecisionResult: () => void
   onDismissSummary: () => void
 }
 
-export default function Dashboard({ campaign, onAdvanceWeek, onRunAction, onChooseDecision, onDismissSummary }: DashboardProps) {
+export default function Dashboard({ campaign, onAdvanceWeek, onRunAction, onChooseDecision, onDismissDecisionResult, onDismissSummary }: DashboardProps) {
   const dashboardMetrics = getDashboardMetrics(campaign)
   const turnDashboardData = getTurnDashboardData(campaign)
 
@@ -148,6 +150,9 @@ export default function Dashboard({ campaign, onAdvanceWeek, onRunAction, onChoo
           onDismiss={onDismissSummary}
           summary={campaign.weeklySummary}
         />
+      )}
+      {campaign.turn.decisionResult && (
+        <DecisionResultDialog onContinue={onDismissDecisionResult} result={campaign.turn.decisionResult} />
       )}
     </main>
   )

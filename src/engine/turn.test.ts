@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
+import { additionalDecisions } from '../data/additionalDecisions'
+import { weeklyDecisions } from '../data/decisions'
 import { createCampaign } from './campaign'
-import { advanceCalendar, advanceWeek, calculateActionPoints } from './turn'
+import { advanceCalendar, advanceWeek, calculateActionPoints, chooseNarrativeOption, getReactionEvent } from './turn'
 
 const thresholdIndicators = {
   executiveSupport: 49,
@@ -9,6 +11,10 @@ const thresholdIndicators = {
   judiciaryRelation: 49,
   presidentialApproval: 49,
 }
+
+test('catálogo inclui pelo menos 25 cartões semanais', () => {
+  assert.ok(weeklyDecisions.length + additionalDecisions.length >= 25)
+})
 
 test('pontos de ação partem da base fixa e bônus exigem passar de 49%', () => {
   assert.equal(calculateActionPoints(thresholdIndicators).newPoints, 2)
@@ -69,4 +75,59 @@ test('virada semanal carrega até dois pontos e a virada mensal fecha evento e b
   )
   assert.ok(nextWeek.weeklySummary?.monthlyEvent)
   assert.ok(nextWeek.weeklySummary?.economyBalance)
+})
+
+test('evento de reação só é elegível quando sua condição é atendida', () => {
+  const campaign = createCampaign('left', {
+    id: 'test-party',
+    fullName: 'Partido de Teste',
+    acronym: 'PDT',
+    description: 'Partido usado em teste.',
+    colors: ['#8bd4af', '#e5a05c'],
+    custom: true,
+  }, () => 0.5)
+
+  assert.equal(getReactionEvent(campaign), null)
+  const lowApproval = { ...campaign, country: { ...campaign.country, presidentialApproval: 40 } }
+  assert.equal(getReactionEvent(lowApproval)?.id, 'low-approval-pulse')
+})
+
+test('não repete imediatamente uma reação que já apareceu', () => {
+  const campaign = createCampaign('left', {
+    id: 'test-party',
+    fullName: 'Partido de Teste',
+    acronym: 'PDT',
+    description: 'Partido usado em teste.',
+    colors: ['#8bd4af', '#e5a05c'],
+    custom: true,
+  }, () => 0.5)
+  campaign.country.presidentialApproval = 40
+  campaign.country.polarization = 60
+  campaign.turn.recentReactionEventIds = ['low-approval-pulse']
+
+  assert.equal(getReactionEvent(campaign)?.id, 'high-polarization-pulse')
+})
+
+test('evento encadeado dispara na semana prevista, após duas viradas', () => {
+  const campaign = createCampaign('left', {
+    id: 'test-party',
+    fullName: 'Partido de Teste',
+    acronym: 'PDT',
+    description: 'Partido usado em teste.',
+    colors: ['#8bd4af', '#e5a05c'],
+    custom: true,
+  }, () => 0.5)
+  campaign.turn.activeDecisionId = 'rain-response'
+  const chosen = chooseNarrativeOption(campaign, 'decisão', 'federative-coordination')
+  assert.ok(chosen)
+  if (!chosen) return
+  assert.equal(chosen.turn.scheduledNarrativeEvents[0]?.weeksRemaining, 2)
+
+  const afterOneWeek = advanceWeek(chosen)
+  assert.equal(afterOneWeek.turn.activeReactionEventId, null)
+  assert.equal(afterOneWeek.turn.scheduledNarrativeEvents[0]?.weeksRemaining, 1)
+  const afterTwoWeeks = advanceWeek(afterOneWeek)
+  assert.equal(afterTwoWeeks.calendar.week, 3)
+  assert.equal(afterTwoWeeks.turn.activeReactionEventId, 'rain-follow-up')
+  assert.equal(afterTwoWeeks.turn.scheduledNarrativeEvents.length, 0)
 })

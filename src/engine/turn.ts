@@ -1,25 +1,35 @@
 import { sampleActions } from '../data/actions'
+import { additionalDecisions } from '../data/additionalDecisions'
 import { actionPointRules, economyRules, indicatorLabels } from '../data/campaignConfig'
 import { weeklyDecisions } from '../data/decisions'
 import { monthlyEvents } from '../data/monthlyEvents'
+import { reactionEvents, scheduledNarrativeEvents } from '../data/reactionEvents'
 import { calendarMonths } from '../state/initialState'
 import type {
   ActionAvailability,
   ActionPointCalculation,
   CampaignState,
   CountryIndicators,
+  ConsequencePreview,
+  DecisionOption,
+  DecisionResult,
   DecisionCondition,
   EconomyBalance,
   GameAction,
   IndicatorChange,
   IndicatorEffects,
   MonthlyEvent,
+  NarrativeDecision,
   NewsItem,
   TurnDashboardData,
   WeeklySummary,
 } from '../state/types'
 
 const MAX_NEWS_ENTRIES = 8
+const RECENT_DECISION_LIMIT = 3
+const RECENT_EVENT_LIMIT = 3
+const allWeeklyDecisions = [...weeklyDecisions, ...additionalDecisions]
+const allReactionEvents = [...reactionEvents, ...scheduledNarrativeEvents]
 
 export function calculateActionPoints(
   indicators: Pick<CountryIndicators, 'executiveSupport' | 'congressSupport' | 'judiciaryRelation' | 'presidentialApproval'>,
@@ -56,21 +66,65 @@ function conditionDistance(campaign: CampaignState, condition: DecisionCondition
     : Math.max(0, condition.value - value)
 }
 
+function stableWeightedChoice<T extends { id: string; weight: number }>(
+  campaign: CampaignState,
+  choices: T[],
+  salt: string,
+): T | null {
+  if (choices.length === 0) return null
+  const totalWeight = choices.reduce((total, choice) => total + Math.max(1, choice.weight), 0)
+  const seed = `${campaign.id}:${campaign.calendar.year}:${campaign.calendar.month}:${campaign.calendar.week}:${salt}:${choices.map((choice) => choice.id).join(',')}`
+  let hash = 2166136261
+  for (const character of seed) hash = Math.imul(hash ^ character.charCodeAt(0), 16777619) >>> 0
+  let ticket = hash % totalWeight
+  for (const choice of choices) {
+    ticket -= Math.max(1, choice.weight)
+    if (ticket < 0) return choice
+  }
+  return choices[choices.length - 1]
+}
+
+function keepRecent(previous: string[], addedId: string, limit: number): string[] {
+  return [...previous.filter((id) => id !== addedId), addedId].slice(-limit)
+}
+
 export function getWeeklyDecision(campaign: CampaignState) {
-  const matching = weeklyDecisions.find((decision) => conditionMatches(campaign, decision.condition))
-  if (matching) return matching
-  return [...weeklyDecisions].sort((first, second) =>
-    conditionDistance(campaign, first.condition) - conditionDistance(campaign, second.condition),
-  )[0]
+  let candidates = allWeeklyDecisions.filter((decision) => conditionMatches(campaign, decision.condition))
+  if (candidates.length === 0) {
+    const nearest = [...allWeeklyDecisions].sort((first, second) =>
+      conditionDistance(campaign, first.condition) - conditionDistance(campaign, second.condition),
+    )[0]
+    candidates = nearest ? [nearest] : []
+  }
+  const notRecent = candidates.filter((decision) => !campaign.turn.recentDecisionIds.slice(-RECENT_DECISION_LIMIT).includes(decision.id))
+  if (notRecent.length) return stableWeightedChoice(campaign, notRecent, 'decisao-semanal')
+  const lastDecisionId = campaign.turn.recentDecisionIds[campaign.turn.recentDecisionIds.length - 1]
+  const alternatives = allWeeklyDecisions.filter((decision) => decision.id !== lastDecisionId)
+  const nearestDistance = Math.min(...alternatives.map((decision) => conditionDistance(campaign, decision.condition)))
+  const nearest = alternatives.filter((decision) => conditionDistance(campaign, decision.condition) === nearestDistance)
+  return stableWeightedChoice(campaign, nearest.length ? nearest : alternatives, 'decisao-semanal')
+}
+
+export function getReactionEvent(campaign: CampaignState): NarrativeDecision | null {
+  const scheduled = campaign.turn.scheduledNarrativeEvents.find((event) => event.weeksRemaining <= 0)
+  if (scheduled) return allReactionEvents.find((event) => event.id === scheduled.eventId) ?? null
+
+  const candidates = reactionEvents.filter((event) => conditionMatches(campaign, event.condition))
+  const notRecent = candidates.filter((event) => !campaign.turn.recentReactionEventIds.slice(-RECENT_EVENT_LIMIT).includes(event.id))
+  return stableWeightedChoice(campaign, notRecent, 'reacao')
 }
 
 export function getMonthlyEvent(campaign: CampaignState): MonthlyEvent | null {
   if (campaign.calendar.week !== campaign.calendar.weeksPerMonth) return null
-  const matching = monthlyEvents.find((event) => conditionMatches(campaign, event.condition))
-  if (matching) return matching
-  return [...monthlyEvents].sort((first, second) =>
+  let candidates = monthlyEvents.filter((event) => conditionMatches(campaign, event.condition))
+  if (candidates.length === 0) candidates = [...monthlyEvents].sort((first, second) =>
     conditionDistance(campaign, first.condition) - conditionDistance(campaign, second.condition),
-  )[0] ?? null
+  ).slice(0, 1)
+  const notRecent = candidates.filter((event) => !campaign.turn.recentMonthlyEventIds.slice(-RECENT_EVENT_LIMIT).includes(event.id))
+  if (notRecent.length) return stableWeightedChoice(campaign, notRecent, 'evento-mensal')
+  const lastMonthlyEventId = campaign.turn.recentMonthlyEventIds[campaign.turn.recentMonthlyEventIds.length - 1]
+  const alternatives = monthlyEvents.filter((event) => event.id !== lastMonthlyEventId)
+  return stableWeightedChoice(campaign, alternatives, 'evento-mensal')
 }
 
 export function getActionAvailability(campaign: CampaignState): ActionAvailability[] {
@@ -156,15 +210,24 @@ function createNewsItem(id: string, category: string, title: string, summary: st
 
 export function initializeCampaignTurn(campaign: CampaignState): CampaignState {
   const calculation = calculateActionPoints(campaign.country)
-  const decision = getWeeklyDecision(campaign)
+  const decision = getWeeklyDecision(campaign) ?? allWeeklyDecisions[0]
+  const activeReactionEvent = campaign.turn.activeReactionEventId
+    ? allReactionEvents.find((event) => event.id === campaign.turn.activeReactionEventId) ?? null
+    : getReactionEvent(campaign)
+  const monthlyEvent = campaign.calendar.week === campaign.calendar.weeksPerMonth
+    ? getMonthlyEvent(campaign)
+    : null
+  const alreadyInitialized = Boolean(campaign.turn.activeDecisionId)
   return {
     ...campaign,
     turn: {
       ...campaign.turn,
-      availableActionPoints: calculation.newPoints,
-      newActionPoints: calculation.newPoints,
-      carriedActionPoints: 0,
-      activeDecisionId: decision.id,
+      availableActionPoints: alreadyInitialized ? campaign.turn.availableActionPoints : calculation.newPoints,
+      newActionPoints: alreadyInitialized ? campaign.turn.newActionPoints : calculation.newPoints,
+      carriedActionPoints: alreadyInitialized ? campaign.turn.carriedActionPoints : 0,
+      activeDecisionId: campaign.turn.activeDecisionId || decision.id,
+      activeReactionEventId: campaign.turn.activeReactionEventId ?? activeReactionEvent?.id ?? null,
+      activeMonthlyEventId: campaign.turn.activeMonthlyEventId ?? monthlyEvent?.id ?? null,
     },
   }
 }
@@ -215,23 +278,101 @@ export function executeAction(campaign: CampaignState, actionId: string): Campai
   ))
 }
 
-export function chooseWeeklyDecision(campaign: CampaignState, optionId: string): CampaignState | null {
-  if (campaign.turn.chosenDecisionOptionId) return null
-  const decision = weeklyDecisions.find((candidate) => candidate.id === campaign.turn.activeDecisionId)
+export function getOptionConsequences(option: DecisionOption): ConsequencePreview[] {
+  return Object.entries(option.effects)
+    .filter((entry): entry is [keyof CountryIndicators, number] => typeof entry[1] === 'number' && entry[1] !== 0)
+    .map(([indicator, amount]) => ({
+      label: indicatorLabels[indicator],
+      amount,
+      direction: amount > 0 ? 'up' as const : 'down' as const,
+    }))
+    .slice(0, 3)
+}
+
+function findDecisionForCategory(campaign: CampaignState, category: DecisionResult['category']): NarrativeDecision | MonthlyEvent | undefined {
+  if (category === 'decisão') return allWeeklyDecisions.find((decision) => decision.id === campaign.turn.activeDecisionId)
+  if (category === 'reação') return allReactionEvents.find((event) => event.id === campaign.turn.activeReactionEventId)
+  return monthlyEvents.find((event) => event.id === campaign.turn.activeMonthlyEventId)
+}
+
+export function chooseNarrativeOption(
+  campaign: CampaignState,
+  category: DecisionResult['category'],
+  optionId: string,
+): CampaignState | null {
+  const alreadyChosen = category === 'decisão'
+    ? campaign.turn.chosenDecisionOptionId
+    : category === 'reação'
+      ? campaign.turn.chosenReactionOptionId
+      : campaign.turn.chosenMonthlyOptionId
+  if (alreadyChosen) return null
+
+  const decision = findDecisionForCategory(campaign, category)
   const option = decision?.options.find((candidate) => candidate.id === optionId)
   if (!decision || !option) return null
 
-  const { campaign: effectedCampaign, changes } = applyIndicatorEffects(campaign, option.effects, `Decisão: ${option.label}`)
-  const updatedCampaign = addChanges({
-    ...effectedCampaign,
-    turn: { ...effectedCampaign.turn, chosenDecisionOptionId: option.id },
-  }, changes)
+  const { campaign: effectedCampaign, changes } = applyIndicatorEffects(
+    campaign,
+    option.effects,
+    `${decision.title}: ${option.label}`,
+  )
+  let scheduledEventTitle: string | null = null
+  let scheduledNarrativeEvents = [...effectedCampaign.turn.scheduledNarrativeEvents]
+  if (option.schedule && option.schedule.delayWeeks > 0) {
+    const scheduledEventId = option.schedule.eventId
+    const scheduledIndex = scheduledNarrativeEvents.findIndex((event) => event.eventId === scheduledEventId)
+    if (scheduledIndex >= 0) {
+      scheduledNarrativeEvents = scheduledNarrativeEvents.map((event, index) => index === scheduledIndex
+        ? { ...event, weeksRemaining: Math.min(event.weeksRemaining, option.schedule?.delayWeeks ?? event.weeksRemaining) }
+        : event)
+    } else {
+      scheduledNarrativeEvents = [...scheduledNarrativeEvents, {
+        eventId: scheduledEventId,
+        weeksRemaining: option.schedule.delayWeeks,
+        scheduledBy: decision.title,
+      }]
+    }
+    scheduledEventTitle = allReactionEvents.find((event) => event.id === scheduledEventId)?.title ?? null
+  }
+
+  const decisionResult: DecisionResult = {
+    category,
+    title: decision.title,
+    choice: option.label,
+    message: option.resultText ?? option.description,
+    reasons: changes.map((change) => `${change.label}: ${change.amount > 0 ? '+' : ''}${change.amount}. ${change.reason}`),
+    changes,
+    scheduledEventTitle,
+  }
+  const turn = { ...effectedCampaign.turn, scheduledNarrativeEvents, decisionResult }
+  if (category === 'decisão') {
+    turn.chosenDecisionOptionId = option.id
+    turn.recentDecisionIds = keepRecent(turn.recentDecisionIds, decision.id, RECENT_DECISION_LIMIT)
+  } else if (category === 'reação') {
+    turn.chosenReactionOptionId = option.id
+    turn.recentReactionEventIds = keepRecent(turn.recentReactionEventIds, decision.id, RECENT_EVENT_LIMIT)
+    const scheduled = turn.scheduledNarrativeEvents.find((event) => event.eventId === decision.id && event.weeksRemaining <= 0)
+    if (scheduled) turn.scheduledNarrativeEvents = turn.scheduledNarrativeEvents.filter((event) => event !== scheduled)
+  } else {
+    turn.chosenMonthlyOptionId = option.id
+    turn.recentMonthlyEventIds = keepRecent(turn.recentMonthlyEventIds, decision.id, RECENT_EVENT_LIMIT)
+  }
+
+  const updatedCampaign = addChanges({ ...effectedCampaign, turn }, changes)
   return appendNews(updatedCampaign, createNewsItem(
-    `decision-${decision.id}-${campaign.calendar.year}-${campaign.calendar.week}`,
-    'DECISÃO',
+    `card-${category}-${decision.id}-${campaign.calendar.year}-${campaign.calendar.week}`,
+    category === 'decisão' ? 'DECISÃO' : category === 'reação' ? 'REAÇÃO' : 'EVENTO MENSAL',
     `${decision.title}: ${option.label}`,
     option.description,
   ))
+}
+
+export function chooseWeeklyDecision(campaign: CampaignState, optionId: string): CampaignState | null {
+  return chooseNarrativeOption(campaign, 'decisão', optionId)
+}
+
+export function dismissDecisionResult(campaign: CampaignState): CampaignState {
+  return { ...campaign, turn: { ...campaign.turn, decisionResult: null } }
 }
 
 export function advanceCalendar(calendar: CampaignState['calendar']): CampaignState['calendar'] {
@@ -310,16 +451,23 @@ export function calculateMonthlyEconomyBalance(campaign: CampaignState): Economy
 }
 
 export function getTurnDashboardData(campaign: CampaignState): TurnDashboardData {
-  const decision = weeklyDecisions.find((candidate) => candidate.id === campaign.turn.activeDecisionId)
+  const decision = allWeeklyDecisions.find((candidate) => candidate.id === campaign.turn.activeDecisionId)
     ?? getWeeklyDecision(campaign)
+    ?? allWeeklyDecisions[0]
   const selectedOption = decision.options.find((option) => option.id === campaign.turn.chosenDecisionOptionId)
-  const monthlyEvent = getMonthlyEvent(campaign)
+  const reactionEvent = allReactionEvents.find((event) => event.id === campaign.turn.activeReactionEventId) ?? null
+  const selectedReactionOption = reactionEvent?.options.find((option) => option.id === campaign.turn.chosenReactionOptionId)
+  const monthlyEvent = monthlyEvents.find((event) => event.id === campaign.turn.activeMonthlyEventId) ?? null
+  const selectedMonthlyOption = monthlyEvent?.options.find((option) => option.id === campaign.turn.chosenMonthlyOptionId)
   return {
     actionPointExplanation: getActionPointExplanation(campaign),
     actions: getActionAvailability(campaign),
     decision,
     selectedDecisionOptionLabel: selectedOption?.label ?? null,
+    reactionEvent,
+    selectedReactionOptionLabel: selectedReactionOption?.label ?? null,
     monthlyEvent,
+    selectedMonthlyOptionLabel: selectedMonthlyOption?.label ?? null,
     monthlyEconomyPreview: monthlyEvent ? calculateMonthlyEconomyBalance(campaign) : null,
   }
 }
@@ -342,11 +490,20 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
   let workingCampaign = campaign
   const changes = [...campaign.turn.weeklyChanges]
   const events: string[] = []
-  const endingDecision = weeklyDecisions.find((decision) => decision.id === campaign.turn.activeDecisionId)
+  const endingDecision = allWeeklyDecisions.find((decision) => decision.id === campaign.turn.activeDecisionId)
   const chosenOption = endingDecision?.options.find((option) => option.id === campaign.turn.chosenDecisionOptionId)
   events.push(chosenOption
     ? `Decisão gratuita registrada: ${chosenOption.label}.`
     : 'A decisão narrativa gratuita da semana não foi selecionada.')
+
+  const endingReaction = allReactionEvents.find((event) => event.id === campaign.turn.activeReactionEventId)
+  if (endingReaction && !campaign.turn.chosenReactionOptionId) {
+    events.push(`A reação “${endingReaction.title}” não foi respondida nesta semana.`)
+  }
+  const endingMonthlyEvent = monthlyEvents.find((event) => event.id === campaign.turn.activeMonthlyEventId)
+  if (endingMonthlyEvent && !campaign.turn.chosenMonthlyOptionId) {
+    events.push(`O evento mensal “${endingMonthlyEvent.title}” não foi escolhido.`)
+  }
 
   if (campaign.pendingEffects.length > 0) {
     for (const pending of campaign.pendingEffects) {
@@ -364,13 +521,8 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
   events.push(...contextual.changes.map((change) => change.reason))
 
   const isMonthEnd = endingCalendar.week === endingCalendar.weeksPerMonth
-  const monthEndEvent = isMonthEnd ? getMonthlyEvent(workingCampaign) : null
-  if (monthEndEvent) {
-    const result = applyIndicatorEffects(workingCampaign, monthEndEvent.effects, monthEndEvent.title)
-    workingCampaign = result.campaign
-    changes.push(...result.changes)
-    events.push(monthEndEvent.description)
-  }
+  const monthEndEvent = isMonthEnd ? endingMonthlyEvent ?? null : null
+  if (monthEndEvent && campaign.turn.chosenMonthlyOptionId) events.push(monthEndEvent.description)
 
   let economyBalance: EconomyBalance | null = null
   if (isMonthEnd) {
@@ -399,6 +551,21 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
   const nextCalendar = advanceCalendar(endingCalendar)
   const nextCalculation = calculateActionPoints(workingCampaign.country)
   const newTotal = nextCalculation.newPoints + carriedActionPoints
+  const advancedSchedules = workingCampaign.turn.scheduledNarrativeEvents.map((event) => ({
+    ...event,
+    weeksRemaining: event.weeksRemaining - 1,
+  }))
+  const dueSchedule = advancedSchedules.find((event) => event.weeksRemaining <= 0)
+  let remainingSchedules = advancedSchedules.filter((event) => event !== dueSchedule)
+  const currentDecisionHistory = endingDecision
+    ? keepRecent(workingCampaign.turn.recentDecisionIds, endingDecision.id, RECENT_DECISION_LIMIT)
+    : workingCampaign.turn.recentDecisionIds
+  const currentReactionHistory = endingReaction
+    ? keepRecent(workingCampaign.turn.recentReactionEventIds, endingReaction.id, RECENT_EVENT_LIMIT)
+    : [...workingCampaign.turn.recentReactionEventIds]
+  const currentMonthlyHistory = endingMonthlyEvent
+    ? keepRecent(workingCampaign.turn.recentMonthlyEventIds, endingMonthlyEvent.id, RECENT_EVENT_LIMIT)
+    : workingCampaign.turn.recentMonthlyEventIds
   const nextCampaign: CampaignState = {
     ...workingCampaign,
     calendar: nextCalendar,
@@ -409,15 +576,46 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
       carriedActionPoints,
       activeDecisionId: '',
       chosenDecisionOptionId: null,
+      activeReactionEventId: null,
+      chosenReactionOptionId: null,
+      activeMonthlyEventId: null,
+      chosenMonthlyOptionId: null,
+      recentDecisionIds: currentDecisionHistory,
+      recentReactionEventIds: currentReactionHistory,
+      recentMonthlyEventIds: currentMonthlyHistory,
+      scheduledNarrativeEvents: remainingSchedules,
+      decisionResult: null,
       actionsTaken: [],
       weeklyChanges: [],
     },
     pendingEffects: [],
   }
-  const nextDecision = getWeeklyDecision(nextCampaign)
+  const nextDecision = getWeeklyDecision(nextCampaign) ?? allWeeklyDecisions[0]
+  const nextReactionEvent = dueSchedule
+    ? allReactionEvents.find((event) => event.id === dueSchedule.eventId) ?? null
+    : getReactionEvent(nextCampaign)
+  if (dueSchedule && nextReactionEvent) {
+    currentReactionHistory.splice(0, currentReactionHistory.length, ...keepRecent(currentReactionHistory, nextReactionEvent.id, RECENT_EVENT_LIMIT))
+    remainingSchedules = remainingSchedules.map((event) => event.weeksRemaining <= 0
+      ? { ...event, weeksRemaining: 1 }
+      : event)
+  }
+  const nextMonthlyEvent = nextCalendar.week === nextCalendar.weeksPerMonth
+    ? getMonthlyEvent(nextCampaign)
+    : null
   const completedCampaign = {
     ...nextCampaign,
-    turn: { ...nextCampaign.turn, activeDecisionId: nextDecision.id },
+    turn: {
+      ...nextCampaign.turn,
+      activeDecisionId: nextDecision.id,
+      activeReactionEventId: nextReactionEvent?.id ?? null,
+      activeMonthlyEventId: nextMonthlyEvent?.id ?? null,
+      recentReactionEventIds: currentReactionHistory,
+      recentMonthlyEventIds: nextMonthlyEvent
+        ? keepRecent(currentMonthlyHistory, nextMonthlyEvent.id, RECENT_EVENT_LIMIT)
+        : currentMonthlyHistory,
+      scheduledNarrativeEvents: remainingSchedules,
+    },
   }
 
   const summary: WeeklySummary = {
