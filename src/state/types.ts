@@ -64,11 +64,66 @@ export interface CampaignState {
   }
   country: CountryIndicators
   theme: CampaignTheme
+  ministries: MinistryState[]
+  executiveProposals: string[]
   turn: CampaignTurnState
   news: NewsItem[]
   pendingEffects: PendingEffect[]
   weeklySummary: WeeklySummary | null
 }
+
+export type ExecutiveActionType =
+  | 'administrative'
+  | 'decree'
+  | 'congress'
+  | 'institutional-approval'
+  | 'legal-budgetary-review'
+
+export interface MinisterAttributes {
+  competence: number
+  loyalty: number
+  popularity: number
+  integrity: number
+  influence: number
+  ambition: number
+  relations: number
+}
+
+export interface MinisterCandidate {
+  id: string
+  name: string
+  partyId: string
+  partyName: string
+  partyAcronym: string
+  profile: string
+  attributes: MinisterAttributes
+}
+
+export interface MinistryState {
+  id: string
+  name: string
+  area: string
+  competences: string[]
+  annualBudget: number
+  monthlyAllocation: number
+  budgetAvailable: number
+  budgetExecuted: number
+  administrativePerformance: number
+  minister: MinisterCandidate | null
+  candidates: MinisterCandidate[]
+  negotiatedCandidateIds: string[]
+  pendingItems: string[]
+  risks: string[]
+  alerts: string[]
+}
+
+export type ExecutiveDecisionEffect =
+  | { kind: 'dismiss'; ministryId: string }
+  | { kind: 'defend'; ministryId: string }
+  | { kind: 'wait'; ministryId: string }
+  | { kind: 'investigate'; ministryId: string }
+  | { kind: 'negotiate-budget'; ministryId: string }
+  | { kind: 'mediate'; ministryId: string }
 
 export interface CampaignTurnState {
   availableActionPoints: number
@@ -111,6 +166,7 @@ export interface GameAction {
   id: string
   title: string
   description: string
+  actionType: ExecutiveActionType
   costs: ResourceCosts
   effects: IndicatorEffects
   pendingEffects?: Array<{ effects: IndicatorEffects; reason: string }>
@@ -172,6 +228,7 @@ export interface DecisionOption {
   uncertainConsequences?: string[]
   resultText?: string
   schedule?: { eventId: string; delayWeeks: number }
+  executiveEffect?: ExecutiveDecisionEffect
 }
 
 export interface DecisionCondition {
@@ -232,6 +289,7 @@ export interface WeeklySummary {
   totalActionPoints: number
   monthlyEvent: string | null
   economyBalance: EconomyBalance | null
+  executiveReport: string[]
 }
 
 export interface PartyDefinition {

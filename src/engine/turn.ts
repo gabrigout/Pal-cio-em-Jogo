@@ -1,10 +1,12 @@
 import { sampleActions } from '../data/actions'
 import { additionalDecisions } from '../data/additionalDecisions'
+import { executiveDecisions } from '../data/executiveDecisions'
 import { actionPointRules, economyRules, indicatorLabels } from '../data/campaignConfig'
 import { weeklyDecisions } from '../data/decisions'
 import { monthlyEvents } from '../data/monthlyEvents'
 import { reactionEvents, scheduledNarrativeEvents } from '../data/reactionEvents'
 import { calendarMonths } from '../state/initialState'
+import { applyExecutiveDecision, closeExecutiveMonth, proposeMinistryReorganization } from './executive'
 import type {
   ActionAvailability,
   ActionPointCalculation,
@@ -28,7 +30,7 @@ import type {
 const MAX_NEWS_ENTRIES = 8
 const RECENT_DECISION_LIMIT = 3
 const RECENT_EVENT_LIMIT = 3
-const allWeeklyDecisions = [...weeklyDecisions, ...additionalDecisions]
+const allWeeklyDecisions = [...weeklyDecisions, ...additionalDecisions, ...executiveDecisions]
 const allReactionEvents = [...reactionEvents, ...scheduledNarrativeEvents]
 
 export function calculateActionPoints(
@@ -66,6 +68,11 @@ function conditionDistance(campaign: CampaignState, condition: DecisionCondition
     : Math.max(0, condition.value - value)
 }
 
+function executiveDecisionAvailable(campaign: CampaignState, decision: NarrativeDecision): boolean {
+  const targetMinistryId = decision.options.find((option) => option.executiveEffect)?.executiveEffect?.ministryId
+  return !targetMinistryId || campaign.ministries.some((ministry) => ministry.id === targetMinistryId && ministry.minister)
+}
+
 function stableWeightedChoice<T extends { id: string; weight: number }>(
   campaign: CampaignState,
   choices: T[],
@@ -89,9 +96,10 @@ function keepRecent(previous: string[], addedId: string, limit: number): string[
 }
 
 export function getWeeklyDecision(campaign: CampaignState) {
-  let candidates = allWeeklyDecisions.filter((decision) => conditionMatches(campaign, decision.condition))
+  const availableDecisions = allWeeklyDecisions.filter((decision) => executiveDecisionAvailable(campaign, decision))
+  let candidates = availableDecisions.filter((decision) => conditionMatches(campaign, decision.condition))
   if (candidates.length === 0) {
-    const nearest = [...allWeeklyDecisions].sort((first, second) =>
+    const nearest = [...availableDecisions].sort((first, second) =>
       conditionDistance(campaign, first.condition) - conditionDistance(campaign, second.condition),
     )[0]
     candidates = nearest ? [nearest] : []
@@ -99,7 +107,7 @@ export function getWeeklyDecision(campaign: CampaignState) {
   const notRecent = candidates.filter((decision) => !campaign.turn.recentDecisionIds.slice(-RECENT_DECISION_LIMIT).includes(decision.id))
   if (notRecent.length) return stableWeightedChoice(campaign, notRecent, 'decisao-semanal')
   const lastDecisionId = campaign.turn.recentDecisionIds[campaign.turn.recentDecisionIds.length - 1]
-  const alternatives = allWeeklyDecisions.filter((decision) => decision.id !== lastDecisionId)
+  const alternatives = availableDecisions.filter((decision) => decision.id !== lastDecisionId)
   const nearestDistance = Math.min(...alternatives.map((decision) => conditionDistance(campaign, decision.condition)))
   const nearest = alternatives.filter((decision) => conditionDistance(campaign, decision.condition) === nearestDistance)
   return stableWeightedChoice(campaign, nearest.length ? nearest : alternatives, 'decisao-semanal')
@@ -155,6 +163,10 @@ export function getActionPointExplanation(campaign: CampaignState): string {
 }
 
 export function getActionBlockedReason(campaign: CampaignState, action: GameAction): string | null {
+  if (action.id === 'propose-ministry-reorganization'
+    && campaign.executiveProposals.includes('Reorganização da estrutura ministerial')) {
+    return 'A proposta já foi registrada e aguarda a fase do Legislativo.'
+  }
   if (campaign.turn.availableActionPoints < action.costs.actionPoints) {
     return `Faltam ${action.costs.actionPoints - campaign.turn.availableActionPoints} ponto(s) de ação.`
   }
@@ -235,6 +247,7 @@ export function initializeCampaignTurn(campaign: CampaignState): CampaignState {
 export function executeAction(campaign: CampaignState, actionId: string): CampaignState | null {
   const action = sampleActions.find((candidate) => candidate.id === actionId)
   if (!action || getActionBlockedReason(campaign, action)) return null
+  if (action.id === 'propose-ministry-reorganization') return proposeMinistryReorganization(campaign)
 
   const paidCampaign: CampaignState = {
     ...campaign,
@@ -311,8 +324,12 @@ export function chooseNarrativeOption(
   const option = decision?.options.find((candidate) => candidate.id === optionId)
   if (!decision || !option) return null
 
+  const executiveCampaign = option.executiveEffect
+    ? applyExecutiveDecision(campaign, option.executiveEffect)
+    : campaign
+  if (!executiveCampaign) return null
   const { campaign: effectedCampaign, changes } = applyIndicatorEffects(
-    campaign,
+    executiveCampaign,
     option.effects,
     `${decision.title}: ${option.label}`,
   )
@@ -525,6 +542,7 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
   if (monthEndEvent && campaign.turn.chosenMonthlyOptionId) events.push(monthEndEvent.description)
 
   let economyBalance: EconomyBalance | null = null
+  let executiveReport: string[] = []
   if (isMonthEnd) {
     economyBalance = calculateMonthlyEconomyBalance(workingCampaign)
     const budgetChange = economyBalance.closingBudget - economyBalance.openingBudget
@@ -541,6 +559,10 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
       })
     }
     events.push(`Balanço mensal: receitas ${economyBalance.revenue}, despesas ${economyBalance.expenses}.`)
+    const executiveClose = closeExecutiveMonth(workingCampaign)
+    workingCampaign = executiveClose.campaign
+    executiveReport = executiveClose.report
+    changes.push(...executiveClose.changes)
   }
 
   const carriedActionPoints = Math.min(
@@ -631,6 +653,7 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
     totalActionPoints: completedCampaign.turn.availableActionPoints,
     monthlyEvent: monthEndEvent?.title ?? null,
     economyBalance,
+    executiveReport,
   }
   const withNews = appendSummaryNews({ ...completedCampaign, weeklySummary: summary }, summary)
 

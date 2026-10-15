@@ -3,6 +3,7 @@ import { parties } from '../data/parties'
 import { initialCalendar } from '../state/initialState'
 import { createCampaignTheme } from './theme'
 import { initializeCampaignTurn } from './turn'
+import { createInitialMinistries } from './executive'
 import { dashboardNews } from '../data/dashboard'
 import type {
   CampaignState,
@@ -118,6 +119,8 @@ export function createCampaign(
     calendar: { ...initialCalendar },
     country: rollCountryIndicators(random),
     theme: createCampaignTheme(selection.colors[0], selection.colors[1]),
+    ministries: [],
+    executiveProposals: [],
     turn: {
       availableActionPoints: 0,
       newActionPoints: 0,
@@ -141,7 +144,10 @@ export function createCampaign(
     weeklySummary: null,
   }
 
-  return initializeCampaignTurn(campaign)
+  return initializeCampaignTurn({
+    ...campaign,
+    ministries: createInitialMinistries(campaign, random),
+  })
 }
 
 export function isCustomPartyValid(name: string, acronym: string, colors: string[]): boolean {

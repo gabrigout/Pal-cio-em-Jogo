@@ -1,10 +1,11 @@
 import { dashboardNews } from '../data/dashboard'
 import { createCampaignTheme } from '../engine/theme'
+import { createInitialMinistries } from '../engine/executive'
 import { initializeCampaignTurn } from '../engine/turn'
 import { calendarMonths } from '../state/initialState'
 import type { CampaignState, CampaignTurnState } from '../state/types'
 
-export const CURRENT_SAVE_VERSION = 2
+export const CURRENT_SAVE_VERSION = 3
 const SAVE_KEY_PREFIX = 'palacio-em-jogo:campaign:'
 
 export interface StorageLike {
@@ -129,9 +130,36 @@ function isWeeklySummary(value: unknown): boolean {
     && isNumber(value.totalActionPoints)
     && (typeof value.monthlyEvent === 'string' || value.monthlyEvent === null)
     && (value.economyBalance === null || isEconomyBalance(value.economyBalance))
+    && isStringArray(value.executiveReport)
 }
 
-function isCampaignState(value: unknown): value is CampaignState {
+function isMinisterCandidate(value: unknown): boolean {
+  if (!isRecord(value) || typeof value.id !== 'string' || typeof value.name !== 'string'
+    || typeof value.partyId !== 'string' || typeof value.partyName !== 'string'
+    || typeof value.partyAcronym !== 'string' || typeof value.profile !== 'string'
+    || !isRecord(value.attributes)) return false
+  const attributes = value.attributes
+  return ['competence', 'loyalty', 'popularity', 'integrity', 'influence', 'ambition', 'relations']
+    .every((key) => isNumber(attributes[key]))
+}
+
+function isMinistry(value: unknown): boolean {
+  return isRecord(value)
+    && typeof value.id === 'string'
+    && typeof value.name === 'string'
+    && typeof value.area === 'string'
+    && isStringArray(value.competences)
+    && ['annualBudget', 'monthlyAllocation', 'budgetAvailable', 'budgetExecuted', 'administrativePerformance']
+      .every((key) => isNumber(value[key]))
+    && (value.minister === null || isMinisterCandidate(value.minister))
+    && Array.isArray(value.candidates) && value.candidates.every(isMinisterCandidate)
+    && isStringArray(value.negotiatedCandidateIds)
+    && isStringArray(value.pendingItems)
+    && isStringArray(value.risks)
+    && isStringArray(value.alerts)
+}
+
+function isCampaignState(value: unknown, allowEmptyMinistries = false): value is CampaignState {
   if (!isRecord(value) || typeof value.id !== 'string' || !value.id) return false
   if (value.orientation !== 'left' && value.orientation !== 'right') return false
   if (!isRecord(value.party) || typeof value.party.id !== 'string' || typeof value.party.fullName !== 'string'
@@ -175,6 +203,10 @@ function isCampaignState(value: unknown): value is CampaignState {
   if (!Array.isArray(value.news) || !value.news.every(isNewsItem)
     || !Array.isArray(value.pendingEffects) || !value.pendingEffects.every(isPendingEffect)) return false
   if (!(value.weeklySummary === null || isWeeklySummary(value.weeklySummary))) return false
+  if (!Array.isArray(value.ministries)
+    || (!allowEmptyMinistries && value.ministries.length === 0)
+    || !value.ministries.every(isMinistry)
+    || !isStringArray(value.executiveProposals)) return false
   return true
 }
 
@@ -222,16 +254,33 @@ function migrateLegacyCampaign(value: unknown): CampaignState | null {
     ...value,
     country,
     theme,
+    ministries: Array.isArray(value.ministries) ? value.ministries : [],
+    executiveProposals: isStringArray(value.executiveProposals) ? value.executiveProposals : [],
     turn: isRecord(value.turn) ? { ...freshTurnState(), ...value.turn } : freshTurnState(),
     news: Array.isArray(value.news) ? value.news : dashboardNews.map((item) => ({ ...item })),
     pendingEffects: Array.isArray(value.pendingEffects) ? value.pendingEffects : [],
-    weeklySummary: isRecord(value.weeklySummary) ? value.weeklySummary : null,
+    weeklySummary: isRecord(value.weeklySummary)
+      ? { ...value.weeklySummary, executiveReport: isStringArray(value.weeklySummary.executiveReport) ? value.weeklySummary.executiveReport : [] }
+      : null,
   }
 
-  if (!isCampaignState(candidate)) return null
+  if (!isCampaignState(candidate, candidate.ministries.length === 0)) return null
+  const migratedCandidate = candidate.ministries.length > 0
+    ? candidate
+    : { ...candidate, ministries: createInitialMinistries(candidate, migrationRandom(candidate.id)) }
+  if (!isCampaignState(migratedCandidate)) return null
   const hasDecisionStateV2 = isRecord(value.turn) && 'activeReactionEventId' in value.turn
-  if (!hasDecisionStateV2) return initializeCampaignTurn(candidate)
-  return candidate
+  if (!hasDecisionStateV2) return initializeCampaignTurn(migratedCandidate)
+  return migratedCandidate
+}
+
+function migrationRandom(seedText: string): () => number {
+  let seed = 2166136261
+  for (const character of seedText) seed = Math.imul(seed ^ character.charCodeAt(0), 16777619) >>> 0
+  return () => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0
+    return seed / 4294967296
+  }
 }
 
 export function migrateSave(value: unknown): MigrationResult {

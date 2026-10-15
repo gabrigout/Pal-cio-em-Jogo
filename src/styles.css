@@ -339,6 +339,84 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cor-primaria); 
 .game-menu-button:hover { border-color: var(--cor-secundaria); color: #efefef; }
 .save-indicator { color: #9d9d9d; font-family: var(--mono); font-size: 8px; }
 .storage-error-banner { width: min(1160px, calc(100% - 64px)); margin: 12px auto 0; padding: 10px 13px; border: 1px solid #626262; background: #242424; color: #ededed; font-size: 10px; line-height: 1.5; }
+.executive-panel { width: min(1160px, calc(100% - 64px)); margin-inline: auto; padding: 25px 0 44px; }
+.state-subnavigation { display: flex; gap: 6px; margin-bottom: 26px; border-bottom: 1px solid var(--line); }
+.state-subnavigation span { position: relative; padding: 0 12px 11px; color: var(--cor-primaria); font-size: 10px; font-weight: 700; }
+.state-subnavigation span::after { position: absolute; right: 10px; bottom: -1px; left: 10px; height: 2px; background: var(--cor-primaria); content: ''; }
+.executive-page-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 22px; }
+.executive-page-heading h1 { margin: 0; color: var(--text); font-size: 23px; font-weight: 600; }
+.executive-page-heading p:last-child { margin: 7px 0 0; color: var(--muted); font-size: 10px; line-height: 1.6; }
+.executive-overview { display: inline-flex; align-items: center; gap: 8px; padding: 9px 11px; border: 1px solid var(--line); color: var(--cor-secundaria); font-family: var(--mono); font-size: 9px; white-space: nowrap; }
+.executive-layout { display: grid; grid-template-columns: minmax(230px, 0.33fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.ministry-list { display: grid; max-height: 900px; overflow: auto; border: 1px solid var(--line); background: var(--surface); }
+.ministry-list-item { min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 12px; border: 0; border-bottom: 1px solid var(--line); background: transparent; color: var(--soft); cursor: pointer; text-align: left; }
+.ministry-list-item:last-child { border-bottom: 0; }
+.ministry-list-item:hover, .ministry-list-item.is-selected { background: color-mix(in srgb, var(--cor-primaria), var(--neutral-900) 92%); }
+.ministry-list-item.is-selected { box-shadow: inset 2px 0 var(--cor-primaria); }
+.ministry-list-copy { min-width: 0; display: grid; gap: 4px; }
+.ministry-list-copy small { color: var(--cor-secundaria); font-family: var(--mono); font-size: 7px; text-transform: uppercase; }
+.ministry-list-copy strong { color: var(--text); font-size: 9px; font-weight: 600; line-height: 1.4; }
+.ministry-list-copy > span { overflow: hidden; color: var(--muted); font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
+.ministry-list-performance { flex: 0 0 auto; color: var(--cor-primaria); font-family: var(--mono); font-size: 10px; }
+.ministry-list-performance small { color: var(--muted); font-size: 7px; }
+.ministry-detail { min-width: 0; display: grid; gap: 12px; }
+.ministry-detail-heading { display: flex; align-items: start; justify-content: space-between; gap: 12px; padding: 16px; border: 1px solid var(--line); background: var(--surface); }
+.ministry-detail-heading .eyebrow { color: var(--cor-secundaria); }
+.ministry-detail-heading h2 { margin: 0; color: var(--text); font-size: 17px; font-weight: 600; }
+.executive-action-type { width: fit-content; display: inline-flex; align-items: center; gap: 5px; padding: 4px 6px; border: 1px solid var(--line); color: var(--cor-secundaria); font-family: var(--mono); font-size: 7px; line-height: 1.35; }
+.ministry-detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.ministry-info-block { min-width: 0; padding: 14px; border: 1px solid var(--line); background: var(--surface); }
+.ministry-info-block h3 { margin: 0 0 10px; color: var(--soft); font-size: 10px; font-weight: 700; }
+.ministry-info-block p { color: var(--muted); font-size: 9px; line-height: 1.55; }
+.minister-identity { display: grid; gap: 4px; }
+.minister-identity strong { color: var(--text); font-size: 13px; }
+.minister-identity span, .minister-profile { color: var(--muted); font-size: 9px; }
+.minister-profile { margin: 7px 0 10px; }
+.minister-attributes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; margin: 0; }
+.minister-attributes > div { display: grid; gap: 4px; padding: 6px; border: 1px solid var(--line); background: var(--neutral-900); }
+.minister-attributes dt { color: var(--muted); font-size: 7px; }
+.minister-attributes dd { margin: 0; color: var(--soft); font-family: var(--mono); font-size: 9px; }
+.minister-performance { display: flex; justify-content: space-between; gap: 8px; margin: 9px 0; }
+.minister-performance strong { color: var(--cor-primaria); font-family: var(--mono); }
+.ministry-competences { display: grid; gap: 7px; margin: 0; padding-left: 15px; color: var(--soft); font-size: 9px; line-height: 1.5; }
+.ministry-competences li::marker { color: var(--cor-secundaria); }
+.ministry-budget { display: grid; gap: 8px; margin-top: 13px; padding-top: 10px; border-top: 1px solid var(--line); }
+.ministry-budget span { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 8px; }
+.ministry-budget strong { color: var(--soft); font-family: var(--mono); font-size: 8px; }
+.ministry-programs { grid-column: 1 / -1; }
+.ministry-programs p { margin: 0; }
+.executive-empty-note { margin: 0; }
+.executive-danger-button, .executive-primary-button, .executive-secondary-button { min-height: 32px; display: inline-flex; align-items: center; justify-content: center; padding: 6px 9px; border: 1px solid var(--line); cursor: pointer; font-size: 8px; font-weight: 700; line-height: 1.4; }
+.executive-danger-button { margin-top: 10px; border-color: var(--cor-secundaria); background: transparent; color: var(--cor-secundaria); }
+.executive-primary-button { border-color: var(--cor-primaria); background: var(--cor-primaria); color: var(--cor-botao-texto); }
+.executive-secondary-button { background: transparent; color: var(--cor-primaria); }
+.executive-danger-button:hover:not(:disabled), .executive-secondary-button:hover:not(:disabled) { background: color-mix(in srgb, var(--cor-primaria), var(--neutral-900) 91%); }
+.executive-primary-button:hover:not(:disabled) { filter: brightness(1.08); }
+.executive-danger-button:disabled, .executive-primary-button:disabled, .executive-secondary-button:disabled { cursor: not-allowed; opacity: .45; }
+.executive-button-hint { display: block; margin-top: 5px; color: var(--muted); font-size: 8px; }
+.executive-reaction-note, .executive-footnote { display: flex; align-items: center; gap: 5px; margin: 8px 0 0; color: var(--muted); font-size: 8px; line-height: 1.5; }
+.vacant-ministry { display: flex; align-items: center; gap: 8px; color: var(--cor-secundaria); font-size: 9px; line-height: 1.5; }
+.candidate-block { display: grid; gap: 10px; }
+.candidate-block h3, .candidate-block > p { margin: 0; }
+.executive-legal-note { display: flex; align-items: center; gap: 6px; color: var(--soft) !important; }
+.minister-candidate-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+.minister-candidate { min-width: 0; display: grid; gap: 8px; padding: 11px; border: 1px solid var(--line); background: var(--neutral-900); }
+.candidate-heading { display: grid; gap: 4px; }
+.candidate-heading strong { color: var(--text); font-size: 10px; }
+.candidate-heading span { color: var(--muted); font-size: 8px; }
+.minister-candidate > p { margin: 0; }
+.minister-candidate .minister-attributes { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.candidate-requirements { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; color: var(--cor-secundaria) !important; }
+.candidate-requirements span { flex-basis: 100%; color: var(--muted); }
+.candidate-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+.candidate-action { min-width: 0; display: grid; align-content: start; gap: 5px; }
+.ministry-reorganization { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 18px; padding: 16px; border: 1px solid var(--line); background: var(--surface); }
+.reorganization-copy h2 { margin: 8px 0 4px; color: var(--text); font-size: 12px; }
+.reorganization-copy p { max-width: 710px; margin: 0; color: var(--muted); font-size: 9px; line-height: 1.55; }
+.proposal-status { display: block; margin-top: 8px; color: var(--cor-secundaria); font-family: var(--mono); font-size: 8px; }
+.executive-footnote { margin-top: 12px; }
+.summary-plain-list svg { flex: 0 0 auto; color: var(--cor-secundaria); }
+.summary-plain-list li { align-items: flex-start; }
 
 @media (max-width: 800px) {
   .setup-page { width: min(100% - 36px, 680px); }
@@ -351,6 +429,21 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cor-primaria); 
   .save-last-saved { grid-column: 2; }
   .save-continue-button { grid-column: 3; grid-row: 1 / span 2; }
   .save-card-actions { padding-left: 56px; }
+  .executive-layout { grid-template-columns: 1fr; }
+  .ministry-list { grid-template-columns: repeat(2, minmax(0, 1fr)); max-height: 300px; }
+  .ministry-list-item:nth-last-child(2) { border-bottom: 0; }
+  .ministry-detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .executive-panel { width: calc(100% - 32px); padding-top: 20px; }
+  .executive-page-heading { align-items: flex-start; flex-direction: column; }
+  .executive-page-heading h1 { font-size: 19px; }
+  .ministry-list { grid-template-columns: 1fr; max-height: 270px; }
+  .ministry-list-item:nth-last-child(2) { border-bottom: 1px solid var(--line); }
+  .ministry-list-item:last-child { border-bottom: 0; }
+  .ministry-detail-heading { align-items: flex-start; flex-direction: column; }
+  .ministry-detail-grid, .minister-candidate-list { grid-template-columns: 1fr; }
+  .candidate-actions { grid-template-columns: 1fr; }
+  .minister-attributes { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .ministry-reorganization { align-items: flex-start; flex-direction: column; }
 }
 @media (max-width: 520px) {
   .setup-page { width: calc(100% - 32px); }

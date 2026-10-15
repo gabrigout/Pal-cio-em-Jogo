@@ -4,8 +4,15 @@ import { ArrowLeft, Landmark } from 'lucide-react'
 import CampaignLibrary from './components/CampaignLibrary'
 import CampaignSetup from './components/CampaignSetup'
 import Dashboard from './components/Dashboard'
+import ExecutivePanel from './components/ExecutivePanel'
 import TopNavigation from './components/TopNavigation'
 import { createCampaign } from './engine/campaign'
+import {
+  appointMinister,
+  dismissMinister,
+  negotiateMinisterNomination,
+  proposeMinistryReorganization,
+} from './engine/executive'
 import { advanceWeek, chooseNarrativeOption, dismissDecisionResult, dismissWeeklySummary, executeAction } from './engine/turn'
 import { downloadCampaignBackup } from './persistence/backup'
 import {
@@ -74,6 +81,14 @@ export default function App() {
     if (!campaign) return
     const nextCampaign = executeAction(campaign, actionId)
     if (nextCampaign) persistCampaign(nextCampaign)
+  }
+
+  function runExecutiveAction(nextCampaign: CampaignState | null, failureMessage: string) {
+    if (!nextCampaign) {
+      setStorageError(failureMessage)
+      return
+    }
+    persistCampaign(nextCampaign)
   }
 
   function chooseDecision(optionId: string, category: 'decisão' | 'reação' | 'mensal') {
@@ -242,6 +257,26 @@ export default function App() {
           onDismissDecisionResult={closeDecisionResult}
           onDismissSummary={closeWeeklySummary}
           onRunAction={runAction}
+        />
+      ) : activeSection === 'estado' ? (
+        <ExecutivePanel
+          campaign={campaign}
+          onAppoint={(ministryId, candidateId) => runExecutiveAction(
+            appointMinister(campaign, ministryId, candidateId),
+            'A nomeação não foi concluída. Verifique os requisitos e recursos disponíveis.',
+          )}
+          onDismiss={(ministryId) => runExecutiveAction(
+            dismissMinister(campaign, ministryId),
+            'A exoneração não foi concluída. Verifique se há ministro e recursos disponíveis.',
+          )}
+          onNegotiate={(ministryId, candidateId) => runExecutiveAction(
+            negotiateMinisterNomination(campaign, ministryId, candidateId),
+            'A negociação não foi concluída. Verifique a indicação e os recursos disponíveis.',
+          )}
+          onProposeReorganization={() => runExecutiveAction(
+            proposeMinistryReorganization(campaign),
+            'A proposta não foi registrada. Verifique se há recursos disponíveis ou se ela já foi enviada.',
+          )}
         />
       ) : (
         <main className="section-placeholder page-enter">

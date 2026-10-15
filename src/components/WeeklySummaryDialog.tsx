@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Check, ChevronRight, Clock3, Coins, FileText } from 'lucide-react'
+import { Check, ChevronRight, Clock3, Coins, FileText, Landmark } from 'lucide-react'
 import type { WeeklySummary } from '../state/types'
 
 interface WeeklySummaryDialogProps {
@@ -41,6 +41,15 @@ export default function WeeklySummaryDialog({ summary, onDismiss }: WeeklySummar
           <section className="summary-section">
             <h3>Ações executadas</h3>
             <ul className="summary-plain-list">{summary.actions.map((action) => <li key={action}><Check aria-hidden="true" size={13} /> {action}</li>)}</ul>
+          </section>
+        )}
+
+        {summary.executiveReport.length > 0 && (
+          <section className="summary-section">
+            <h3>Desempenho dos ministérios</h3>
+            <ul className="summary-plain-list">
+              {summary.executiveReport.map((entry) => <li key={entry}><Landmark aria-hidden="true" size={13} /> {entry}</li>)}
+            </ul>
           </section>
         )}
 

@@ -97,7 +97,7 @@ test('migra campanha legada sem versão para o save atual', () => {
   assert.equal(result.ok, true)
   if (!result.ok) return
   assert.equal(result.migrated, true)
-  assert.equal(result.save.versaoDoSave, 2)
+  assert.equal(result.save.versaoDoSave, 3)
   assert.equal(result.save.campaign.country.executiveSupport, 50)
   assert.equal(result.save.campaign.country.judiciaryRelation, 50)
   assert.ok(result.save.campaign.turn.activeDecisionId)
@@ -123,9 +123,35 @@ test('migra save versão 1 preservando pontos e inicializando o modelo de evento
   assert.equal(result.ok, true)
   if (!result.ok) return
   assert.equal(result.migrated, true)
-  assert.equal(result.save.versaoDoSave, 2)
+  assert.equal(result.save.versaoDoSave, 3)
   assert.equal(result.save.campaign.turn.availableActionPoints, 3)
   assert.ok(Array.isArray(result.save.campaign.turn.scheduledNarrativeEvents))
+})
+
+test('migra save versão 2 e gera o gabinete para campanha existente', () => {
+  const campaign = createTestCampaign() as unknown as Record<string, unknown>
+  delete campaign.ministries
+  delete campaign.executiveProposals
+
+  const result = migrateSave({
+    versaoDoSave: 2,
+    savedAt: '2027-01-01T00:00:00.000Z',
+    campaign,
+  })
+
+  assert.equal(result.ok, true)
+  if (!result.ok) return
+  assert.equal(result.migrated, true)
+  assert.equal(result.save.versaoDoSave, 3)
+  assert.equal(result.save.campaign.ministries.length, 17)
+  assert.ok(result.save.campaign.ministries.every((ministry) => ministry.minister))
+  const repeatedMigration = migrateSave({
+    versaoDoSave: 2,
+    savedAt: '2027-01-01T00:00:00.000Z',
+    campaign,
+  })
+  assert.equal(repeatedMigration.ok, true)
+  if (repeatedMigration.ok) assert.deepEqual(result.save.campaign.ministries, repeatedMigration.save.campaign.ministries)
 })
 
 test('rejeita import inválido e não altera campanhas existentes', () => {

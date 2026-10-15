@@ -16,10 +16,11 @@ O jogador inicia na Presidência e governa em turnos semanais, tomando decisões
 - **Calendário:** quatro semanas por mês, virada de mês/ano, avanço semanal, resumo semanal e balanço econômico simplificado no fechamento do mês.
 - **Pontos e recursos:** 2 pontos de ação base, bônus para os quatro apoios acima de 49%, teto de 6 novos pontos, até 2 carregados e máximo de 8 disponíveis. Dinheiro/orçamento, capital político e capacidade administrativa são recursos separados.
 - **Ações:** cinco ações de exemplo em `data/actions.ts`, com custos, efeitos imediatos ou pendentes, bloqueio por falta de recurso e motivo apresentado ao jogador.
-- **Decisões e eventos:** 32 decisões semanais com opções, efeitos, ícones e prévias de consequência; oito reações condicionais com pesos e histórico antirrepetição; dois eventos encadeáveis; três eventos mensais com opções. Resultados aplicam mudanças e mostram justificativa antes de voltar ao dashboard.
+- **Decisões e eventos:** 32 decisões semanais gerais e seis cartões executivos sobre ministros, com opções, efeitos, ícones e prévias de consequência; oito reações condicionais com pesos e histórico antirrepetição; dois eventos encadeáveis; três eventos mensais com opções. Resultados aplicam mudanças e mostram justificativa antes de voltar ao dashboard.
 - **Feed e resumo:** ações, escolhas e encerramentos atualizam o feed. O resumo registra indicadores alterados, motivos, eventos, ações e pontos carregados/expirados.
 - **Múltiplas campanhas:** biblioteca local para continuar, criar, excluir com confirmação, importar e exportar backups JSON. Cada campanha tem chave e identificador próprios.
-- **Persistência:** autosave após criação, ação, decisão, resultado/fechamento e avanço semanal. Save atual em `versaoDoSave: 2`; migração de saves sem versão e de versão 1. Saves inválidos são isolados, e erros de quota/armazenamento geram mensagens.
+- **Persistência:** autosave após criação, ação, decisão, resultado/fechamento e avanço semanal. Save atual em `versaoDoSave: 3`; migração de saves sem versão e das versões 1 e 2. Campanhas antigas recebem um gabinete ficcional gerado de forma determinística. Saves inválidos são isolados, e erros de quota/armazenamento geram mensagens.
+- **Poder Executivo:** 17 ministérios de referência para janeiro de 2027, ministros ficcionais com sete atributos e candidatos gerados por afinidade partidária; nomeação, negociação e exoneração custam recursos e atualizam o apoio político. A ficha mostra competências, orçamento, execução anterior, desempenho, pendências, riscos e alertas. A virada mensal recalcula desempenho e inclui execução e riscos no resumo. Reorganização ministerial só pode ser registrada como proposta dependente do Congresso, sem tramitação nesta fase.
 - **Instituições:** opções modelam negociação e interlocução; não permitem ao presidente comandar o Congresso ou o Judiciário.
 
 ## Pastas e arquivos principais
@@ -29,8 +30,8 @@ O jogador inicia na Presidência e governa em turnos semanais, tomando decisões
 - `src/styles.css`: tema neutro/partidário, layout responsivo e estilos das telas.
 - `src/components/`: `CampaignLibrary.tsx` (saves e backups), `CampaignSetup.tsx` (nova campanha), `Dashboard.tsx` (painel), `TurnControls.tsx` (recursos, ações e cartões), `DecisionResultDialog.tsx` e `WeeklySummaryDialog.tsx` (resultados), além de `MetricCard.tsx` e `TopNavigation.tsx`.
 - `src/state/`: `types.ts` define o estado serializável e os contratos; `initialState.ts` define calendário inicial e meses.
-- `src/engine/`: `campaign.ts` cria e valida seleções de partido; `theme.ts` calcula contraste e variantes; `dashboard.ts` deriva indicadores e estados; `turn.ts` implementa calendário, recursos, condições/pesos, decisões, reações, encadeamentos, eventos mensais e resultados. `turn.test.ts` testa pontos, calendário e eventos; `dashboard.test.ts` testa as faixas dos indicadores.
-- `src/data/`: `campaignConfig.ts` contém paletas, faixas e regras; `parties.ts` contém partidos; `actions.ts` ações de exemplo; `decisions.ts` e `additionalDecisions.ts` decisões; `reactionEvents.ts` reações e eventos encadeados; `monthlyEvents.ts` eventos mensais; `dashboard.ts` notícias e cards demonstrativos.
+- `src/engine/`: `campaign.ts` cria e valida seleções de partido; `executive.ts` inicializa ministros, processa nomeações/exonerações e calcula o desempenho mensal; `theme.ts` calcula contraste e variantes; `dashboard.ts` deriva indicadores e estados; `turn.ts` implementa calendário, recursos, decisões, reações, encadeamentos, eventos mensais e resultados. Testes em `turn.test.ts`, `executive.test.ts` e `dashboard.test.ts`.
+- `src/data/`: `campaignConfig.ts` contém paletas, faixas e regras; `parties.ts` contém partidos; `ministries.ts` é o catálogo de ministérios; `executiveDecisions.ts` contém os seis cartões de ministros; `actions.ts` contém ações presidenciais classificadas por instrumento; `decisions.ts` e `additionalDecisions.ts` decisões gerais; `reactionEvents.ts` reações e eventos encadeados; `monthlyEvents.ts` eventos mensais; `dashboard.ts` notícias e cards demonstrativos.
 - `src/persistence/`: `campaignRepository.ts` valida, salva, lista, carrega, exclui e migra saves; `backup.ts` exporta JSON; `campaignRepository.test.ts` cobre persistência, migração, backup e falhas.
 - Raiz: `package.json` define comandos e dependências; `vite.config.ts` e `tsconfig*.json` configuram build; `index.html` é a entrada Vite.
 - `docs/`: documento mestre e catálogos de personagens em Markdown/CSV/JSON.
@@ -44,7 +45,7 @@ npm run test
 npm run build
 ```
 
-`npm run test` executa os testes de `src/engine/turn.test.ts`, `src/engine/dashboard.test.ts` e `src/persistence/campaignRepository.test.ts`. O LocalStorage é específico do navegador; exporte um backup JSON para cópia externa.
+`npm run test` executa os testes de `src/engine/turn.test.ts`, `src/engine/dashboard.test.ts` e `src/persistence/campaignRepository.test.ts`. Para incluir os testes executivos, execute `npx tsx --test src/engine/executive.test.ts`. O build usa `npm run build`. O LocalStorage é específico do navegador; exporte um backup JSON para cópia externa.
 
 ## Decisões de design
 
@@ -57,7 +58,7 @@ npm run build
 
 ## Pendências e retoques conhecidos
 
-- As abas Estado, Economia, Políticas Públicas, Sociedade, Relações e Notícias/Histórico ainda mostram apenas o título da seção; não têm sistemas próprios.
+- Economia, Políticas Públicas, Sociedade, Relações e Notícias/Histórico ainda mostram apenas o título da seção; sistemas orçamentários detalhados e programas/projetos ministeriais continuam para etapas posteriores.
 - Alertas e cartões “Em andamento”, “Aguardando resposta” e “Encerrado” ainda usam conteúdo demonstrativo. Há textos/contadores estáticos no dashboard, como o total anunciado de atualizações.
 - As cinco ações, 32 decisões, reações e eventos mensais são conteúdo inicial. A economia usa receita e despesa agregadas simples; não há orçamento anual completo, dívida ou execução detalhada.
 - Personagens ainda não têm memória/autonomia real, relações persistentes ou efeitos de promessas; imprensa, investigações, crises entre poderes e eleições também não têm sistemas completos.
@@ -67,7 +68,7 @@ npm run build
 ## Plano de fases
 
 - **Fase 1 — Fundação jogável: completa.** Criação de campanha, dashboard, calendário, recursos/pontos, decisões, avanço semanal, notícias e saves múltiplos estão implementados. As ações e os conteúdos seguem como exemplos.
-- **Próxima: Fase 2 — Governo e execução.** Implementar Executivo, ministérios/ministros, economia e orçamento anual, políticas/projetos e grupos sociais, conectando gastos e projetos aos recursos e indicadores existentes.
+- **Fase 2 — Governo e execução: parcial.** Executivo, ministérios/ministros, nomeações, decisões ministeriais e desempenho mensal estão implementados. Falta economia e orçamento anual detalhados, políticas/projetos e grupos sociais, conectados aos recursos e indicadores existentes.
 - **Fase 3 — Instituições e crises: não iniciada como sistema completo.** Criar procedimentos próprios do Congresso, Judiciário e demais órgãos, respeitando competências.
 - **Fase 4 — Política viva: parcial.** Há cartões de reação, notícias e encadeamentos; faltam personagens autônomos, alianças, memória, imprensa sistêmica e modelos globais de corrupção/interesses.
 - **Fase 5 — Eleições e Maré Ideológica: não iniciada.** Pesquisas, candidatos, regras eleitorais, composição pós-eleição e ciclo de oito anos.

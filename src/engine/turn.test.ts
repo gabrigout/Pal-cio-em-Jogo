@@ -75,6 +75,7 @@ test('virada semanal carrega até dois pontos e a virada mensal fecha evento e b
   )
   assert.ok(nextWeek.weeklySummary?.monthlyEvent)
   assert.ok(nextWeek.weeklySummary?.economyBalance)
+  assert.equal(nextWeek.weeklySummary?.executiveReport.length, 17)
 })
 
 test('evento de reação só é elegível quando sua condição é atendida', () => {

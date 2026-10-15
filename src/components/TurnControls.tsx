@@ -23,6 +23,14 @@ import type { LucideIcon } from 'lucide-react'
 import { getOptionConsequences } from '../engine/turn'
 import type { CampaignState, DecisionIcon, DecisionResult, NarrativeDecision, TurnDashboardData } from '../state/types'
 
+const actionTypeLabels = {
+  administrative: 'Ação administrativa do Executivo',
+  decree: 'Decreto/regulamento',
+  congress: 'Proposta que depende do Congresso',
+  'institutional-approval': 'Nomeação sujeita à aprovação de outra instituição',
+  'legal-budgetary-review': 'Ato sujeito a controle jurídico ou orçamentário',
+} as const
+
 const decisionIcons: Record<DecisionIcon, LucideIcon> = {
   briefcase: BriefcaseBusiness,
   landmark: Landmark,
@@ -43,12 +51,18 @@ function DecisionChoiceCard({
   selectedLabel,
   onChoose,
   eyebrow,
+  availableActionPoints,
+  politicalCapital,
+  ministries,
 }: {
   decision: NarrativeDecision
   category: DecisionResult['category']
   selectedLabel: string | null
   onChoose: (optionId: string, category: DecisionResult['category']) => void
   eyebrow: string
+  availableActionPoints: number
+  politicalCapital: number
+  ministries: CampaignState['ministries']
 }) {
   return (
     <section aria-labelledby={`decision-${decision.id}`} className={`narrative-decision-card decision-${category}`}>
@@ -64,6 +78,12 @@ function DecisionChoiceCard({
         {decision.options.map((option) => {
           const OptionIcon = option.icon ? decisionIcons[option.icon] : Sparkles
           const selected = selectedLabel === option.label
+          const requiresDismissal = option.executiveEffect?.kind === 'dismiss'
+          const blockedByDismissalCost = requiresDismissal
+            && (availableActionPoints < 1 || politicalCapital < 4)
+          const executiveTargetUnavailable = option.executiveEffect
+            && !ministries.some((ministry) => ministry.id === option.executiveEffect?.ministryId && ministry.minister)
+          const executiveOptionType = option.executiveEffect ? actionTypeLabels.administrative : null
           const consequences = getOptionConsequences(option).map((consequence) => ({
             label: `${consequence.direction === 'up' ? '↑' : '↓'} ${consequence.amount > 0 ? '+' : ''}${consequence.amount} ${consequence.label}`,
             direction: consequence.direction,
@@ -77,13 +97,18 @@ function DecisionChoiceCard({
             <button
               aria-pressed={selected}
               className={`decision-option${selected ? ' is-chosen' : ''}`}
-              disabled={Boolean(selectedLabel)}
+              disabled={Boolean(selectedLabel) || blockedByDismissalCost || Boolean(executiveTargetUnavailable)}
+              title={executiveTargetUnavailable ? 'O ministro desta decisão já não ocupa a pasta.' : undefined}
               key={option.id}
               onClick={() => onChoose(option.id, category)}
               type="button"
             >
               <span className="decision-option-icon"><OptionIcon aria-hidden="true" size={17} /></span>
-              <span className="decision-option-copy"><strong>{option.label}</strong><small>{option.description}</small></span>
+              <span className="decision-option-copy">
+                <strong>{option.label}</strong>
+                {executiveOptionType && <small className="executive-action-type">{executiveOptionType}</small>}
+                <small>{option.description}</small>
+              </span>
               <span className="decision-consequences">
                 {consequences.slice(0, 4).map((consequence, index) => (
                   <small className={`consequence-tag${index >= getOptionConsequences(option).length ? ' is-uncertain' : ` is-${consequence.direction}`}`} key={`${consequence.label}-${index}`}>
@@ -150,6 +175,7 @@ export default function TurnControls({ campaign, data, onRunAction, onChooseDeci
               <span className="sample-action-icon"><Swords aria-hidden="true" size={15} /></span>
               <div className="sample-action-copy">
                 <h3>{action.title}</h3>
+                <span className="executive-action-type">{actionTypeLabels[action.actionType]}</span>
                 <p>{action.description}</p>
                 <span className="action-cost">Custo: {costSummary}</span>
                 {blockedReason && <span className="action-blocked-reason">{blockedReason}</span>}
@@ -175,6 +201,9 @@ export default function TurnControls({ campaign, data, onRunAction, onChooseDeci
         eyebrow={`DECISÃO DA SEMANA ${campaign.calendar.week}`}
         onChoose={onChooseDecision}
         selectedLabel={data.selectedDecisionOptionLabel}
+        availableActionPoints={campaign.turn.availableActionPoints}
+        politicalCapital={campaign.country.politicalCapital}
+        ministries={campaign.ministries}
       />
 
       {data.reactionEvent && (
@@ -184,6 +213,9 @@ export default function TurnControls({ campaign, data, onRunAction, onChooseDeci
           eyebrow="REAÇÃO DO PAÍS"
           onChoose={onChooseDecision}
           selectedLabel={data.selectedReactionOptionLabel}
+          availableActionPoints={campaign.turn.availableActionPoints}
+          politicalCapital={campaign.country.politicalCapital}
+          ministries={campaign.ministries}
         />
       )}
 
@@ -207,6 +239,9 @@ export default function TurnControls({ campaign, data, onRunAction, onChooseDeci
             eyebrow="EVENTO DE ENCERRAMENTO"
             onChoose={onChooseDecision}
             selectedLabel={data.selectedMonthlyOptionLabel}
+            availableActionPoints={campaign.turn.availableActionPoints}
+            politicalCapital={campaign.country.politicalCapital}
+            ministries={campaign.ministries}
           />
         </section>
       )}
