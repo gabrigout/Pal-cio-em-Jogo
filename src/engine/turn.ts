@@ -10,6 +10,8 @@ import { calendarMonths } from '../state/initialState'
 import { applyExecutiveDecision, closeExecutiveMonth, proposeMinistryReorganization } from './executive'
 import { applyEconomicDecision, closeEconomicMonth, prepareEconomicYear } from './economy'
 import { advancePublicProjectsWeek, closePublicProjectsMonth } from './projects'
+import { closeSocietyMonth } from './society'
+import { formatBRLMoney } from '../utils/money'
 import type {
   ActionAvailability,
   ActionPointCalculation,
@@ -144,7 +146,7 @@ export function getActionAvailability(campaign: CampaignState): ActionAvailabili
     blockedReason: getActionBlockedReason(campaign, action),
     costSummary: [
       `${action.costs.actionPoints} PA`,
-      action.costs.budget ? `${action.costs.budget} orçamento` : null,
+      action.costs.budget ? formatBRLMoney(action.costs.budget) : null,
       action.costs.politicalCapital ? `${action.costs.politicalCapital} capital político` : null,
       action.costs.administrativeCapacity ? `${action.costs.administrativeCapacity} capacidade administrativa` : null,
     ].filter((cost): cost is string => cost !== null).join(' · '),
@@ -196,7 +198,7 @@ function applyIndicatorEffects(
   for (const [indicator, amount] of Object.entries(effects) as Array<[keyof CountryIndicators, number]>) {
     if (!amount) continue
     const before = country[indicator]
-    const after = clampIndicator(before + amount)
+    const after = indicator === 'budget' ? Math.max(0, before + amount) : clampIndicator(before + amount)
     if (after === before) continue
     country[indicator] = after
     changes.push({ indicator, label: indicatorLabels[indicator], amount: after - before, reason })
@@ -570,8 +572,12 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
     events.push(...projectClose.events)
     const economicClose = closeEconomicMonth(workingCampaign)
     workingCampaign = economicClose.campaign
-    economicReport = [...projectClose.report, ...economicClose.report]
     changes.push(...economicClose.changes)
+    const societyClose = closeSocietyMonth(workingCampaign)
+    workingCampaign = societyClose.campaign
+    changes.push(...societyClose.changes)
+    events.push(...societyClose.events)
+    economicReport = [...projectClose.report, ...economicClose.report, ...societyClose.report]
     const nextMonthIndex = calendarMonths.findIndex((month) => month === endingCalendar.month) + 1
     const nextYear = nextMonthIndex >= calendarMonths.length ? endingCalendar.year + 1 : endingCalendar.year
     if (nextMonthIndex >= calendarMonths.length) {
@@ -592,7 +598,7 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
         reason: `Receitas públicas +${economyBalance.revenue}; despesas, juros e execução ministerial -${economyBalance.expenses}.`,
       })
     }
-    events.push(`Balanço mensal: receitas ${economyBalance.revenue}, despesas ${economyBalance.expenses}.`)
+    events.push(`Balanço mensal: receitas ${formatBRLMoney(economyBalance.revenue)}, despesas ${formatBRLMoney(economyBalance.expenses)}.`)
   }
 
   const carriedActionPoints = Math.min(
