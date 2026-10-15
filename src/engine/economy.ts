@@ -480,13 +480,21 @@ export function closeEconomicMonth(campaign: CampaignState): { campaign: Campaig
   const ministryById = new Map(campaign.ministries.map((ministry) => [ministry.id, ministry]))
   const plannedSectorSpending = economy.annualBudget.sectors.map((sector) => {
     const weights = sectorEconomicWeights[sector.id]
-    const ministryExecutions = sector.ministryIds.reduce((total, id) =>
+    const requestedExecution = sector.ministryIds.reduce((total, id) =>
       total + (ministryById.get(id)?.budgetExecuted ?? 0), 0)
+    const remainingAllocation = Math.max(0, sector.annualAllocation - sector.executedThisYear)
+    // Cost multipliers represent waste/overrun, so the remaining appropriation
+    // must cover the weighted cost, not merely the nominal ministry execution.
+    const nominalExecuted = Math.min(
+      requestedExecution,
+      remainingAllocation / Math.max(0.1, weights.costMultiplier),
+    )
     return {
       sector,
       weights,
-      planned: ministryExecutions * weights.costMultiplier,
-      nominalExecuted: ministryExecutions,
+      requestedExecution,
+      planned: nominalExecuted * weights.costMultiplier,
+      nominalExecuted,
     }
   })
   const fixedPlanned = economy.annualBudget.fixedCommitments / 12
@@ -498,19 +506,20 @@ export function closeEconomicMonth(campaign: CampaignState): { campaign: Campaig
   const sectorFundingRatio = plannedSectorTotal > 0 ? Math.min(1, funds / plannedSectorTotal) : 1
   const actualSectors = plannedSectorSpending.map(({ sector, weights, nominalExecuted }) => {
     const paid = nominalExecuted * sectorFundingRatio
+    const weightedExpense = paid * weights.costMultiplier
     return {
       ...sector,
-      executedToDate: sector.executedThisYear + paid,
+      executedThisYear: Math.min(sector.annualAllocation, Math.round((sector.executedThisYear + weightedExpense) * 10) / 10),
       paid,
-      weightedExpense: paid * weights.costMultiplier,
+      weightedExpense,
     }
   })
   const sectorExpenses = actualSectors.reduce((sum, sector) => sum + sector.weightedExpense, 0)
   funds = Math.max(0, funds - sectorExpenses)
-  const nominalSectorTotal = plannedSectorSpending.reduce((sum, item) => sum + item.nominalExecuted, 0)
+  const requestedSectorTotal = plannedSectorSpending.reduce((sum, item) => sum + item.requestedExecution, 0)
   const paidNominalSectorTotal = plannedSectorSpending.reduce((sum, item) => sum + item.nominalExecuted * sectorFundingRatio, 0)
   const unpaidCommitments = Math.max(0, fixedPlanned - fixedPaid)
-    + Math.max(0, nominalSectorTotal - paidNominalSectorTotal)
+    + Math.max(0, requestedSectorTotal - paidNominalSectorTotal)
   const projectExpensesPaid = Math.max(0, economy.projectExpensesPaidThisMonth)
   const expenses = Math.round((fixedPaid + sectorExpenses + interestPaid + projectExpensesPaid) * 10) / 10
   const fiscalBalance = Math.round((revenue - fixedPaid - sectorExpenses - interestPaid - projectExpensesPaid) * 10) / 10
@@ -586,7 +595,7 @@ export function closeEconomicMonth(campaign: CampaignState): { campaign: Campaig
   ]
   if (debtRisk >= 4) report.push('Risco fiscal elevado: dívida acima de quatro vezes a receita anual pode pressionar confiança, custo de crédito e apoio político.')
 
-  const nextSectors = actualSectors.map(({ paid, weightedExpense: _weightedExpense, ...sector }) => sector)
+  const nextSectors = actualSectors.map(({ paid: _paid, weightedExpense: _weightedExpense, ...sector }) => sector)
   const updatedAnnualBudget = { ...economy.annualBudget, sectors: nextSectors }
   const updatedLoans = loans
   const nextState: EconomicState = {

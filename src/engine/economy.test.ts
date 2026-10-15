@@ -149,3 +149,34 @@ test('caixa insuficiente reduz execução e não permite despesas acima dos recu
   assert.ok(closed.report.some((entry) => /não financiados/.test(entry)))
   assert.ok(closed.campaign.economy.deferredPayments > 0)
 })
+
+
+test('execução ministerial não ultrapassa a dotação anual remanescente do setor', () => {
+  const initial = createCampaign('left', party, () => 0.5)
+  const health = initial.economy.annualBudget.sectors.find((sector) => sector.id === 'health')
+  assert.ok(health)
+  if (!health) return
+  const constrained = {
+    ...initial,
+    country: { ...initial.country, budget: 1_000_000 },
+    economy: {
+      ...initial.economy,
+      availableFunds: 1_000_000,
+      annualBudget: {
+        ...initial.economy.annualBudget,
+        sectors: initial.economy.annualBudget.sectors.map((sector) => sector.id === 'health'
+          ? { ...sector, executedThisYear: sector.annualAllocation - 1 }
+          : sector),
+      },
+    },
+    ministries: initial.ministries.map((ministry) => ministry.id === 'health'
+      ? { ...ministry, budgetExecuted: 100 }
+      : { ...ministry, budgetExecuted: 0 }),
+  }
+  const result = closeEconomicMonth(constrained)
+  const updatedHealth = result.campaign.economy.annualBudget.sectors.find((sector) => sector.id === 'health')
+  assert.ok(updatedHealth)
+  if (!updatedHealth) return
+  assert.ok(updatedHealth.executedThisYear <= updatedHealth.annualAllocation)
+  assert.ok(updatedHealth.executedThisYear >= health.annualAllocation - 1)
+})
