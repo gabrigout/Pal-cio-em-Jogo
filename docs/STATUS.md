@@ -45,7 +45,7 @@ npm run test
 npm run build
 ```
 
-`npm run test` executa os testes de `src/engine/turn.test.ts`, `src/engine/dashboard.test.ts` e `src/persistence/campaignRepository.test.ts`. Para incluir os testes executivos, execute `npx tsx --test src/engine/executive.test.ts`. O build usa `npm run build`. O LocalStorage é específico do navegador; exporte um backup JSON para cópia externa.
+`npm run test` executa os testes de `src/engine/turn.test.ts`, `src/engine/executive.test.ts`, `src/engine/dashboard.test.ts` e `src/persistence/campaignRepository.test.ts`. O build usa `npm run build`. O LocalStorage é específico do navegador; exporte um backup JSON para cópia externa.
 
 ## Decisões de design
 
