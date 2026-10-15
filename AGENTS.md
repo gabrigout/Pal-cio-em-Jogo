@@ -1,5 +1,6 @@
 # Palácio em Jogo: instruções para a IA
 
+Antes de qualquer tarefa, leia docs/STATUS.md.
 Antes de qualquer tarefa, leia docs/Palacio_em_Jogo_Documento_Mestre.md.
 O catálogo de personagens está em docs/ (md, csv e json). Não é necessário importá-lo agora.
 
