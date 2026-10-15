@@ -3,7 +3,7 @@ import { ArrowDown, ArrowUp, Banknote, ChartNoAxesCombined, Landmark, Scale } fr
 import { economicRules } from '../data/campaignConfig'
 import { canReviseBudget } from '../engine/economy'
 import type { CampaignState, EconomicIndicators } from '../state/types'
-import { formatBRLMoney, formatBRLMoneyDelta } from '../utils/money'
+import { formatBRLMoney } from '../utils/money'
 
 const indicatorMeta: Array<{ id: keyof EconomicIndicators; label: string; suffix: string }> = [
   { id: 'publicRevenue', label: 'Receitas públicas', suffix: '' },
