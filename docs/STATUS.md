@@ -25,7 +25,7 @@ Validação: `npm run test` passou com 33 testes e `npm run build` concluiu com 
 - **Decisões e eventos:** 32 decisões semanais gerais, seis cartões executivos sobre ministros e seis cartões econômicos, com opções, efeitos e justificativas; oito reações condicionais com pesos e histórico antirrepetição; dois eventos encadeáveis; três eventos mensais com opções.
 - **Feed e resumo:** ações, escolhas e encerramentos atualizam o feed. O resumo registra indicadores alterados, motivos, eventos, ações e pontos carregados/expirados.
 - **Múltiplas campanhas:** biblioteca local para continuar, criar, excluir com confirmação, importar e exportar backups JSON. Cada campanha tem chave e identificador próprios.
-- **Persistência:** autosave após criação, ação, decisão, resultado/fechamento e avanço semanal. Save atual em `versaoDoSave: 4`; migração de saves sem versão e das versões 1, 2 e 3. Campanhas antigas recebem gabinete, indicadores econômicos e orçamento ficcionais gerados de forma determinística. Saves inválidos são isolados, e erros de quota/armazenamento geram mensagens.
+- **Persistência:** autosave após criação, ação, decisão, resultado/fechamento e avanço semanal. Save atual em `versaoDoSave: 5`; migração de saves sem versão e das versões 1 a 4 inicializa projetos e contador mensal sem apagar economia ou gabinete. Valores novos para campanhas antigas são gerados de forma determinística.
 - **Poder Executivo:** 17 ministérios de referência para janeiro de 2027, ministros ficcionais com sete atributos e candidatos gerados por afinidade partidária; nomeação, negociação e exoneração custam recursos e atualizam o apoio político. A ficha mostra competências, orçamento, execução anterior, desempenho, pendências, riscos e alertas. A virada mensal recalcula desempenho e inclui execução e riscos no resumo. Reorganização ministerial só pode ser registrada como proposta dependente do Congresso, sem tramitação nesta fase.
 - **Economia:** indicadores serializáveis e histórico mensal; orçamento anual distribuído por oito setores e integrado às dotações dos ministérios, com revisões limitadas ao início do ano e às janelas trimestrais. Tributos permitem ajustes administrativos limitados e reformas ficam como propostas ao Congresso. Caixa, empréstimos, juros, dívida e pagamentos adiados são finitos; a execução mensal considera ministérios, confiança, integridade, polarização, estabilidade, desempenho e decisões, explica os resultados e reduz a execução quando falta dinheiro. A tela apresenta indicadores, tendências, gráficos SVG, execução setorial, tributos, empréstimos, riscos e alternativas emergenciais.
 - **Instituições:** opções modelam negociação e interlocução; não permitem ao presidente comandar o Congresso ou o Judiciário.
@@ -35,10 +35,10 @@ Validação: `npm run test` passou com 33 testes e `npm run build` concluiu com 
 - `src/App.tsx`: alterna biblioteca, criação e jogo; conecta ações da UI ao engine e persiste alterações.
 - `src/main.tsx`: inicializa React e importa estilos.
 - `src/styles.css`: tema neutro/partidário, layout responsivo e estilos das telas.
-- `src/components/`: `CampaignLibrary.tsx` (saves e backups), `CampaignSetup.tsx` (nova campanha), `Dashboard.tsx` (painel), `TurnControls.tsx` (recursos, ações e cartões), `DecisionResultDialog.tsx` e `WeeklySummaryDialog.tsx` (resultados), além de `MetricCard.tsx` e `TopNavigation.tsx`.
+- `src/components/`: inclui `PolicyProjectsPanel.tsx` para catálogo, carteira e histórico de projetos, além da biblioteca, configuração de campanha, dashboard, controles de turno, painéis executivo/econômico e componentes de resultado.
 - `src/state/`: `types.ts` define o estado serializável e os contratos; `initialState.ts` define calendário inicial e meses.
-- `src/engine/`: `campaign.ts` cria campanhas; `executive.ts` inicializa ministros, processa nomeações/exonerações e calcula o desempenho mensal; `economy.ts` implementa orçamento, tributos, empréstimos, fechamento fiscal e resultados; `theme.ts` calcula contraste e variantes; `dashboard.ts` deriva indicadores; `turn.ts` implementa calendário, recursos, decisões, reações, eventos e fechamentos mensais. Testes em `turn.test.ts`, `executive.test.ts`, `economy.test.ts` e `dashboard.test.ts`.
-- `src/data/`: `campaignConfig.ts` contém paletas, faixas e regras; `parties.ts` contém partidos; `ministries.ts` e `economy.ts` contêm catálogos de ministérios, setores e tributos; `executiveDecisions.ts` e `economicDecisions.ts` contêm cartões; `actions.ts` contém ações presidenciais classificadas por instrumento; `decisions.ts` e `additionalDecisions.ts` decisões gerais; `reactionEvents.ts` reações e eventos encadeados; `monthlyEvents.ts` eventos mensais.
+- `src/engine/`: `campaign.ts` cria campanhas; `executive.ts` implementa ministérios; `economy.ts` implementa orçamento, tributos, empréstimos e fechamento fiscal; `projects.ts` implementa custos, progresso e avaliação de projetos; `turn.ts` integra calendário, decisões e fechamentos. Testes incluem `projects.test.ts`.
+- `src/data/`: inclui `publicPrograms.ts`, catálogo de programas públicos por setor, junto aos catálogos de partidos, ministérios, orçamento, ações, decisões e eventos.
 - `src/components/`: `EconomyPanel.tsx` apresenta os indicadores, gráficos SVG, orçamento, tributos, dívida e explicações econômicas.
 - `src/persistence/`: `campaignRepository.ts` valida, salva, lista, carrega, exclui e migra saves; `backup.ts` exporta JSON; `campaignRepository.test.ts` cobre persistência, migração determinística, backup e falhas.
 - Raiz: `package.json` define comandos e dependências; `vite.config.ts` e `tsconfig*.json` configuram build; `index.html` é a entrada Vite.
@@ -53,7 +53,7 @@ npm run test
 npm run build
 ```
 
-`npm run test` executa os testes de `src/engine/turn.test.ts`, `src/engine/executive.test.ts`, `src/engine/economy.test.ts`, `src/engine/dashboard.test.ts` e `src/persistence/campaignRepository.test.ts` (33 testes). `npm run build` valida TypeScript e gera a versão de produção. O LocalStorage é específico do navegador; exporte um backup JSON para cópia externa.
+`npm run test` executa os testes de `src/engine/turn.test.ts`, `src/engine/executive.test.ts`, `src/engine/economy.test.ts`, `src/engine/dashboard.test.ts` e `src/persistence/campaignRepository.test.ts` (37 testes na validação da Fase 2A). `npm run build` valida TypeScript e gera a versão de produção. O LocalStorage é específico do navegador; exporte um backup JSON para cópia externa.
 
 ## Decisões de design
 
@@ -67,9 +67,9 @@ npm run build
 
 ## Pendências e retoques conhecidos
 
-- Políticas Públicas recebeu implementação inicial na branch `codex/phase-2a-public-projects`; Sociedade, Relações e Notícias/Histórico seguem como placeholders.
+- Políticas Públicas tem tela funcional na branch `codex/phase-2a-public-projects`; Sociedade, Relações e Notícias/Histórico seguem como placeholders.
 - Alertas e cartões “Em andamento”, “Aguardando resposta” e “Encerrado” ainda usam conteúdo demonstrativo. Há textos/contadores estáticos no dashboard, como o total anunciado de atualizações.
-- As ações, decisões, reações e eventos são conteúdo inicial, sujeito a balanceamento. A economia implementa orçamento, dívida e execução base, mas não simula programas/projetos nem todo o sistema tributário e macroeconômico.
+- As ações, decisões, reações e eventos são conteúdo inicial, sujeito a balanceamento. A economia conecta projetos à dotação setorial, caixa e balanço fiscal; ainda falta simular todo o sistema tributário e macroeconômico.
 - Personagens ainda não têm memória/autonomia real, relações persistentes ou efeitos de promessas; imprensa, investigações, crises entre poderes e eleições também não têm sistemas completos.
 - Não há testes automatizados de interação visual nem screenshots em desktop/celular. O tema calcula contraste em código, mas merece revisão visual nas telas densas e com cores extremas. O resumo semanal agora recebe foco sem scroll ao abrir e devolve o foco ao título do dashboard ao fechar.
 - A folha importa Manrope e DM Mono do Google Fonts; sem rede, o fallback local é usado.
@@ -77,7 +77,7 @@ npm run build
 ## Plano de fases
 
 - **Fase 1 — Fundação jogável: completa.** Criação de campanha, dashboard, calendário, recursos/pontos, decisões, avanço semanal, notícias e saves múltiplos estão implementados. As ações e os conteúdos seguem como exemplos.
-- **Fase 2 — Governo e execução: parcial.** Executivo e economia estão implementados; Políticas Públicas e Projetos estão na branch de trabalho, aguardando validação automatizada. Sociedade e grupos de pressão continuam pendentes.
+- **Fase 2 — Governo e execução: parcial.** Executivo, economia e primeira versão de Políticas Públicas/Projetos estão implementados; Sociedade e grupos de pressão continuam pendentes.
 - **Fase 3 — Instituições e crises: não iniciada como sistema completo.** Criar procedimentos próprios do Congresso, Judiciário e demais órgãos, respeitando competências.
 - **Fase 4 — Política viva: parcial.** Há cartões de reação, notícias e encadeamentos; faltam personagens autônomos, alianças, memória, imprensa sistêmica e modelos globais de corrupção/interesses.
 - **Fase 5 — Eleições e Maré Ideológica: não iniciada.** Pesquisas, candidatos, regras eleitorais, composição pós-eleição e ciclo de oito anos.
@@ -85,9 +85,9 @@ npm run build
 
 ## Próximo passo
 
-Implementar a etapa inicial de Políticas Públicas: catálogo de programas e projetos por setor, propostas e acompanhamento de execução mensal, conectando custos e resultados ao orçamento, à capacidade administrativa e aos indicadores sem permitir gastos acima do caixa disponível.
+Próximo passo: Fase 2B — Sociedade e grupos de pressão. Modelar classes econômicas e grupos organizados separadamente, conectar interesses e aprovação por grupo às políticas e acontecimentos, e manter efeitos na simulação existente.
 
 
 ## Trabalho em andamento — Fase 2A
 
-A branch `codex/phase-2a-public-projects` inclui catálogo de programas, projetos serializáveis, execução semanal, revisão mensal, histórico e riscos contextuais, com integração a caixa, dotação setorial, capital político e capacidade administrativa. A versão do save passa para v5 com migração determinística das campanhas existentes. **Testes e build desta etapa ainda dependem da execução do GitHub Actions.**
+A branch `codex/phase-2a-public-projects` inclui catálogo de 15 programas, carteira serializável, execução semanal, revisão mensal, histórico, pausa/retomada e ajuste de prioridade; os custos dependem do caixa, saldo anual do setor, capital político, capacidade administrativa e pontos de ação. Save v5 migra campanhas anteriores. **GitHub Actions: 37 testes passaram e `npm run build` concluiu com sucesso no commit `72a3a37`.**
