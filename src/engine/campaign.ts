@@ -4,6 +4,7 @@ import { initialCalendar } from '../state/initialState'
 import { createCampaignTheme } from './theme'
 import { initializeCampaignTurn } from './turn'
 import { createInitialMinistries } from './executive'
+import { createInitialSocietyState } from './society'
 import { allocateSectorBudgetToMinistries, createEconomicState } from './economy'
 import { dashboardNews } from '../data/dashboard'
 import type {
@@ -146,11 +147,12 @@ export function createCampaign(
     weeklySummary: null,
   }
 
-  const ministries = createInitialMinistries(campaignBase, random)
-  const economicCampaign = { ...campaignBase, ministries }
+  const socialCampaign = { ...campaignBase, society: createInitialSocietyState(campaignBase) }
+  const ministries = createInitialMinistries(socialCampaign, random)
+  const economicCampaign = { ...socialCampaign, ministries }
   const economy = createEconomicState(economicCampaign, random)
   return initializeCampaignTurn({
-    ...campaignBase,
+    ...socialCampaign,
     ministries: allocateSectorBudgetToMinistries(economicCampaign, economy.annualBudget.sectors),
     economy,
     country: { ...campaignBase.country, budget: economy.availableFunds },

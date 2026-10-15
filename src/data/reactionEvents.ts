@@ -31,9 +31,9 @@ export const reactionEvents: NarrativeDecision[] = [
   {
     id: 'low-budget-reaction', title: 'O orçamento no modo econômico', category: 'reação', weight: 8,
     prompt: 'A reserva ficou baixa e as áreas trouxeram três prioridades para cada recurso disponível.',
-    condition: { indicator: 'budget', operator: 'atMost', value: 24 },
+    condition: { indicator: 'budget', operator: 'atMost', value: 240 },
     options: [
-      { id: 'resequence-delivery', label: 'Reordenar entregas', description: 'Ajustar prazos e preservar serviços em andamento.', icon: 'briefcase', effects: { budget: 1, publicTrust: -1, administrativeCapacity: 1 }, resultText: 'O calendário ficou mais realista e algumas entregas foram adiadas.' },
+      { id: 'resequence-delivery', label: 'Reordenar entregas', description: 'Ajustar prazos e preservar serviços em andamento.', icon: 'briefcase', effects: { budget: 10, publicTrust: -1, administrativeCapacity: 1 }, resultText: 'O calendário ficou mais realista e algumas entregas foram adiadas.' },
       { id: 'publish-tradeoffs', label: 'Publicar escolhas', description: 'Explicar quais compromissos serão mantidos e quais ficarão para depois.', icon: 'newspaper', effects: { publicTrust: 2, presidentialApproval: -1, politicalCapital: -1 }, resultText: 'A transparência reduziu dúvidas, mas tornou explícitas as perdas de prioridade.' },
     ],
   },
@@ -81,7 +81,7 @@ export const scheduledNarrativeEvents: NarrativeDecision[] = [
     prompt: 'Duas semanas depois, estados trazem um novo boletim e pedem continuidade da coordenação.',
     condition: { indicator: 'institutionalStability', operator: 'atLeast', value: 0 },
     options: [
-      { id: 'continue-federative-table', label: 'Manter mesa federativa', description: 'Continuar reuniões com responsabilidades e prazos publicados.', icon: 'users', effects: { institutionalStability: 1, publicTrust: 1, budget: -1 }, resultText: 'A coordenação continuou e consumiu uma pequena parte da reserva.' },
+      { id: 'continue-federative-table', label: 'Manter mesa federativa', description: 'Continuar reuniões com responsabilidades e prazos publicados.', icon: 'users', effects: { institutionalStability: 1, publicTrust: 1, budget: -10 }, resultText: 'A coordenação continuou e consumiu uma pequena parte da reserva.' },
       { id: 'transfer-to-local-teams', label: 'Apoiar equipes locais', description: 'Direcionar apoio técnico e deixar a operação com os órgãos competentes.', icon: 'briefcase', effects: { administrativeCapacity: -1, publicTrust: 2, politicalCapital: 1 }, resultText: 'Equipes locais receberam apoio e conduziram as próprias operações.' },
     ],
   },

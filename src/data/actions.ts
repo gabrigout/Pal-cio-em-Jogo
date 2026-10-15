@@ -22,7 +22,7 @@ export const sampleActions: GameAction[] = [
     title: 'Mutirão de serviços públicos',
     description: 'Concentrar equipes para destravar atendimentos prioritários.',
     actionType: 'administrative',
-    costs: { actionPoints: 1, budget: 3, politicalCapital: 0, administrativeCapacity: 2 },
+    costs: { actionPoints: 1, budget: 30, politicalCapital: 0, administrativeCapacity: 2 },
     effects: { publicTrust: 2, administrativeCapacity: 1 },
   },
   {
@@ -38,7 +38,7 @@ export const sampleActions: GameAction[] = [
     title: 'Coordenar agenda econômica',
     description: 'Alinhar execução e previsibilidade dentro das leis e dotações vigentes.',
     actionType: 'administrative',
-    costs: { actionPoints: 2, budget: 4, politicalCapital: 1, administrativeCapacity: 1 },
+    costs: { actionPoints: 2, budget: 40, politicalCapital: 1, administrativeCapacity: 1 },
     effects: { economicOutlook: 2, presidentialApproval: 1 },
     pendingEffects: [{ effects: { economicOutlook: 1 }, reason: 'A coordenação econômica começou a produzir efeitos nesta semana.' }],
   },
