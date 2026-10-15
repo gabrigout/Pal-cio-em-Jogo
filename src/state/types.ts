@@ -66,6 +66,7 @@ export interface CampaignState {
   theme: CampaignTheme
   ministries: MinistryState[]
   projects: PublicProjectState[]
+  society: SocietyState
   executiveProposals: string[]
   economy: EconomicState
   turn: CampaignTurnState
@@ -318,6 +319,51 @@ export interface EconomicState {
   lastMonthlyReport: string[]
   pressures: EconomicPressures
   deferredPayments: number
+}
+
+export type SocialClassId = 'low-income' | 'middle-class' | 'wealthy-business' | 'millionaires' | 'billionaires'
+export type PressureGroupId = 'unions' | 'business-entities' | 'students' | 'public-employees' | 'rural-producers' | 'environmental-movements' | 'health-communities'
+export type SocietyActionType = 'dialogue' | 'agreement'
+
+export interface SocialClassState {
+  id: SocialClassId
+  name: string
+  approval: number
+  economicSecurity: number
+  priorities: string[]
+  lastChange: number
+  latestReason: string
+}
+
+export interface PressureGroupState {
+  id: PressureGroupId
+  name: string
+  category: string
+  approval: number
+  influence: number
+  pressure: number
+  sectorIds: string[]
+  beneficiaryClass: SocialClassId
+  interests: string[]
+  demand: string
+  lastChange: number
+  latestReason: string
+}
+
+export interface SocietyHistoryEntry {
+  id: string
+  dateLabel: string
+  kind: 'review' | 'protest' | 'strike' | 'endorsement' | 'dialogue' | 'agreement'
+  title: string
+  summary: string
+  tone: MetricTone
+}
+
+export interface SocietyState {
+  classes: SocialClassState[]
+  groups: PressureGroupState[]
+  history: SocietyHistoryEntry[]
+  lastReviewKey: string | null
 }
 
 export type ProjectPriority = 'low' | 'normal' | 'high'
