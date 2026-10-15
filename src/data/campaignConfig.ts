@@ -56,6 +56,41 @@ export const economyRules = {
   maximumBudget: 100,
 } as const
 
+export const economicRanges = {
+  publicRevenue: { min: 48, max: 58 },
+  publicExpenses: { min: 50, max: 62 },
+  publicDebt: { min: 620, max: 1050 },
+  growth: { min: -1.2, max: 2.4 },
+  inflation: { min: 3.2, max: 7.8 },
+  unemployment: { min: 7.5, max: 12.5 },
+  incomeInequality: { min: 46, max: 56 },
+  availableFunds: { min: 28, max: 52 },
+} satisfies Record<string, ValueRange>
+
+export const economicRules = {
+  sectorBudgetShare: 0.85,
+  minimumSectorShare: 4,
+  maximumSectorShare: 35,
+  budgetRevisionMonths: ['Janeiro', 'Abril', 'Julho', 'Outubro'],
+  budgetRevisionActionPoints: 2,
+  budgetRevisionPoliticalCapital: 3,
+  maximumDebtToAnnualRevenue: 5,
+  emergencyLoanAmount: 24,
+  emergencyLoanAnnualInterestRate: 9.5,
+  emergencyLoanTermMonths: 12,
+  emergencyLoanActionPoints: 1,
+  emergencyLoanPoliticalCapital: 3,
+  emergencyCashThreshold: 15,
+  deferredPaymentAmount: 8,
+  deferredPaymentActionPoints: 1,
+  deferredPaymentPoliticalCapital: 2,
+  taxAdjustmentActionPoints: 1,
+  taxAdjustmentPoliticalCapital: 2,
+  taxReformActionPoints: 2,
+  taxReformPoliticalCapital: 4,
+  monthlyHistoryLimit: 12,
+} as const
+
 export const dashboardStatusBands = {
   criticalBelow: 35,
   attentionBelow: 50,

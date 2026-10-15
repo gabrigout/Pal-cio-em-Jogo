@@ -655,9 +655,78 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cor-primaria); 
 .decision-result-changes small { color: #999999; font-size: 8px; line-height: 1.5; }
 .result-scheduled { display: inline-flex; align-items: center; gap: 6px; margin: 13px 0 0; padding: 8px 10px; border: 1px dashed var(--cor-secundaria); color: var(--cor-secundaria); font-size: 9px; }
 
+.economy-panel { width: min(1160px, calc(100% - 64px)); display: grid; gap: 18px; margin: 0 auto; padding: 34px 0 60px; }
+.economy-heading, .economy-section-heading, .economy-control-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.economy-heading { padding-bottom: 4px; }
+.economy-heading h1 { margin: 7px 0 0; font-size: 28px; font-weight: 600; }
+.economy-cash { display: flex; align-items: center; gap: 9px; color: var(--cor-secundaria); }
+.economy-cash span { display: grid; gap: 3px; color: #aaa; font-size: 9px; }
+.economy-cash strong { color: #eee; font-family: var(--mono); font-size: 15px; }
+.economy-indicators { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.economy-indicator-card, .economy-card { border: 1px solid #373737; background: #1b1b1b; }
+.economy-indicator-card { min-width: 0; display: grid; gap: 7px; padding: 13px; }
+.economy-indicator-card > span { color: #aaa; font-size: 9px; }
+.economy-indicator-card > strong { color: #eee; font-family: var(--mono); font-size: 17px; font-weight: 500; }
+.economy-indicator-card > small { display: inline-flex; align-items: center; gap: 4px; color: var(--cor-secundaria); font-size: 8px; }
+.economy-indicator-card > small svg { color: var(--cor-primaria); }
+.economy-sparkline { width: 100%; height: 31px; overflow: visible; }
+.economy-chart-axis { stroke: #444; stroke-width: .7; }
+.economy-chart-line { fill: none; stroke: var(--cor-primaria); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.economy-card { display: grid; gap: 14px; padding: 17px; }
+.economy-section-heading h2 { display: flex; align-items: center; gap: 7px; margin: 5px 0 0; color: #e8e8e8; font-size: 15px; font-weight: 600; }
+.economy-section-heading h2 svg { color: var(--cor-secundaria); }
+.economy-caption { margin: 0; color: #999; font-size: 9px; line-height: 1.6; }
+.economy-sector-list, .economy-tax-list, .economy-loan-list { display: grid; }
+.economy-sector-row { display: grid; grid-template-columns: minmax(0, 1fr) 100px 58px; align-items: center; gap: 15px; padding: 9px 0; border-top: 1px solid #333; }
+.economy-sector-title { display: flex; justify-content: space-between; gap: 12px; color: #ddd; font-size: 9px; }
+.economy-sector-title span { color: #999; text-align: right; }
+.economy-progress { height: 4px; background: #343434; }
+.economy-progress span { display: block; height: 100%; background: var(--cor-secundaria); }
+.economy-share-input { display: flex; align-items: center; justify-content: flex-end; gap: 4px; color: #aaa; font-family: var(--mono); font-size: 9px; }
+.economy-share-input input { width: 39px; padding: 4px; border: 1px solid #454545; background: #161616; color: #eee; font: inherit; }
+.economy-control-footer { padding-top: 3px; color: #999; font-size: 8px; }
+.economy-button, .economy-tax-row button { min-height: 32px; padding: 7px 10px; border: 1px solid var(--cor-secundaria); background: color-mix(in srgb, var(--cor-secundaria), #191919 91%); color: #eee; font-size: 9px; cursor: pointer; }
+.economy-button:hover:not(:disabled), .economy-tax-row button:hover:not(:disabled) { border-color: var(--cor-primaria); }
+.economy-button:disabled, .economy-tax-row button:disabled { opacity: .45; cursor: not-allowed; }
+.economy-button-secondary { border-color: #555; background: #222; }
+.economy-tax-row { display: grid; grid-template-columns: minmax(0, 1fr) 64px 34px 34px; align-items: center; gap: 8px; padding: 10px 0; border-top: 1px solid #333; }
+.economy-tax-row > div { display: grid; gap: 4px; }
+.economy-tax-row strong { color: #ddd; font-size: 9px; }
+.economy-tax-row > strong { font-family: var(--mono); text-align: center; }
+.economy-tax-row span { color: #999; font-size: 8px; }
+.economy-tax-row button { min-height: 28px; padding: 3px; font-size: 14px; }
+.economy-action-label { margin: 0; color: var(--cor-secundaria); font-size: 8px; line-height: 1.6; }
+.economy-debt-overview { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.economy-debt-overview span { display: grid; gap: 5px; padding: 10px; border: 1px solid #333; color: #999; font-size: 8px; }
+.economy-debt-overview strong { color: #eee; font-family: var(--mono); font-size: 13px; font-weight: 500; }
+.economy-loan-list { gap: 8px; }
+.economy-loan-list article { display: grid; gap: 4px; padding: 10px; border-left: 2px solid var(--cor-secundaria); background: #202020; }
+.economy-loan-list strong { color: #ddd; font-size: 9px; }
+.economy-loan-list span, .economy-loan-list small { color: #999; font-size: 8px; line-height: 1.5; }
+.economy-emergency-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-top: 10px; border-top: 1px solid #333; }
+.economy-emergency-actions p { flex-basis: 100%; margin: 0; color: var(--cor-secundaria); font-size: 9px; }
+.economy-report-list { display: grid; gap: 8px; margin: 0; padding-left: 17px; color: #aaa; font-size: 9px; line-height: 1.6; }
+
 @media (max-width: 700px) {
   .decision-options { grid-template-columns: 1fr; }
   .decision-option { min-height: 0; }
   .decision-consequences { margin-top: 2px; }
   .month-end-panel { grid-template-columns: 28px minmax(0, 1fr); gap: 9px; }
+  .economy-panel { width: min(100% - 30px, 560px); gap: 12px; padding-top: 24px; }
+  .economy-heading { align-items: flex-start; }
+  .economy-heading h1 { font-size: 22px; }
+  .economy-indicators { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+  .economy-indicator-card { padding: 10px; }
+  .economy-indicator-card > strong { font-size: 14px; }
+  .economy-card { gap: 11px; padding: 12px; }
+  .economy-section-heading { align-items: flex-start; }
+  .economy-section-heading .executive-action-type { max-width: 46%; white-space: normal; }
+  .economy-sector-row { grid-template-columns: minmax(0, 1fr) 57px; gap: 7px; }
+  .economy-sector-title { grid-column: 1 / -1; flex-direction: column; gap: 3px; }
+  .economy-sector-title span { text-align: left; }
+  .economy-control-footer { align-items: stretch; flex-direction: column; }
+  .economy-control-footer .economy-button { width: 100%; }
+  .economy-debt-overview { grid-template-columns: 1fr; }
+  .economy-emergency-actions { align-items: stretch; flex-direction: column; }
+  .economy-emergency-actions .economy-button { width: 100%; }
 }

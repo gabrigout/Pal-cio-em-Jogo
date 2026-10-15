@@ -5,6 +5,7 @@ import CampaignLibrary from './components/CampaignLibrary'
 import CampaignSetup from './components/CampaignSetup'
 import Dashboard from './components/Dashboard'
 import ExecutivePanel from './components/ExecutivePanel'
+import EconomyPanel from './components/EconomyPanel'
 import TopNavigation from './components/TopNavigation'
 import { createCampaign } from './engine/campaign'
 import {
@@ -13,6 +14,13 @@ import {
   negotiateMinisterNomination,
   proposeMinistryReorganization,
 } from './engine/executive'
+import {
+  adjustEconomicTax,
+  deferEconomicPayments,
+  proposeTaxReform,
+  reviseBudgetDistribution,
+  takeEmergencyLoan,
+} from './engine/economy'
 import { advanceWeek, chooseNarrativeOption, dismissDecisionResult, dismissWeeklySummary, executeAction } from './engine/turn'
 import { downloadCampaignBackup } from './persistence/backup'
 import {
@@ -84,6 +92,14 @@ export default function App() {
   }
 
   function runExecutiveAction(nextCampaign: CampaignState | null, failureMessage: string) {
+    if (!nextCampaign) {
+      setStorageError(failureMessage)
+      return
+    }
+    persistCampaign(nextCampaign)
+  }
+
+  function runEconomicAction(nextCampaign: CampaignState | null, failureMessage: string) {
     if (!nextCampaign) {
       setStorageError(failureMessage)
       return
@@ -276,6 +292,30 @@ export default function App() {
           onProposeReorganization={() => runExecutiveAction(
             proposeMinistryReorganization(campaign),
             'A proposta não foi registrada. Verifique se há recursos disponíveis ou se ela já foi enviada.',
+          )}
+        />
+      ) : activeSection === 'economia' ? (
+        <EconomyPanel
+          campaign={campaign}
+          onAdjustTax={(taxId, direction) => runEconomicAction(
+            adjustEconomicTax(campaign, taxId, direction),
+            'O ajuste tributário não foi realizado. Verifique os limites do tributo e os recursos disponíveis.',
+          )}
+          onDeferPayments={() => runEconomicAction(
+            deferEconomicPayments(campaign),
+            'O adiamento emergencial não está disponível nas condições atuais.',
+          )}
+          onEmergencyLoan={() => runEconomicAction(
+            takeEmergencyLoan(campaign),
+            'O crédito emergencial não está disponível. Verifique o caixa, a dívida e os recursos disponíveis.',
+          )}
+          onProposeReform={() => runEconomicAction(
+            proposeTaxReform(campaign),
+            'A proposta tributária não foi registrada. Verifique os recursos disponíveis ou se já foi enviada.',
+          )}
+          onReviseBudget={(shares) => runEconomicAction(
+            reviseBudgetDistribution(campaign, shares),
+            'A revisão orçamentária não foi aplicada. Verifique os limites, a janela e os recursos disponíveis.',
           )}
         />
       ) : (

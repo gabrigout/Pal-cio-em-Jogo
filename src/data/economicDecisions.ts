@@ -1,0 +1,148 @@
+import type { NarrativeDecision } from '../state/types'
+
+export const economicDecisions: NarrativeDecision[] = [
+  {
+    id: 'market-confidence-briefing',
+    title: 'O mercado pede previsibilidade',
+    prompt: 'Uma rodada de incerteza elevou o custo de decisões de investimento. A equipe econômica recomenda um calendário público de metas, sem prometer resultado imediato.',
+    condition: { indicator: 'economicOutlook', operator: 'atMost', value: 58 },
+    weight: 2,
+    category: 'Economia',
+    options: [
+      {
+        id: 'publish-calendar',
+        label: 'Publicar metas e calendário de revisão',
+        description: 'A transparência pode reduzir incerteza, mas expõe o governo a cobrança por cumprimento.',
+        effects: { publicTrust: 1 },
+        economicEffect: { kind: 'market-confidence', growth: 0.18, inflation: -0.04, note: 'Calendário público de metas reduziu incerteza, sem garantir resultados.' },
+        resultText: 'O calendário foi publicado; agentes econômicos reagem gradualmente às informações.',
+      },
+      {
+        id: 'wait-for-data',
+        label: 'Esperar os próximos dados',
+        description: 'Evita anunciar metas com informação incompleta, mas mantém a incerteza no curto prazo.',
+        effects: { publicTrust: -1 },
+        economicEffect: { kind: 'market-confidence', growth: -0.05, inflation: 0.03, note: 'A ausência de sinalização manteve incerteza no mercado.' },
+      },
+    ],
+  },
+  {
+    id: 'ministry-budget-request',
+    title: 'Pedido de reforço para a rede de saúde',
+    prompt: 'A ministra fictícia Lia Vento Sul solicita reforço para manter estoques e equipes regionais. O pedido será registrado para uma janela orçamentária, não libera recursos automaticamente.',
+    condition: { indicator: 'executiveSupport', operator: 'atMost', value: 58 },
+    weight: 2,
+    category: 'Orçamento',
+    options: [
+      {
+        id: 'register-health-request',
+        label: 'Registrar o pedido para a próxima revisão',
+        description: 'O pedido entra na pauta de revisão; qualquer mudança ainda exige decisão e recursos.',
+        effects: { executiveSupport: 1 },
+        economicEffect: { kind: 'budget-request', sectorId: 'health', amount: 12, note: 'Pedido ministerial de reforço para continuidade dos serviços de saúde.' },
+      },
+      {
+        id: 'request-efficiency-plan',
+        label: 'Solicitar plano de execução antes de revisar',
+        description: 'Exige justificativa administrativa e mantém a distribuição atual.',
+        effects: { administrativeCapacity: 1, executiveSupport: -1 },
+        economicEffect: { kind: 'budget-request', sectorId: 'health', amount: 4, note: 'Solicitado plano de execução antes de eventual reforço para a saúde.' },
+      },
+    ],
+  },
+  {
+    id: 'limited-credit-offer',
+    title: 'Oferta de crédito com prazo curto',
+    prompt: 'O Fundo Cívico de Investimento oferece crédito limitado para suavizar o caixa. O contrato inclui juros e prestação mensal; a dívida total continua sujeita ao teto fiscal.',
+    condition: { indicator: 'budget', operator: 'atMost', value: 54 },
+    weight: 2,
+    category: 'Dívida',
+    options: [
+      {
+        id: 'accept-limited-credit',
+        label: 'Aceitar crédito de 12 u.',
+        description: 'Aumenta o caixa e a dívida; juros e amortização serão cobrados nos próximos meses.',
+        effects: { publicTrust: -1 },
+        economicEffect: { kind: 'loan-offer', amount: 12, annualInterestRate: 7.5, termMonths: 8, lender: 'Fundo Cívico de Investimento' },
+      },
+      {
+        id: 'decline-credit',
+        label: 'Recusar e manter o caixa atual',
+        description: 'Evita novo serviço da dívida e mantém a pressão sobre a execução.',
+        effects: { publicTrust: 1 },
+      },
+    ],
+  },
+  {
+    id: 'public-service-strike',
+    title: 'Paralisação parcial de serviços',
+    prompt: 'Servidores de atendimento anunciam paralisação por dois meses e reivindicam negociação. A mobilização não implica irregularidade ou culpa de qualquer agente.',
+    condition: { indicator: 'administrativeCapacity', operator: 'atMost', value: 62 },
+    weight: 2,
+    category: 'Serviços públicos',
+    options: [
+      {
+        id: 'negotiate-continuity',
+        label: 'Negociar continuidade e calendário',
+        description: 'A negociação tem custo fiscal moderado e protege parte dos serviços.',
+        effects: { publicTrust: 1, executiveSupport: 1 },
+        economicEffect: { kind: 'public-service-strike', months: 1, note: 'Negociação de continuidade reduziu a duração da paralisação.' },
+      },
+      {
+        id: 'maintain-current-offer',
+        label: 'Manter a proposta atual',
+        description: 'Preserva o gasto imediato, com risco de interrupção prolongada.',
+        effects: { publicTrust: -2, administrativeCapacity: -1 },
+        economicEffect: { kind: 'public-service-strike', months: 2, note: 'Paralisação parcial manteve pressão sobre serviços e atividade.' },
+      },
+    ],
+  },
+  {
+    id: 'food-price-pressure',
+    title: 'Alta sazonal no preço dos alimentos',
+    prompt: 'Uma combinação de logística e sazonalidade elevou preços em algumas regiões. A apuração dos fatores continua; o dado não aponta culpados.',
+    condition: { indicator: 'publicTrust', operator: 'atMost', value: 60 },
+    weight: 2,
+    category: 'Preços',
+    options: [
+      {
+        id: 'coordinate-supply',
+        label: 'Coordenar abastecimento e monitoramento',
+        description: 'A coordenação pode aliviar gargalos, sem controlar diretamente todos os preços.',
+        effects: { publicTrust: 1 },
+        economicEffect: { kind: 'food-price-pressure', inflation: -0.12, inequality: -0.06, note: 'Coordenação logística mitigou parte da pressão sazonal sobre preços.' },
+      },
+      {
+        id: 'publish-price-data',
+        label: 'Publicar dados e acompanhar a apuração',
+        description: 'Prioriza transparência e coleta de evidências; os preços podem seguir pressionados.',
+        effects: { publicTrust: 1, publicIntegrity: 1 },
+        economicEffect: { kind: 'food-price-pressure', inflation: 0.08, inequality: 0.05, note: 'Acompanhamento transparente manteve o diagnóstico aberto; pressão de preços persiste.' },
+      },
+    ],
+  },
+  {
+    id: 'regional-supply-chain',
+    title: 'Gargalo em uma rota de abastecimento',
+    prompt: 'Uma interrupção logística regional afeta insumos e entregas. A equipe propõe coordenação entre transportes, indústria e estados, com efeitos graduais.',
+    condition: { indicator: 'foreignRelations', operator: 'atLeast', value: 45 },
+    weight: 2,
+    category: 'Atividade produtiva',
+    options: [
+      {
+        id: 'coordinate-route',
+        label: 'Coordenar uma rota alternativa',
+        description: 'A medida reduz parte do gargalo, mas exige tempo de execução.',
+        effects: { administrativeCapacity: 1 },
+        economicEffect: { kind: 'supply-chain', growth: 0.12, inflation: -0.06, note: 'A coordenação logística reduziu parcialmente o gargalo de abastecimento.' },
+      },
+      {
+        id: 'wait-route',
+        label: 'Aguardar normalização da rota',
+        description: 'Evita custos imediatos, aceitando possível atraso na atividade.',
+        effects: { administrativeCapacity: -1 },
+        economicEffect: { kind: 'supply-chain', growth: -0.12, inflation: 0.08, note: 'A espera prolongou os efeitos do gargalo sobre produção e preços.' },
+      },
+    ],
+  },
+]

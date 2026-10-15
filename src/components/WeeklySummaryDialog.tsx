@@ -53,6 +53,15 @@ export default function WeeklySummaryDialog({ summary, onDismiss }: WeeklySummar
           </section>
         )}
 
+        {summary.economicReport.length > 0 && (
+          <section className="summary-section">
+            <h3>Fechamento econômico mensal</h3>
+            <ul className="summary-plain-list">
+              {summary.economicReport.map((entry) => <li key={entry}><Coins aria-hidden="true" size={13} /> {entry}</li>)}
+            </ul>
+          </section>
+        )}
+
         {summary.events.length > 0 && (
           <section className="summary-section">
             <h3>Pendências e contexto</h3>

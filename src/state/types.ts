@@ -66,6 +66,7 @@ export interface CampaignState {
   theme: CampaignTheme
   ministries: MinistryState[]
   executiveProposals: string[]
+  economy: EconomicState
   turn: CampaignTurnState
   news: NewsItem[]
   pendingEffects: PendingEffect[]
@@ -229,7 +230,101 @@ export interface DecisionOption {
   resultText?: string
   schedule?: { eventId: string; delayWeeks: number }
   executiveEffect?: ExecutiveDecisionEffect
+  economicEffect?: EconomicDecisionEffect
 }
+
+export interface EconomicIndicators {
+  publicRevenue: number
+  publicExpenses: number
+  fiscalBalance: number
+  publicDebt: number
+  growth: number
+  inflation: number
+  unemployment: number
+  incomeInequality: number
+}
+
+export interface BudgetSector {
+  id: string
+  name: string
+  share: number
+  annualAllocation: number
+  executedThisYear: number
+  ministryIds: string[]
+}
+
+export interface AnnualBudget {
+  year: number
+  total: number
+  fixedCommitments: number
+  sectors: BudgetSector[]
+  lastRevisionKey: string | null
+}
+
+export interface EconomicTax {
+  id: string
+  name: string
+  rate: number
+  minimumRate: number
+  maximumRate: number
+  adjustmentStep: number
+  revenueSensitivity: number
+  affectedGroups: string[]
+}
+
+export interface PublicLoan {
+  id: string
+  lender: string
+  amount: number
+  outstandingPrincipal: number
+  annualInterestRate: number
+  termMonths: number
+  remainingMonths: number
+  monthlyPayment: number
+  conditions: string[]
+  startYear: number
+  startMonth: string
+  emergency: boolean
+}
+
+export interface EconomicSnapshot {
+  year: number
+  month: string
+  indicators: EconomicIndicators
+}
+
+export interface EconomicPressures {
+  growth: number
+  inflation: number
+  unemployment: number
+  inequality: number
+  expenses: number
+  revenue: number
+  notes: string[]
+}
+
+export interface EconomicState {
+  indicators: EconomicIndicators
+  availableFunds: number
+  annualBudget: AnnualBudget
+  taxes: EconomicTax[]
+  loans: PublicLoan[]
+  congressProposals: string[]
+  socialEffects: string[]
+  pendingBudgetRequests: string[]
+  history: EconomicSnapshot[]
+  lastMonthlyReport: string[]
+  pressures: EconomicPressures
+  deferredPayments: number
+}
+
+export type EconomicDecisionEffect =
+  | { kind: 'market-confidence'; growth: number; inflation: number; note: string }
+  | { kind: 'budget-request'; sectorId: string; amount: number; note: string }
+  | { kind: 'loan-offer'; amount: number; annualInterestRate: number; termMonths: number; lender: string }
+  | { kind: 'public-service-strike'; months: number; note: string }
+  | { kind: 'food-price-pressure'; inflation: number; inequality: number; note: string }
+  | { kind: 'supply-chain'; growth: number; inflation: number; note: string }
 
 export interface DecisionCondition {
   indicator: keyof CountryIndicators
@@ -262,8 +357,10 @@ export interface MonthlyEvent {
   options: DecisionOption[]
 }
 
+export type EconomicIndicatorId = keyof EconomicIndicators
+
 export interface IndicatorChange {
-  indicator: keyof CountryIndicators | 'budget'
+  indicator: keyof CountryIndicators | EconomicIndicatorId | 'budget'
   label: string
   amount: number
   reason: string
@@ -290,6 +387,7 @@ export interface WeeklySummary {
   monthlyEvent: string | null
   economyBalance: EconomyBalance | null
   executiveReport: string[]
+  economicReport: string[]
 }
 
 export interface PartyDefinition {

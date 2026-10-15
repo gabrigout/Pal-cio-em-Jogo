@@ -1,12 +1,14 @@
 import { sampleActions } from '../data/actions'
 import { additionalDecisions } from '../data/additionalDecisions'
 import { executiveDecisions } from '../data/executiveDecisions'
-import { actionPointRules, economyRules, indicatorLabels } from '../data/campaignConfig'
+import { economicDecisions } from '../data/economicDecisions'
+import { actionPointRules, indicatorLabels } from '../data/campaignConfig'
 import { weeklyDecisions } from '../data/decisions'
 import { monthlyEvents } from '../data/monthlyEvents'
 import { reactionEvents, scheduledNarrativeEvents } from '../data/reactionEvents'
 import { calendarMonths } from '../state/initialState'
 import { applyExecutiveDecision, closeExecutiveMonth, proposeMinistryReorganization } from './executive'
+import { applyEconomicDecision, closeEconomicMonth, prepareEconomicYear } from './economy'
 import type {
   ActionAvailability,
   ActionPointCalculation,
@@ -30,7 +32,7 @@ import type {
 const MAX_NEWS_ENTRIES = 8
 const RECENT_DECISION_LIMIT = 3
 const RECENT_EVENT_LIMIT = 3
-const allWeeklyDecisions = [...weeklyDecisions, ...additionalDecisions, ...executiveDecisions]
+const allWeeklyDecisions = [...weeklyDecisions, ...additionalDecisions, ...executiveDecisions, ...economicDecisions]
 const allReactionEvents = [...reactionEvents, ...scheduledNarrativeEvents]
 
 export function calculateActionPoints(
@@ -199,7 +201,10 @@ function applyIndicatorEffects(
     changes.push({ indicator, label: indicatorLabels[indicator], amount: after - before, reason })
   }
 
-  return { campaign: { ...campaign, country }, changes }
+  const synchronizedCampaign = country.budget === campaign.economy.availableFunds
+    ? { ...campaign, country }
+    : { ...campaign, country, economy: { ...campaign.economy, availableFunds: country.budget } }
+  return { campaign: synchronizedCampaign, changes }
 }
 
 function addChanges(campaign: CampaignState, changes: IndicatorChange[]): CampaignState {
@@ -251,6 +256,10 @@ export function executeAction(campaign: CampaignState, actionId: string): Campai
 
   const paidCampaign: CampaignState = {
     ...campaign,
+    economy: {
+      ...campaign.economy,
+      availableFunds: campaign.economy.availableFunds - action.costs.budget,
+    },
     country: {
       ...campaign.country,
       budget: campaign.country.budget - action.costs.budget,
@@ -328,8 +337,12 @@ export function chooseNarrativeOption(
     ? applyExecutiveDecision(campaign, option.executiveEffect)
     : campaign
   if (!executiveCampaign) return null
+  const economicCampaign = option.economicEffect
+    ? applyEconomicDecision(executiveCampaign, option.economicEffect)
+    : executiveCampaign
+  if (!economicCampaign) return null
   const { campaign: effectedCampaign, changes } = applyIndicatorEffects(
-    executiveCampaign,
+    economicCampaign,
     option.effects,
     `${decision.title}: ${option.label}`,
   )
@@ -445,25 +458,21 @@ function applyContextualVariations(campaign: CampaignState): { campaign: Campaig
   const { campaign: variedCampaign, changes } = applyIndicatorEffects(campaign, effects, 'Variação contextual semanal')
   const explainedChanges = changes.map((change) => ({
     ...change,
-    reason: reasons[change.indicator] ?? change.reason,
+    reason: change.indicator in reasons
+      ? reasons[change.indicator as keyof CountryIndicators] ?? change.reason
+      : change.reason,
   }))
   return { campaign: variedCampaign, changes: explainedChanges }
 }
 
 export function calculateMonthlyEconomyBalance(campaign: CampaignState): EconomyBalance {
-  const revenue = economyRules.regularRevenue
-    + Math.floor(campaign.country.economicOutlook / economyRules.revenuePerEconomicBand)
-  const expenses = economyRules.operatingExpense
-    + Math.floor(campaign.country.administrativeCapacity / economyRules.expensePerCapacityBand)
-  const closingBudget = clampIndicator(
-    campaign.country.budget + revenue - expenses,
-  )
-
+  const executiveCampaign = closeExecutiveMonth(campaign).campaign
+  const economicClosure = closeEconomicMonth(executiveCampaign).campaign
   return {
     openingBudget: campaign.country.budget,
-    revenue,
-    expenses,
-    closingBudget,
+    revenue: economicClosure.economy.indicators.publicRevenue,
+    expenses: economicClosure.economy.indicators.publicExpenses,
+    closingBudget: economicClosure.economy.availableFunds,
   }
 }
 
@@ -543,26 +552,38 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
 
   let economyBalance: EconomyBalance | null = null
   let executiveReport: string[] = []
+  let economicReport: string[] = []
   if (isMonthEnd) {
-    economyBalance = calculateMonthlyEconomyBalance(workingCampaign)
-    const budgetChange = economyBalance.closingBudget - economyBalance.openingBudget
-    workingCampaign = {
-      ...workingCampaign,
-      country: { ...workingCampaign.country, budget: economyBalance.closingBudget },
+    const openingBudget = workingCampaign.country.budget
+    const executiveClose = closeExecutiveMonth(workingCampaign)
+    workingCampaign = executiveClose.campaign
+    executiveReport = executiveClose.report
+    changes.push(...executiveClose.changes)
+    const economicClose = closeEconomicMonth(workingCampaign)
+    workingCampaign = economicClose.campaign
+    economicReport = economicClose.report
+    changes.push(...economicClose.changes)
+    const nextMonthIndex = calendarMonths.findIndex((month) => month === endingCalendar.month) + 1
+    const nextYear = nextMonthIndex >= calendarMonths.length ? endingCalendar.year + 1 : endingCalendar.year
+    if (nextMonthIndex >= calendarMonths.length) {
+      workingCampaign = prepareEconomicYear(workingCampaign, nextYear)
     }
+    economyBalance = {
+      openingBudget,
+      revenue: economicClose.campaign.economy.indicators.publicRevenue,
+      expenses: economicClose.campaign.economy.indicators.publicExpenses,
+      closingBudget: economicClose.campaign.economy.availableFunds,
+    }
+    const budgetChange = economyBalance.closingBudget - openingBudget
     if (budgetChange !== 0) {
       changes.push({
         indicator: 'budget',
         label: indicatorLabels.budget,
         amount: budgetChange,
-        reason: `Receitas ordinárias +${economyBalance.revenue}; despesas operacionais -${economyBalance.expenses}.`,
+        reason: `Receitas públicas +${economyBalance.revenue}; despesas, juros e execução ministerial -${economyBalance.expenses}.`,
       })
     }
     events.push(`Balanço mensal: receitas ${economyBalance.revenue}, despesas ${economyBalance.expenses}.`)
-    const executiveClose = closeExecutiveMonth(workingCampaign)
-    workingCampaign = executiveClose.campaign
-    executiveReport = executiveClose.report
-    changes.push(...executiveClose.changes)
   }
 
   const carriedActionPoints = Math.min(
@@ -654,6 +675,7 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
     monthlyEvent: monthEndEvent?.title ?? null,
     economyBalance,
     executiveReport,
+    economicReport,
   }
   const withNews = appendSummaryNews({ ...completedCampaign, weeklySummary: summary }, summary)
 

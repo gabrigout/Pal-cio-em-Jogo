@@ -21,12 +21,13 @@ const profiles = [
   'Organizador de coalizões, costuma buscar acordos antes de anunciar.',
   'Reformadora ambiciosa, cobra ritmo e autonomia para a pasta.',
 ]
+type CabinetContext = Pick<CampaignState, 'party' | 'orientation' | 'country'>
 
 function roll(min: number, max: number, random: () => number): number {
   return Math.floor(random() * (max - min + 1)) + min
 }
 
-function partyForCampaign(campaign: CampaignState): PartyDefinition[] {
+function partyForCampaign(campaign: CabinetContext): PartyDefinition[] {
   const compatible: PartyDefinition[] = parties.filter((party) =>
     party.ideology === campaign.orientation || party.ideology === 'center',
   )
@@ -44,7 +45,7 @@ function partyForCampaign(campaign: CampaignState): PartyDefinition[] {
 }
 
 function createCandidate(
-  campaign: CampaignState,
+  campaign: CabinetContext,
   ministryId: string,
   index: number,
   party: PartyDefinition,
@@ -72,7 +73,7 @@ function createCandidate(
 }
 
 export function createInitialMinistries(
-  campaign: CampaignState,
+  campaign: CabinetContext,
   random: () => number = Math.random,
 ): MinistryState[] {
   const cabinetParties = partyForCampaign(campaign)

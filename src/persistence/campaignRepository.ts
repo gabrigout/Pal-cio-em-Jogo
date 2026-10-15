@@ -1,11 +1,12 @@
 import { dashboardNews } from '../data/dashboard'
 import { createCampaignTheme } from '../engine/theme'
 import { createInitialMinistries } from '../engine/executive'
+import { allocateSectorBudgetToMinistries, createEconomicState } from '../engine/economy'
 import { initializeCampaignTurn } from '../engine/turn'
 import { calendarMonths } from '../state/initialState'
 import type { CampaignState, CampaignTurnState } from '../state/types'
 
-export const CURRENT_SAVE_VERSION = 3
+export const CURRENT_SAVE_VERSION = 4
 const SAVE_KEY_PREFIX = 'palacio-em-jogo:campaign:'
 
 export interface StorageLike {
@@ -105,6 +106,61 @@ function isEconomyBalance(value: unknown): boolean {
     && isNumber(value.closingBudget)
 }
 
+function isEconomicIndicators(value: unknown): boolean {
+  return isRecord(value)
+    && ['publicRevenue', 'publicExpenses', 'fiscalBalance', 'publicDebt', 'growth', 'inflation', 'unemployment', 'incomeInequality']
+      .every((key) => isNumber(value[key]))
+}
+
+function isEconomicState(value: unknown): boolean {
+  if (!isRecord(value) || !isEconomicIndicators(value.indicators)
+    || !isNumber(value.availableFunds) || value.availableFunds < 0
+    || !isNumber(value.deferredPayments) || value.deferredPayments < 0
+    || !isStringArray(value.congressProposals) || !isStringArray(value.socialEffects)
+    || !isStringArray(value.pendingBudgetRequests) || !isStringArray(value.lastMonthlyReport)
+    || !Array.isArray(value.taxes) || !Array.isArray(value.loans) || !Array.isArray(value.history)
+    || !isRecord(value.annualBudget) || !isRecord(value.pressures)) return false
+  const budget = value.annualBudget
+  if (!isNumber(budget.year) || !Number.isInteger(budget.year)
+    || !isNumber(budget.total) || budget.total < 0
+    || !isNumber(budget.fixedCommitments) || budget.fixedCommitments < 0
+    || !(typeof budget.lastRevisionKey === 'string' || budget.lastRevisionKey === null)
+    || !Array.isArray(budget.sectors) || !budget.sectors.every((sector) => isRecord(sector)
+      && typeof sector.id === 'string' && typeof sector.name === 'string'
+      && isNumber(sector.share) && sector.share >= 0 && sector.share <= 100
+      && isNumber(sector.annualAllocation) && sector.annualAllocation >= 0
+      && isNumber(sector.executedThisYear) && sector.executedThisYear >= 0
+      && isStringArray(sector.ministryIds))) return false
+  if (!value.taxes.every((tax) => {
+    if (!isRecord(tax) || typeof tax.id !== 'string' || typeof tax.name !== 'string'
+      || !isNumber(tax.rate) || !isNumber(tax.minimumRate) || !isNumber(tax.maximumRate)
+      || !isNumber(tax.adjustmentStep) || !isNumber(tax.revenueSensitivity)
+      || !isStringArray(tax.affectedGroups)) return false
+    return tax.minimumRate >= 0 && tax.maximumRate >= tax.minimumRate
+      && tax.rate >= tax.minimumRate && tax.rate <= tax.maximumRate
+      && tax.adjustmentStep > 0 && tax.revenueSensitivity >= 0
+  })) return false
+  if (!value.loans.every((loan) => {
+    if (!isRecord(loan) || typeof loan.id !== 'string' || typeof loan.lender !== 'string'
+      || !isNumber(loan.amount) || !isNumber(loan.outstandingPrincipal)
+      || !isNumber(loan.annualInterestRate) || !isNumber(loan.termMonths)
+      || !isNumber(loan.remainingMonths) || !isNumber(loan.monthlyPayment)
+      || !isNumber(loan.startYear) || typeof loan.startMonth !== 'string'
+      || typeof loan.emergency !== 'boolean' || !isStringArray(loan.conditions)) return false
+    return loan.amount > 0 && loan.outstandingPrincipal >= 0 && loan.annualInterestRate >= 0
+      && Number.isInteger(loan.termMonths) && loan.termMonths > 0
+      && Number.isInteger(loan.remainingMonths) && loan.remainingMonths >= 0
+      && (loan.outstandingPrincipal === 0 || loan.remainingMonths > 0)
+      && loan.monthlyPayment >= 0 && Number.isInteger(loan.startYear)
+  })) return false
+  if (!value.history.every((snapshot) => isRecord(snapshot)
+    && isNumber(snapshot.year) && typeof snapshot.month === 'string' && isEconomicIndicators(snapshot.indicators))) return false
+  const pressures = value.pressures
+  return ['growth', 'inflation', 'unemployment', 'inequality', 'expenses', 'revenue']
+    .every((key) => isNumber(pressures[key]))
+    && isStringArray(pressures.notes)
+}
+
 function isDecisionResult(value: unknown): boolean {
   return isRecord(value)
     && ['decisão', 'reação', 'mensal'].includes(String(value.category))
@@ -131,6 +187,7 @@ function isWeeklySummary(value: unknown): boolean {
     && (typeof value.monthlyEvent === 'string' || value.monthlyEvent === null)
     && (value.economyBalance === null || isEconomyBalance(value.economyBalance))
     && isStringArray(value.executiveReport)
+    && isStringArray(value.economicReport)
 }
 
 function isMinisterCandidate(value: unknown): boolean {
@@ -159,7 +216,11 @@ function isMinistry(value: unknown): boolean {
     && isStringArray(value.alerts)
 }
 
-function isCampaignState(value: unknown, allowEmptyMinistries = false): value is CampaignState {
+function isCampaignState(
+  value: unknown,
+  allowEmptyMinistries = false,
+  allowMissingEconomy = false,
+): value is CampaignState {
   if (!isRecord(value) || typeof value.id !== 'string' || !value.id) return false
   if (value.orientation !== 'left' && value.orientation !== 'right') return false
   if (!isRecord(value.party) || typeof value.party.id !== 'string' || typeof value.party.fullName !== 'string'
@@ -207,6 +268,7 @@ function isCampaignState(value: unknown, allowEmptyMinistries = false): value is
     || (!allowEmptyMinistries && value.ministries.length === 0)
     || !value.ministries.every(isMinistry)
     || !isStringArray(value.executiveProposals)) return false
+  if (!isEconomicState(value.economy) && !allowMissingEconomy) return false
   return true
 }
 
@@ -260,18 +322,30 @@ function migrateLegacyCampaign(value: unknown): CampaignState | null {
     news: Array.isArray(value.news) ? value.news : dashboardNews.map((item) => ({ ...item })),
     pendingEffects: Array.isArray(value.pendingEffects) ? value.pendingEffects : [],
     weeklySummary: isRecord(value.weeklySummary)
-      ? { ...value.weeklySummary, executiveReport: isStringArray(value.weeklySummary.executiveReport) ? value.weeklySummary.executiveReport : [] }
+      ? {
+        ...value.weeklySummary,
+        executiveReport: isStringArray(value.weeklySummary.executiveReport) ? value.weeklySummary.executiveReport : [],
+        economicReport: isStringArray(value.weeklySummary.economicReport) ? value.weeklySummary.economicReport : [],
+      }
       : null,
+    economy: isEconomicState(value.economy) ? value.economy : undefined,
   }
 
-  if (!isCampaignState(candidate, candidate.ministries.length === 0)) return null
+  if (!isCampaignState(candidate, candidate.ministries.length === 0, true)) return null
   const migratedCandidate = candidate.ministries.length > 0
     ? candidate
     : { ...candidate, ministries: createInitialMinistries(candidate, migrationRandom(candidate.id)) }
-  if (!isCampaignState(migratedCandidate)) return null
+  const economy = migratedCandidate.economy ?? createEconomicState(migratedCandidate, migrationRandom(`${candidate.id}:economy`))
+  const economicCandidate = {
+    ...migratedCandidate,
+    economy,
+    ministries: allocateSectorBudgetToMinistries(migratedCandidate, economy.annualBudget.sectors),
+    country: { ...migratedCandidate.country, budget: economy.availableFunds },
+  }
+  if (!isCampaignState(economicCandidate)) return null
   const hasDecisionStateV2 = isRecord(value.turn) && 'activeReactionEventId' in value.turn
-  if (!hasDecisionStateV2) return initializeCampaignTurn(migratedCandidate)
-  return migratedCandidate
+  if (!hasDecisionStateV2) return initializeCampaignTurn(economicCandidate)
+  return economicCandidate
 }
 
 function migrationRandom(seedText: string): () => number {
