@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ArrowLeft, BriefcaseBusiness, Check, CircleAlert, Landmark, Scale, UsersRound } from 'lucide-react'
 import type { CampaignState, MinisterCandidate, MinistryState } from '../state/types'
+import { formatBRLMoney } from '../utils/money'
 
 const actionTypeLabel = 'Ação administrativa do Executivo'
 
@@ -89,16 +90,20 @@ function MinistryDetail({
           <h3>Competências oficiais</h3>
           <ul className="ministry-competences">{ministry.competences.map((competence) => <li key={competence}>{competence}</li>)}</ul>
           <div className="ministry-budget">
-            <span>Dotação anual de referência <strong>{ministry.annualBudget} u.</strong></span>
-            <span>Disponível no mês <strong>{ministry.budgetAvailable} u.</strong></span>
-            <span>Executado no último mês <strong>{ministry.budgetExecuted} u.</strong></span>
+            <span>Dotação anual de referência <strong>{formatBRLMoney(ministry.annualBudget)}</strong></span>
+            <span>Disponível no mês <strong>{formatBRLMoney(ministry.budgetAvailable)}</strong></span>
+            <span>Executado no último mês <strong>{formatBRLMoney(ministry.budgetExecuted)}</strong></span>
           </div>
         </section>
       </div>
 
       <section className="ministry-info-block ministry-programs">
         <h3>Programas e projetos</h3>
-        <p>Programas e projetos ministeriais ficam disponíveis na próxima etapa.</p>
+        {campaign.projects.filter((project) => project.ministryId === ministry.id).length > 0 ? (
+          <ul className="ministry-competences">{campaign.projects.filter((project) => project.ministryId === ministry.id).map((project) => (
+            <li key={project.id}><strong>{project.name}</strong> · {project.status === 'active' ? 'Em execução' : project.status === 'paused' ? 'Pausado' : project.status === 'completed' ? 'Concluído' : 'Cancelado'} · {Math.round(project.progress)}% · {formatBRLMoney(project.budgetSpent)} de {formatBRLMoney(project.estimatedBudget)}</li>
+          ))}</ul>
+        ) : <p className="executive-empty-note">Nenhum projeto vinculado a este ministério.</p>}
       </section>
 
       <div className="ministry-detail-grid">

@@ -100,9 +100,9 @@ export default function Dashboard({ campaign, onAdvanceWeek, onRunAction, onChoo
       <section aria-labelledby="alerts-title" className="alerts-panel">
         <div className="alerts-symbol"><CircleAlert aria-hidden="true" size={19} /></div>
         <div className="alerts-copy">
-          <p className="eyebrow">CENTRAL DE ATENÇÃO <span>·</span> 02 PONTOS</p>
-          <h2 id="alerts-title">A semana começa com duas frentes abertas.</h2>
-          <p>Articulação legislativa e resposta às chuvas pedem coordenação do governo.</p>
+          <p className="eyebrow">CENTRAL DE ATENÇÃO <span>·</span> {campaign.society.groups.filter((group) => group.pressure >= 65).length.toString().padStart(2, '0')} ALERTAS SOCIAIS</p>
+          <h2 id="alerts-title">{campaign.society.groups.some((group) => group.pressure >= 65) ? 'Grupos sociais aumentaram a pressão.' : 'A semana começa sem pressão social extraordinária.'}</h2>
+          <p>{campaign.society.groups.filter((group) => group.pressure >= 65).sort((a, b) => b.pressure - a.pressure).slice(0, 2).map((group) => group.name + ' (' + Math.round(group.pressure) + '/100)').join(' · ') || 'A aprovação por classe e as reivindicações seguem no painel Sociedade.'}</p>
         </div>
         <button className="text-action" type="button" title="Ver alertas">
           Ver alertas <ArrowUpRight aria-hidden="true" size={16} />

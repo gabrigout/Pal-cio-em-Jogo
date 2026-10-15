@@ -1,6 +1,7 @@
 import { indicatorLabels } from '../data/campaignConfig'
 import { ministryCatalog } from '../data/ministries'
 import { parties } from '../data/parties'
+import { formatBRLMoney } from '../utils/money'
 import type {
   CampaignState,
   CountryIndicators,
@@ -344,7 +345,7 @@ export function closeExecutiveMonth(campaign: CampaignState): { campaign: Campai
       ? 'Sinal de agenda própria: alinhar prioridades e responsabilidades do gabinete.'
       : null
     if (ambitiousAndDisloyal) executiveSupport = clamp(executiveSupport - 1)
-    report.push(`${ministry.name}: desempenho ${performance}/100; execução ${executed}/${ministry.monthlyAllocation} u.${ambitiousAndDisloyal ? ' Sinal de desalinhamento registrado.' : ''}`)
+    report.push(`${ministry.name}: desempenho ${performance}/100; execução ${formatBRLMoney(executed)} de ${formatBRLMoney(ministry.monthlyAllocation)}.${ambitiousAndDisloyal ? ' Sinal de desalinhamento registrado.' : ''}`)
     return {
       ...ministry,
       administrativePerformance: performance,

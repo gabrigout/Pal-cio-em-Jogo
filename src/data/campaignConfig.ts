@@ -31,7 +31,7 @@ export const countryRanges = {
   executiveSupport: { min: 46, max: 56 },
   judiciaryRelation: { min: 46, max: 56 },
   economicOutlook: { min: 48, max: 62 },
-  budget: { min: 68, max: 100 },
+  budget: { min: 280, max: 520 },
   politicalCapital: { min: 45, max: 64 },
   administrativeCapacity: { min: 47, max: 66 },
   institutionalStability: { min: 58, max: 73 },
@@ -49,22 +49,22 @@ export const actionPointRules = {
 } as const
 
 export const economyRules = {
-  regularRevenue: 6,
-  operatingExpense: 5,
-  revenuePerEconomicBand: 30,
-  expensePerCapacityBand: 40,
-  maximumBudget: 100,
+  regularRevenue: 60,
+  operatingExpense: 50,
+  revenuePerEconomicBand: 300,
+  expensePerCapacityBand: 400,
+  maximumBudget: 1000,
 } as const
 
 export const economicRanges = {
-  publicRevenue: { min: 48, max: 58 },
-  publicExpenses: { min: 50, max: 62 },
-  publicDebt: { min: 620, max: 1050 },
+  publicRevenue: { min: 480, max: 580 },
+  publicExpenses: { min: 500, max: 620 },
+  publicDebt: { min: 6200, max: 10500 },
   growth: { min: -1.2, max: 2.4 },
   inflation: { min: 3.2, max: 7.8 },
   unemployment: { min: 7.5, max: 12.5 },
   incomeInequality: { min: 46, max: 56 },
-  availableFunds: { min: 28, max: 52 },
+  availableFunds: { min: 280, max: 520 },
 } satisfies Record<string, ValueRange>
 
 export const economicRules = {
@@ -75,13 +75,13 @@ export const economicRules = {
   budgetRevisionActionPoints: 2,
   budgetRevisionPoliticalCapital: 3,
   maximumDebtToAnnualRevenue: 5,
-  emergencyLoanAmount: 24,
+  emergencyLoanAmount: 240,
   emergencyLoanAnnualInterestRate: 9.5,
   emergencyLoanTermMonths: 12,
   emergencyLoanActionPoints: 1,
   emergencyLoanPoliticalCapital: 3,
-  emergencyCashThreshold: 15,
-  deferredPaymentAmount: 8,
+  emergencyCashThreshold: 150,
+  deferredPaymentAmount: 80,
   deferredPaymentActionPoints: 1,
   deferredPaymentPoliticalCapital: 2,
   taxAdjustmentActionPoints: 1,
@@ -102,7 +102,7 @@ export const indicatorLabels = {
   executiveSupport: 'Apoio interno do Executivo',
   judiciaryRelation: 'Relação institucional com o Judiciário',
   economicOutlook: 'Situação econômica',
-  budget: 'Orçamento',
+  budget: 'Caixa disponível',
   politicalCapital: 'Capital político',
   administrativeCapacity: 'Capacidade administrativa',
   institutionalStability: 'Estabilidade institucional',

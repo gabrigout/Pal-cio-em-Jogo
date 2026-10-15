@@ -6,6 +6,8 @@ import CampaignSetup from './components/CampaignSetup'
 import Dashboard from './components/Dashboard'
 import ExecutivePanel from './components/ExecutivePanel'
 import EconomyPanel from './components/EconomyPanel'
+import PolicyProjectsPanel from './components/PolicyProjectsPanel'
+import SocietyPanel from './components/SocietyPanel'
 import TopNavigation from './components/TopNavigation'
 import { createCampaign } from './engine/campaign'
 import {
@@ -22,6 +24,8 @@ import {
   takeEmergencyLoan,
 } from './engine/economy'
 import { advanceWeek, chooseNarrativeOption, dismissDecisionResult, dismissWeeklySummary, executeAction } from './engine/turn'
+import { adjustPublicProjectPriority, startPublicProject, togglePublicProjectPause } from './engine/projects'
+import { applySocietyAction } from './engine/society'
 import { downloadCampaignBackup } from './persistence/backup'
 import {
   deleteCampaign,
@@ -105,6 +109,12 @@ export default function App() {
       return
     }
     persistCampaign(nextCampaign)
+  }
+
+  function runPolicyAction(nextCampaign: CampaignState | null, message: string) {
+    if (!nextCampaign) { setStorageError(message); return }
+    persistCampaign(nextCampaign)
+    setStorageError(null)
   }
 
   function chooseDecision(optionId: string, category: 'decisão' | 'reação' | 'mensal') {
@@ -317,6 +327,17 @@ export default function App() {
             reviseBudgetDistribution(campaign, shares),
             'A revisão orçamentária não foi aplicada. Verifique os limites, a janela e os recursos disponíveis.',
           )}
+        />
+      ) : activeSection === 'politicas' ? (
+        <PolicyProjectsPanel campaign={campaign}
+          onStartProject={(id, investment, priority) => runPolicyAction(startPublicProject(campaign,id,investment,priority),'Não foi possível iniciar o projeto. Confira recursos e dotação disponível.')}
+          onAdjustPriority={(id, priority) => runPolicyAction(adjustPublicProjectPriority(campaign,id,priority),'Não foi possível ajustar a prioridade. Confira os recursos disponíveis.')}
+          onTogglePause={(id) => runPolicyAction(togglePublicProjectPause(campaign,id),'Não foi possível pausar ou retomar o projeto. Confira os pontos de ação.')}
+        />
+      ) : activeSection === 'sociedade' ? (
+        <SocietyPanel campaign={campaign}
+          onDialogue={(id) => runPolicyAction(applySocietyAction(campaign,id,'dialogue'),'Não foi possível abrir o diálogo. Confira os pontos e recursos disponíveis.')}
+          onAgreement={(id) => runPolicyAction(applySocietyAction(campaign,id,'agreement'),'Não foi possível registrar o compromisso. Confira caixa, dotação e recursos disponíveis.')}
         />
       ) : (
         <main className="section-placeholder page-enter">

@@ -1,6 +1,7 @@
 import { dashboardMetricLabels } from '../data/dashboard'
 import { dashboardStatusBands } from '../data/campaignConfig'
 import type { CampaignState, DashboardMetric, MetricTone } from '../state/types'
+import { formatBRLMoney } from '../utils/money'
 
 export function clampProgress(value: number): number {
   return Math.min(100, Math.max(0, value))
@@ -20,9 +21,9 @@ function statusTone(status: DashboardMetric['statusLabel']): MetricTone {
 
 export function getDashboardMetrics(campaign: CampaignState): DashboardMetric[] {
   const { country } = campaign
-  const resourceBalance = Math.round(
-    (country.budget + country.politicalCapital + country.administrativeCapacity) / 3,
-  )
+  const cashCoverageMonths = country.budget / Math.max(1, campaign.economy.indicators.publicExpenses)
+  const cashScore = clampProgress(cashCoverageMonths * 50)
+  const resourceBalance = Math.round((cashScore + country.politicalCapital + country.administrativeCapacity) / 3)
   const resourceStatus = getIndicatorStatus(resourceBalance)
   const publicClimate = Math.min(100 - country.polarization, country.publicTrust)
   const climateStatus = getIndicatorStatus(publicClimate)
@@ -52,7 +53,7 @@ export function getDashboardMetrics(campaign: CampaignState): DashboardMetric[] 
     {
       id: 'resources', label: dashboardMetricLabels.resources,
       value: resourceStatus === 'Estável' ? 'Equilibrados' : resourceStatus === 'Atenção' ? 'Limitados' : 'Escassos',
-      detail: `Orçamento ${country.budget} · capital ${country.politicalCapital} · gestão ${country.administrativeCapacity}`,
+      detail: `Caixa ${formatBRLMoney(country.budget)} · cobertura ${cashCoverageMonths.toFixed(1)} mês · capital ${country.politicalCapital} · gestão ${country.administrativeCapacity}`,
       change: '3 recursos distintos', tone: statusTone(resourceStatus), statusLabel: resourceStatus, progress: resourceBalance,
     },
     {

@@ -32,6 +32,7 @@ test('todos os indicadores mostram rótulo coerente com seus valores, incluindo 
     campaign.country.congressSupport = expected.value
     campaign.country.economicOutlook = expected.value
     campaign.country.budget = expected.value
+    campaign.economy.indicators.publicExpenses = 50
     campaign.country.politicalCapital = expected.value
     campaign.country.administrativeCapacity = expected.value
     campaign.country.institutionalStability = expected.value

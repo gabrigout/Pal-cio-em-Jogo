@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { ArrowDown, ArrowUp, Check, ChevronRight, Sparkles } from 'lucide-react'
 import type { DecisionResult } from '../state/types'
+import { formatBRLMoneyDelta } from '../utils/money'
 
 interface DecisionResultDialogProps {
   result: DecisionResult
@@ -32,7 +33,7 @@ export default function DecisionResultDialog({ result, onContinue }: DecisionRes
               <li key={`${change.indicator}-${index}`}>
                 <span className={change.amount > 0 ? 'result-direction is-up' : 'result-direction is-down'}>
                   {change.amount > 0 ? <ArrowUp aria-hidden="true" size={13} /> : <ArrowDown aria-hidden="true" size={13} />}
-                  {change.amount > 0 ? '+' : ''}{change.amount}
+                  {['budget', 'publicRevenue', 'publicExpenses', 'fiscalBalance', 'publicDebt'].includes(change.indicator) ? formatBRLMoneyDelta(change.amount) : (change.amount > 0 ? '+' : '') + change.amount}
                 </span>
                 <span><strong>{change.label}</strong><small>{change.reason}</small></span>
               </li>

@@ -1,5 +1,6 @@
 import { economicRanges, economicRules } from '../data/campaignConfig'
 import { budgetSectorCatalog, initialTaxes, sectorEconomicWeights, taxReformProposal } from '../data/economy'
+import { formatBRLMoney } from '../utils/money'
 import type {
   AnnualBudget,
   BudgetSector,
@@ -127,6 +128,7 @@ export function createEconomicState(
   const economy: EconomicState = {
     indicators,
     availableFunds: roll(economicRanges.availableFunds.min, economicRanges.availableFunds.max, random),
+    projectExpensesPaidThisMonth: 0,
     annualBudget,
     taxes: initialTaxes.map((tax) => ({ ...tax, affectedGroups: [...tax.affectedGroups] })),
     loans: [],
@@ -303,7 +305,7 @@ function createLoan(
       availableFunds: campaign.economy.availableFunds + terms.amount,
       indicators: { ...campaign.economy.indicators, publicDebt: campaign.economy.indicators.publicDebt + terms.amount },
       loans: [...campaign.economy.loans, loan],
-      lastMonthlyReport: [`Empréstimo de ${terms.amount} u. contratado com ${terms.lender}; taxa anual ${terms.annualInterestRate}%, prazo ${terms.termMonths} meses.`, ...campaign.economy.lastMonthlyReport].slice(0, 8),
+      lastMonthlyReport: [`Empréstimo de ${formatBRLMoney(terms.amount)} contratado com ${terms.lender}; taxa anual ${terms.annualInterestRate}%, prazo ${terms.termMonths} meses.`, ...campaign.economy.lastMonthlyReport].slice(0, 8),
     },
     country: { ...campaign.country, budget: campaign.country.budget + terms.amount },
   }
@@ -345,7 +347,7 @@ export function deferEconomicPayments(campaign: CampaignState): CampaignState | 
     economy: {
       ...campaign.economy,
       deferredPayments: campaign.economy.deferredPayments + economicRules.deferredPaymentAmount,
-      lastMonthlyReport: [`Medida emergencial: ${economicRules.deferredPaymentAmount} u. de compromissos adiadas para o próximo mês; confiança e execução serão pressionadas.`, ...campaign.economy.lastMonthlyReport].slice(0, 8),
+      lastMonthlyReport: [`Medida emergencial: ${formatBRLMoney(economicRules.deferredPaymentAmount)} em compromissos adiados para o próximo mês; confiança e execução serão pressionadas.`, ...campaign.economy.lastMonthlyReport].slice(0, 8),
     },
     country: {
       ...campaign.country,
@@ -355,7 +357,7 @@ export function deferEconomicPayments(campaign: CampaignState): CampaignState | 
     turn: {
       ...campaign.turn,
       availableActionPoints: campaign.turn.availableActionPoints - economicRules.deferredPaymentActionPoints,
-      actionsTaken: [...campaign.turn.actionsTaken, `Adiar ${economicRules.deferredPaymentAmount} u. de compromissos para o próximo mês`],
+      actionsTaken: [...campaign.turn.actionsTaken, `Adiar ${formatBRLMoney(economicRules.deferredPaymentAmount)} em compromissos para o próximo mês`],
     },
   }
 }
@@ -378,7 +380,7 @@ export function applyEconomicDecision(
       ...campaign,
       economy: {
         ...campaign.economy,
-        pendingBudgetRequests: [`${sector.name}: pedido de ${effect.amount} u.; sujeito à próxima janela de revisão.`, ...campaign.economy.pendingBudgetRequests].slice(0, 8),
+        pendingBudgetRequests: [`${sector.name}: pedido de ${formatBRLMoney(effect.amount)}; sujeito à próxima janela de revisão.`, ...campaign.economy.pendingBudgetRequests].slice(0, 8),
         pressures: { ...campaign.economy.pressures, notes: [...campaign.economy.pressures.notes, effect.note] },
       },
     }
@@ -389,7 +391,7 @@ export function applyEconomicDecision(
     pressures.inflation += effect.inflation
   } else if (effect.kind === 'public-service-strike') {
     pressures.growth -= 0.15 * effect.months
-    pressures.expenses += 2 * effect.months
+    pressures.expenses += 20 * effect.months
     pressures.notes.push('Paralisação reduziu entregas e acrescentou custo de negociação e continuidade.')
   } else if (effect.kind === 'food-price-pressure') {
     pressures.inflation += effect.inflation
@@ -478,13 +480,21 @@ export function closeEconomicMonth(campaign: CampaignState): { campaign: Campaig
   const ministryById = new Map(campaign.ministries.map((ministry) => [ministry.id, ministry]))
   const plannedSectorSpending = economy.annualBudget.sectors.map((sector) => {
     const weights = sectorEconomicWeights[sector.id]
-    const ministryExecutions = sector.ministryIds.reduce((total, id) =>
+    const requestedExecution = sector.ministryIds.reduce((total, id) =>
       total + (ministryById.get(id)?.budgetExecuted ?? 0), 0)
+    const remainingAllocation = Math.max(0, sector.annualAllocation - sector.executedThisYear)
+    // Cost multipliers represent waste/overrun, so the remaining appropriation
+    // must cover the weighted cost, not merely the nominal ministry execution.
+    const nominalExecuted = Math.min(
+      requestedExecution,
+      remainingAllocation / Math.max(0.1, weights.costMultiplier),
+    )
     return {
       sector,
       weights,
-      planned: ministryExecutions * weights.costMultiplier,
-      nominalExecuted: ministryExecutions,
+      requestedExecution,
+      planned: nominalExecuted * weights.costMultiplier,
+      nominalExecuted,
     }
   })
   const fixedPlanned = economy.annualBudget.fixedCommitments / 12
@@ -496,21 +506,23 @@ export function closeEconomicMonth(campaign: CampaignState): { campaign: Campaig
   const sectorFundingRatio = plannedSectorTotal > 0 ? Math.min(1, funds / plannedSectorTotal) : 1
   const actualSectors = plannedSectorSpending.map(({ sector, weights, nominalExecuted }) => {
     const paid = nominalExecuted * sectorFundingRatio
+    const weightedExpense = paid * weights.costMultiplier
     return {
       ...sector,
-      executedToDate: sector.executedThisYear + paid,
+      executedThisYear: Math.min(sector.annualAllocation, Math.round((sector.executedThisYear + weightedExpense) * 10) / 10),
       paid,
-      weightedExpense: paid * weights.costMultiplier,
+      weightedExpense,
     }
   })
   const sectorExpenses = actualSectors.reduce((sum, sector) => sum + sector.weightedExpense, 0)
   funds = Math.max(0, funds - sectorExpenses)
-  const nominalSectorTotal = plannedSectorSpending.reduce((sum, item) => sum + item.nominalExecuted, 0)
+  const requestedSectorTotal = plannedSectorSpending.reduce((sum, item) => sum + item.requestedExecution, 0)
   const paidNominalSectorTotal = plannedSectorSpending.reduce((sum, item) => sum + item.nominalExecuted * sectorFundingRatio, 0)
   const unpaidCommitments = Math.max(0, fixedPlanned - fixedPaid)
-    + Math.max(0, nominalSectorTotal - paidNominalSectorTotal)
-  const expenses = Math.round((fixedPaid + sectorExpenses + interestPaid) * 10) / 10
-  const fiscalBalance = Math.round((revenue - fixedPaid - sectorExpenses - interestPaid) * 10) / 10
+    + Math.max(0, requestedSectorTotal - paidNominalSectorTotal)
+  const projectExpensesPaid = Math.max(0, economy.projectExpensesPaidThisMonth)
+  const expenses = Math.round((fixedPaid + sectorExpenses + interestPaid + projectExpensesPaid) * 10) / 10
+  const fiscalBalance = Math.round((revenue - fixedPaid - sectorExpenses - interestPaid - projectExpensesPaid) * 10) / 10
   const surplusDebtRepayment = fiscalBalance > 0
     ? Math.max(0, Math.min(previous.publicDebt - principalPaid, Math.floor(fiscalBalance * 0.25)))
     : 0
@@ -572,23 +584,25 @@ export function closeEconomicMonth(campaign: CampaignState): { campaign: Campaig
     incomeInequality: Math.round(clamp(previous.incomeInequality + inequalityChange, 20, 80) * 10) / 10,
   }
   const report = [
-    `Receita de ${revenue} u. e despesa de ${expenses} u.; saldo ${fiscalBalance >= 0 ? 'superavitário' : 'deficitário'} em ${fiscalBalance} u.`,
+    `Receita de ${formatBRLMoney(revenue)} e despesa de ${formatBRLMoney(expenses)}; saldo ${fiscalBalance >= 0 ? 'superavitário' : 'deficitário'} em ${formatBRLMoney(fiscalBalance)}.`,
     `Execução ministerial e composição do orçamento: custo setorial médio ${costWeighted.toFixed(2)}; execução financiada de ${Math.round(sectorFundingRatio * 100)}%.`,
     `Confiança ${context.publicTrust}, integridade ${context.publicIntegrity}, polarização ${context.polarization} e estabilidade ${context.institutionalStability} influenciaram inflação, crescimento e execução.`,
-    `Dívida em ${indicators.publicDebt} u. (${debtRisk.toFixed(1)} vezes a receita anual); juros pagos ${interestPaid} u.${unpaidInterest ? ` Juros não pagos capitalizados: ${unpaidInterest} u.` : ''}`,
+    `Dívida de ${formatBRLMoney(indicators.publicDebt)} (${debtRisk.toFixed(1)} vezes a receita anual); juros pagos ${formatBRLMoney(interestPaid)}.${unpaidInterest ? ` Juros não pagos capitalizados: ${formatBRLMoney(unpaidInterest)}.` : ''}`,
+    ...(projectExpensesPaid > 0 ? [`Projetos públicos executaram ${formatBRLMoney(projectExpensesPaid)} já descontados do caixa semanal.`] : []),
     `Mudanças do mês: crescimento ${growthChange >= 0 ? '+' : ''}${growthChange.toFixed(1)} p.p.; inflação ${inflationChange >= 0 ? '+' : ''}${inflationChange.toFixed(1)} p.p.; desemprego ${unemploymentChange >= 0 ? '+' : ''}${unemploymentChange.toFixed(1)} p.p.; desigualdade ${inequalityChange >= 0 ? '+' : ''}${inequalityChange.toFixed(1)} p.p.`,
-    ...(unpaidCommitments > 0 ? [`Compromissos não financiados de ${Math.round(unpaidCommitments)} u. foram adiados; nenhuma despesa excedeu o caixa disponível.`] : []),
+    ...(unpaidCommitments > 0 ? [`Compromissos não financiados de ${formatBRLMoney(unpaidCommitments)} foram adiados; nenhuma despesa excedeu o caixa disponível.`] : []),
     ...economy.pressures.notes,
   ]
   if (debtRisk >= 4) report.push('Risco fiscal elevado: dívida acima de quatro vezes a receita anual pode pressionar confiança, custo de crédito e apoio político.')
 
-  const nextSectors = actualSectors.map(({ paid, weightedExpense: _weightedExpense, ...sector }) => sector)
+  const nextSectors = actualSectors.map(({ paid: _paid, weightedExpense: _weightedExpense, ...sector }) => sector)
   const updatedAnnualBudget = { ...economy.annualBudget, sectors: nextSectors }
   const updatedLoans = loans
   const nextState: EconomicState = {
     ...economy,
     indicators,
     availableFunds: Math.round(funds * 10) / 10,
+    projectExpensesPaidThisMonth: 0,
     annualBudget: updatedAnnualBudget,
     loans: updatedLoans,
     history: [...economy.history, makeSnapshot(campaign.calendar.year, campaign.calendar.month, indicators)]

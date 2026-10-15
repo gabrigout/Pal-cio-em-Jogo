@@ -18,7 +18,7 @@ export const executiveDecisions: NarrativeDecision[] = [
     id: 'minister-budget-threat',
     title: 'A ameaça de saída por falta de verba',
     prompt: 'A ministra da Saúde diz que não consegue cumprir o calendário sem recomposição de recursos. O pedido precisa respeitar a disponibilidade orçamentária.',
-    condition: { indicator: 'budget', operator: 'atMost', value: 100 },
+    condition: { indicator: 'budget', operator: 'atMost', value: 1000 },
     weight: 3,
     category: 'ministros',
     options: [

@@ -6,7 +6,7 @@ Este documento permite que outra IA continue o projeto sem depender do históric
 
 - Trabalhe em **um pedido por vez** e implemente partes pequenas, completas e verificáveis. Não tente concluir uma fase inteira em uma única mudança.
 - Ao terminar cada parte, execute os testes pertinentes e `npm run build`; corrija falhas antes de encerrar. Atualize `docs/STATUS.md` com o que foi feito, o resultado dos testes e o próximo passo; então crie um commit.
-- O estado da campanha é serializado e salvo automaticamente. A versão atual é `versaoDoSave: 4`, definida em `src/persistence/campaignRepository.ts`. Sempre que mudar o formato do estado salvo, aumente a versão e implemente/teste a migração de saves antigos. Preserve campanhas e dados existentes; migrações devem ser determinísticas quando gerarem valores.
+- O estado da campanha é serializado e salvo automaticamente. A versão atual é `versaoDoSave: 6`, definida em `src/persistence/campaignRepository.ts`. Sempre que mudar o formato do estado salvo, aumente a versão e implemente/teste a migração de saves antigos. Preserve campanhas e dados existentes; migrações devem ser determinísticas quando gerarem valores.
 - Siga a arquitetura existente: estado e tipos em `src/state/`, regras e simulação em `src/engine/`, catálogos e configuração em `src/data/`, apresentação em `src/components/` e persistência/migrações em `src/persistence/`. Componentes exibem estado e encaminham ações; não contêm lógica política.
 - Use somente as cores oficiais do partido ativo e tons neutros na interface. Não introduza cores fixas para sucesso/alerta/erro; comunique estados também por rótulos e ícones. Mantenha contraste e legibilidade.
 - Preserve as regras institucionais e a separação entre pontos de ação, dinheiro, capital político e capacidade administrativa; aprovação, Maré Ideológica e força eleitoral também são indicadores diferentes. Partidos, eventos e acusações são ficcionais e satíricos.
@@ -20,29 +20,22 @@ Atualizado conforme `docs/STATUS.md` em 2026-10-15. A fundação jogável (Fase 
 
 - **Executivo e ministérios: implementados.** Há 17 ministérios de referência, ministros e candidatos ficcionais, nomeação, negociação e exoneração, decisões executivas, desempenho e fechamento mensal, além de proposta de reorganização sujeita ao Congresso. Implementação principal em `src/engine/executive.ts`, `src/data/ministries.ts`, `src/data/executiveDecisions.ts` e `src/components/ExecutivePanel.tsx`.
 - **Economia e orçamento base: implementados.** Há indicadores e histórico, orçamento anual por setor e dotações ministeriais, execução mensal, ajustes tributários limitados, propostas legislativas, empréstimos e pagamentos adiados. Implementação principal em `src/engine/economy.ts`, `src/data/economy.ts`, `src/data/economicDecisions.ts` e `src/components/EconomyPanel.tsx`. Isso ainda não equivale ao sistema econômico completo previsto no documento mestre.
-- **Políticas públicas e projetos: não implementados como sistema.** O orçamento já tem setores, mas ainda não existe catálogo de programas/projetos, acompanhamento de execução ou resultados de políticas.
-- **Sociedade e grupos de pressão: não implementados como sistema.** Não há estado serializável de classes/grupos nem cálculo de aprovação por grupo.
+- **Políticas públicas e projetos: implementados e validados na base da branch `codex/phase-2a-public-projects`.**
+- **Sociedade e grupos de pressão: primeira versão implementada e validada** na branch `codex/phase-2b-society-finance`. O sistema acompanha cinco classes, sete grupos, diálogo/acordos, apoio, pressão, manifestação e paralisação.
 
-No código, apenas Brasil, Estado/Executivo e Economia têm telas funcionais. Políticas Públicas, Sociedade, Relações e Notícias/Histórico ainda caem na tela genérica com título, em `src/App.tsx`. A última etapa registrada em `docs/STATUS.md` foi a Economia, com 33 testes e build aprovados; save v4 e migrações anteriores. Confira o status e rode a validação no começo de cada nova etapa, pois o repositório pode ter avançado.
+Brasil, Estado/Executivo, Economia, Políticas Públicas e Sociedade têm telas funcionais na branch de trabalho. Relações e Notícias/Histórico seguem como placeholders. Save v6 migra valores monetários antigos para reais e cria estado social determinístico. O GitHub Actions passou 45 testes e build no commit `bffec5e`.
 
 ## Restante da Fase 2
 
-Implemente primeiro **2A**, valide e registre o estado; depois faça **2B** em outro pedido/commit. Ambas devem se conectar aos recursos e indicadores já existentes, sem criar recursos duplicados.
+A Fase 2A está na base da branch `codex/phase-2a-public-projects`; a Fase 2B e revisão financeira estão validadas na branch `codex/phase-2b-society-finance`. A `main` ainda não foi alterada.
 
-### 2A. Políticas públicas e projetos
+### 2A. Políticas públicas e projetos — implementação inicial na branch de trabalho
 
-Referência: seção 11 de `docs/Palacio_em_Jogo_Documento_Mestre.md`.
+Referência: seção 11 do Documento Mestre. Catálogo com 15 programas por setor, investimentos e prioridade, estado serializável, execução semanal, avaliação mensal, histórico, riscos contextuais, custos finitos e migração de save. A Fase 2A passou 37 testes e build no commit `319dae2`.
 
-- Criar catálogo de programas por setor, usando os setores existentes como referência e dados/configuração em `src/data/`.
-- Permitir definir investimento, duração e prioridade. Representar cada projeto ativo no estado serializável.
-- Avançar projetos semanalmente e avaliar resultados de maior alcance no fechamento mensal.
-- Modelar consequências possíveis: atrasos, aumento de custo, protestos, investigação, conflito político, sucesso antecipado ou mudança de prioridade. Não transformar cada tarefa rotineira em microgerenciamento.
-- Conectar os projetos a dinheiro/caixa, capital político e capacidade administrativa. Respeitar a disponibilidade financeira e explicar custos, atrasos e resultados; não criar dinheiro ilimitado.
-- Testar regras no engine, persistência e migração, e apresentar o estado em componentes sem colocar regras políticas na UI.
+### 2B. Sociedade e grupos de pressão — implementada e validada
 
-### 2B. Sociedade e grupos de pressão
-
-Referência: seção 12 de `docs/Palacio_em_Jogo_Documento_Mestre.md`.
+Referência: seção 12 de `docs/Palacio_em_Jogo_Documento_Mestre.md`. Validação da Fase 2B: 45 testes e build aprovados no commit `bffec5e`.
 
 - Representar separadamente as classes econômicas (baixa renda, classe média, ricos/empresários, milionários e bilionários) e grupos organizados (por exemplo, sindicatos, entidades empresariais, estudantes, servidores e grupos rurais).
 - Dar aos grupos interesses e reações contextualizados: pressão, apoio a propostas, negociação e manifestações. Não reduzir classes a categorias morais nem fazer eventos sem causa compreensível.
@@ -54,7 +47,7 @@ Referência: seção 12 de `docs/Palacio_em_Jogo_Documento_Mestre.md`.
 
 A sequência abaixo segue as Fases 3 a 6 da seção 19 do documento mestre. As subdivisões são entregas menores: faça cada uma em um pedido separado e na ordem indicada. Releia também as regras específicas das seções citadas antes de implementar.
 
-### Fase 3 — Instituições e crises
+### Fase 3 — Instituições e crises (próxima entrega)
 
 1. **Congresso, legislação e orçamento legislativo** — seção 7. Modelar Casas, propostas, negociação, tramitação e votações com requisitos próprios; incluir orçamento/emendas conforme escopo e regras configuráveis.
 2. **Judiciário e indicações** — seção 8. Modelar processos, decisões, recursos e nomeações aplicáveis sem permitir controle presidencial sobre julgamentos.

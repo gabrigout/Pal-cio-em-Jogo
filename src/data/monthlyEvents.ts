@@ -6,12 +6,12 @@ export const monthlyEvents: MonthlyEvent[] = [
     title: 'Revisão de execução e contingenciamento',
     prompt: 'O mês fecha com compromissos concorrendo pela mesma reserva.',
     description: 'A equipe fecha o mês revendo prioridades para manter os compromissos dentro do orçamento disponível.',
-    condition: { indicator: 'budget', operator: 'atMost', value: 76 },
+    condition: { indicator: 'budget', operator: 'atMost', value: 760 },
     weight: 6,
     options: [
-      { id: 'focus-essential', label: 'Proteger serviços essenciais', description: 'Concentrar recursos em entregas prioritárias e adiar projetos menores.', icon: 'shield', effects: { budget: 2, administrativeCapacity: -1, publicTrust: 1 }, resultText: 'A reserva aumentou, mas a capacidade para frentes menores diminuiu.' },
+      { id: 'focus-essential', label: 'Proteger serviços essenciais', description: 'Concentrar recursos em entregas prioritárias e adiar projetos menores.', icon: 'shield', effects: { budget: 20, administrativeCapacity: -1, publicTrust: 1 }, resultText: 'A reserva aumentou, mas a capacidade para frentes menores diminuiu.' },
       { id: 'publish-review', label: 'Abrir revisão de gastos', description: 'Publicar critérios e revisar compromissos com as áreas responsáveis.', icon: 'newspaper', effects: { publicIntegrity: 1, publicTrust: 1, politicalCapital: -1 }, resultText: 'Os critérios ficaram públicos e exigiram negociação com as áreas.' },
-      { id: 'maintain-plan', label: 'Manter o plano atual', description: 'Preservar o calendário de entregas e acompanhar o orçamento de perto.', icon: 'clipboard', effects: { economicOutlook: 1, budget: -1, presidentialApproval: 1 }, resultText: 'As entregas mantiveram ritmo e consumiram parte da reserva.' },
+      { id: 'maintain-plan', label: 'Manter o plano atual', description: 'Preservar o calendário de entregas e acompanhar o orçamento de perto.', icon: 'clipboard', effects: { economicOutlook: 1, budget: -10, presidentialApproval: 1 }, resultText: 'As entregas mantiveram ritmo e consumiram parte da reserva.' },
     ],
   },
   {
@@ -23,7 +23,7 @@ export const monthlyEvents: MonthlyEvent[] = [
     weight: 4,
     options: [
       { id: 'share-outlook', label: 'Compartilhar cenário', description: 'Apresentar projeções e suas incertezas aos setores interessados.', icon: 'newspaper', effects: { economicOutlook: 1, publicTrust: 1, politicalCapital: -1 }, resultText: 'O cenário compartilhado aumentou previsibilidade, com custo de articulação.' },
-      { id: 'hold-reserve', label: 'Preservar margem', description: 'Evitar compromissos adicionais antes do próximo balanço.', icon: 'coins', effects: { budget: 2, presidentialApproval: -1, economicOutlook: -1 }, resultText: 'A margem fiscal foi preservada, mas a expectativa perdeu impulso.' },
+      { id: 'hold-reserve', label: 'Preservar margem', description: 'Evitar compromissos adicionais antes do próximo balanço.', icon: 'coins', effects: { budget: 20, presidentialApproval: -1, economicOutlook: -1 }, resultText: 'A margem fiscal foi preservada, mas a expectativa perdeu impulso.' },
     ],
   },
   {

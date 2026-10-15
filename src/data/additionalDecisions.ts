@@ -114,7 +114,7 @@ export const additionalDecisions: NarrativeDecision[] = [
     prompt: 'Governos estaduais pedem coordenação enquanto os boletins mudam a cada hora.',
     condition: { indicator: 'institutionalStability', operator: 'atMost', value: 69 },
     options: [
-      { id: 'federative-coordination', label: 'Coordenar com estados', description: 'Organizar apoio entre entes federativos e publicar responsabilidades.', icon: 'cloud', effects: { institutionalStability: 2, publicTrust: 1, budget: -2 }, schedule: { eventId: 'rain-follow-up', delayWeeks: 2 }, resultText: 'A coordenação começou com estados e deixou uma rodada de acompanhamento agendada.' },
+      { id: 'federative-coordination', label: 'Coordenar com estados', description: 'Organizar apoio entre entes federativos e publicar responsabilidades.', icon: 'cloud', effects: { institutionalStability: 2, publicTrust: 1, budget: -20 }, schedule: { eventId: 'rain-follow-up', delayWeeks: 2 }, resultText: 'A coordenação começou com estados e deixou uma rodada de acompanhamento agendada.' },
       { id: 'publish-guidance', label: 'Publicar orientações', description: 'Concentrar informações úteis e manter canal para atualizações locais.', icon: 'newspaper', effects: { publicTrust: 2, administrativeCapacity: -1, presidentialApproval: -1 }, uncertainConsequences: ['A situação pode mudar rapidamente'], resultText: 'As orientações chegaram ao público; as equipes precisaram acompanhar atualizações.' },
     ],
   },
@@ -166,10 +166,10 @@ export const additionalDecisions: NarrativeDecision[] = [
   {
     id: 'budget-spreadsheet', title: 'A planilha finalíssima', category: 'economia', weight: 5,
     prompt: 'A planilha de despesas tem uma aba chamada “final”, outra “final 2” e uma terceira que ninguém admite ter criado.',
-    condition: { indicator: 'budget', operator: 'atMost', value: 76 },
+    condition: { indicator: 'budget', operator: 'atMost', value: 760 },
     options: [
       { id: 'consolidate-sheets', label: 'Consolidar números', description: 'Conferir valores antes de anunciar compromissos de gasto.', icon: 'coins', effects: { publicIntegrity: 1, administrativeCapacity: -1, politicalCapital: 1 }, resultText: 'A equipe consolidou as versões e ganhou clareza sobre o orçamento disponível.' },
-      { id: 'protect-reserve', label: 'Preservar reserva', description: 'Adiar compromissos novos até fechar o mês.', icon: 'shield', effects: { budget: 2, presidentialApproval: -1, economicOutlook: 1 }, resultText: 'A reserva foi preservada e a expectativa econômica melhorou; o anúncio perdeu apelo popular.' },
+      { id: 'protect-reserve', label: 'Preservar reserva', description: 'Adiar compromissos novos até fechar o mês.', icon: 'shield', effects: { budget: 20, presidentialApproval: -1, economicOutlook: 1 }, resultText: 'A reserva foi preservada e a expectativa econômica melhorou; o anúncio perdeu apelo popular.' },
     ],
   },
   {
