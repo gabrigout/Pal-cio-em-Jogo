@@ -14,7 +14,7 @@ A branch `codex/phase-3a-congress` implementa uma área própria do Congresso e 
 
 A tramitação agora contempla PL, PLP, PEC, MP, PPA, LDO, LOA, crédito adicional e emenda de remanejamento. As etapas e votações avançam com as semanas do jogo; a negociação aumenta a margem de apoio, mas não garante aprovação. PL/PLP passam pelas duas Casas; PEC exige três quintos em dois turnos por Casa e não recebe sanção presidencial; MP exige declaração de relevância/urgência, tem prazo simulado e efeito fiscal provisório reversível; proposições orçamentárias vão à deliberação conjunta e, conforme o tipo, à sanção/veto. O veto volta às duas Casas para análise. As decisões fiscais integram o orçamento existente em R$ bilhões, sem transformar aprovação em caixa novo.
 
-A reforma tributária já registrada pelo sistema econômico e a reorganização ministerial são recuperadas como proposições quando uma campanha anterior é migrada. O save atual é v8: a v7 já incluía o estado legislativo e a v8 atualiza a paleta/tema de partidos predefinidos nas campanhas salvas, preservando cores de partidos personalizados. Saves v6 mantêm os valores já convertidos para reais, sem nova multiplicação; saves v5 e anteriores ainda recebem a conversão histórica. Dados antigos de propostas pendentes são preservados na agenda legislativa.
+A reforma tributária já registrada pelo sistema econômico e a reorganização ministerial são recuperadas como proposições quando uma campanha anterior é migrada. O save atual é v9: a v7 já incluía o estado legislativo, a v8 introduziu paletas partidárias e a v9 atualiza os códigos revisados e o contraste dos botões nas campanhas salvas, preservando cores de partidos personalizados. Saves v6 mantêm os valores já convertidos para reais, sem nova multiplicação; saves v5 e anteriores ainda recebem a conversão histórica. Dados antigos de propostas pendentes são preservados na agenda legislativa.
 
 **Validação automatizada:** GitHub Actions passou `npm run test` com **61 testes aprovados, 0 falhas**, e `npm run build` com sucesso no commit de código `601152eee8e9d17511a8ccb8d985516cddbef1a0` (execução [38947033246](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38947033246)). A revisão documental posterior foi validada no HEAD `b4f20af61d697fc5fc423e672349b823b29c9535`, com 61 testes e build aprovados no [workflow 38947525507](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38947525507). O resultado automatiza testes e build, mas não equivale a uma revisão visual no navegador. A branch de trabalho não foi mesclada à `main`.
 
@@ -73,7 +73,7 @@ npm run test
 npm run build
 ```
 
-A suíte automatizada atual tem 61 testes. O workflow `.github/workflows/validate.yml` executa testes e build a cada push em `main` ou em branches `codex/**`, e em pull requests direcionados à `main`.
+A suíte automatizada atual tem 62 testes. O workflow `.github/workflows/validate.yml` executa testes e build a cada push em `main` ou em branches `codex/**`, e em pull requests direcionados à `main`.
 
 ## Decisões de design
 
@@ -82,7 +82,7 @@ A suíte automatizada atual tem 61 testes. O workflow `.github/workflows/validat
 - O modelo legislativo é uma abstração jogável. Quóruns e números principais são parametrizados, mas o sistema não implementa todo o processo regimental, todas as comissões, pareceres, apensamentos, urgências específicas, períodos de recesso ou todas as exceções constitucionais.
 - O resultado de uma votação não é decidido diretamente pelo jogador. Apoio no Congresso e articulação influenciam probabilidades, não substituem o voto.
 - Aprovar uma lei não cria dinheiro disponível automaticamente. A LOA altera o planejamento anual; emendas redistribuem dotação; crédito adicional altera orçamento planejado; caixa e despesas continuam sujeitos ao motor econômico.
-- A migração de v7 para v8 atualiza a paleta dos partidos predefinidos; a migração de v6 para v8 não reescala reais pela segunda vez. Valores v5 ou anteriores recebem a conversão histórica de unidades abstratas para a escala interna de R$ bilhões.
+- A migração de v8 para v9 atualiza os códigos revisados de paleta/tema; v7 para v8 introduziu a primeira paleta; a migração de v6 para v8 não reescala reais pela segunda vez. Valores v5 ou anteriores recebem a conversão histórica de unidades abstratas para a escala interna de R$ bilhões.
 - LocalStorage é específico do navegador. Exporte backups para preservar campanhas fora da máquina.
 
 ## Pendências e limites conhecidos
