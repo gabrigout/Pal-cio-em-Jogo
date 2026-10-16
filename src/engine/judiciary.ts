@@ -846,11 +846,6 @@ export function advanceJudiciaryWeek(
       lastAdvancedKey: key,
     },
   }
-  const retirements = endingCalendar.week === endingCalendar.weeksPerMonth
-    ? advanceRetirement(working, endingCalendar)
-    : { campaign: working, events: [] }
-  working = retirements.campaign
-  events.push(...retirements.events)
   return { campaign: working, events }
 }
 
