@@ -4,10 +4,12 @@ import { createInitialMinistries } from '../engine/executive'
 import { allocateSectorBudgetToMinistries, createEconomicState } from '../engine/economy'
 import { initializeCampaignTurn } from '../engine/turn'
 import { createInitialSocietyState } from '../engine/society'
+import { createInitialLegislatureState } from '../engine/legislature'
+import { legislativeRules } from '../data/legislature'
 import { calendarMonths } from '../state/initialState'
 import type { CampaignState, CampaignTurnState } from '../state/types'
 
-export const CURRENT_SAVE_VERSION = 6
+export const CURRENT_SAVE_VERSION = 7
 const SAVE_KEY_PREFIX = 'palacio-em-jogo:campaign:'
 
 export interface StorageLike {
@@ -291,6 +293,57 @@ function isMinistry(value: unknown): boolean {
     && isStringArray(value.alerts)
 }
 
+function isLegislatureState(value: unknown): boolean {
+  if (!isRecord(value) || !Array.isArray(value.chamberOfDeputies) || !Array.isArray(value.senate)
+    || !Array.isArray(value.bills) || !isStringArray(value.history)
+    || !(typeof value.lastAdvancedKey === 'string' || value.lastAdvancedKey === null)) return false
+  const validBloc = (bloc: unknown) => isRecord(bloc)
+    && typeof bloc.partyId === 'string' && typeof bloc.partyName === 'string'
+    && typeof bloc.acronym === 'string'
+    && ['left', 'right', 'center'].includes(String(bloc.orientation))
+    && isNumber(bloc.seats) && Number.isInteger(bloc.seats) && bloc.seats >= 0
+  const seatTotal = (blocs: unknown[]) => blocs.reduce((sum, bloc) =>
+    sum + (isRecord(bloc) && isNumber(bloc.seats) ? bloc.seats : 0), 0)
+  const billTypes = ['ordinary', 'complementary', 'pec', 'mp', 'ppa', 'ldo', 'loa', 'credit', 'amendment']
+  const stages = ['committee', 'negotiation', 'voting', 'sanction', 'veto-review', 'approved', 'rejected', 'expired']
+  const chambers = ['house', 'senate', 'joint']
+  const validVote = (vote: unknown) => isRecord(vote)
+    && typeof vote.id === 'string' && chambers.includes(String(vote.chamber))
+    && Number.isInteger(vote.round) && isNumber(vote.round) && vote.round >= 1
+    && typeof vote.dateLabel === 'string'
+    && ['yes', 'no', 'abstain', 'absent', 'present', 'totalSeats', 'quorumNeeded', 'requiredYes']
+      .every((key) => isNumber(vote[key]) && Number.isInteger(vote[key]) && Number(vote[key]) >= 0)
+    && typeof vote.passed === 'boolean' && typeof vote.note === 'string'
+    && Number(vote.yes) + Number(vote.no) + Number(vote.abstain) === Number(vote.present)
+    && Number(vote.present) + Number(vote.absent) === Number(vote.totalSeats)
+  const validBill = (bill: unknown) => isRecord(bill)
+    && typeof bill.id === 'string' && billTypes.includes(String(bill.type))
+    && typeof bill.title === 'string' && bill.title.length > 0 && typeof bill.summary === 'string'
+    && ['executive', 'parliamentary'].includes(String(bill.origin))
+    && typeof bill.authorPartyId === 'string' && typeof bill.authorPartyAcronym === 'string'
+    && isNumber(bill.createdYear) && Number.isInteger(bill.createdYear)
+    && typeof bill.createdMonth === 'string'
+    && isNumber(bill.createdWeek) && Number.isInteger(bill.createdWeek) && Number(bill.createdWeek) >= 1 && Number(bill.createdWeek) <= 4
+    && stages.includes(String(bill.stage))
+    && ['stageWeeks', 'daysInProcess', 'currentRound', 'negotiatedSupport', 'fiscalImpact']
+      .every((key) => isNumber(bill[key]) && Number.isFinite(Number(bill[key])))
+    && Number(bill.stageWeeks) >= 0 && Number(bill.daysInProcess) >= 0
+    && Number(bill.currentRound) >= 1 && Number(bill.negotiatedSupport) >= 0 && Number(bill.negotiatedSupport) <= 100
+    && chambers.includes(String(bill.currentChamber))
+    && (typeof bill.targetSectorId === 'string' || bill.targetSectorId === null)
+    && (typeof bill.sourceSectorId === 'string' || bill.sourceSectorId === null)
+    && Array.isArray(bill.voteHistory) && bill.voteHistory.every(validVote)
+    && isStringArray(bill.history) && typeof bill.isUrgent === 'boolean'
+    && typeof bill.provisionalFiscalImpactApplied === 'boolean'
+    && (typeof bill.vetoReason === 'string' || bill.vetoReason === null)
+    && (typeof bill.sourceKey === 'string' || bill.sourceKey === null)
+  return value.chamberOfDeputies.length > 0 && value.chamberOfDeputies.every(validBloc)
+    && value.senate.length > 0 && value.senate.every(validBloc)
+    && seatTotal(value.chamberOfDeputies) === legislativeRules.chambers.house.seats
+    && seatTotal(value.senate) === legislativeRules.chambers.senate.seats
+    && value.bills.every(validBill)
+}
+
 function isCampaignState(
   value: unknown,
   allowEmptyMinistries = false,
@@ -344,6 +397,7 @@ function isCampaignState(
     || !value.ministries.every(isMinistry)
     || !Array.isArray(value.projects) || !value.projects.every(isPublicProject)
     || !isSocietyState(value.society)
+    || !isLegislatureState(value.legislature)
     || !isStringArray(value.executiveProposals)) return false
   if (!isEconomicState(value.economy) && !allowMissingEconomy) return false
   return true
@@ -370,9 +424,9 @@ function freshTurnState(): CampaignTurnState {
   }
 }
 
-function migrateLegacyCampaign(value: unknown): CampaignState | null {
+function migrateLegacyCampaign(value: unknown, scaleLegacyMoney = true): CampaignState | null {
   if (!isRecord(value) || !isRecord(value.party) || !isRecord(value.calendar) || !isRecord(value.country)) return null
-  value = scaleLegacyMoneyDeep(value)
+  if (scaleLegacyMoney) value = scaleLegacyMoneyDeep(value)
   if (!isRecord(value) || !isRecord(value.party) || !isRecord(value.calendar) || !isRecord(value.country)) return null
   const party = value.party
   if (!Array.isArray(party.colors) || party.colors.length !== 2 || !party.colors.every(isHexColor)) return null
@@ -404,6 +458,9 @@ function migrateLegacyCampaign(value: unknown): CampaignState | null {
       orientation: value.orientation === 'right' ? 'right' : 'left',
       country: country as unknown as CampaignState['country'],
     }),
+    legislature: isLegislatureState(value.legislature)
+      ? value.legislature as unknown as CampaignState['legislature']
+      : createInitialLegislatureState({ party: party as unknown as CampaignState['party'] }),
     executiveProposals: isStringArray(value.executiveProposals) ? value.executiveProposals : [],
     turn: isRecord(value.turn) ? { ...freshTurnState(), ...value.turn } : freshTurnState(),
     news: Array.isArray(value.news) ? value.news : dashboardNews.map((item) => ({ ...item })),
@@ -469,7 +526,7 @@ export function migrateSave(value: unknown): MigrationResult {
   }
 
   const oldCampaign = value.campaign ?? value.campanha ?? value
-  const campaign = migrateLegacyCampaign(oldCampaign)
+  const campaign = migrateLegacyCampaign(oldCampaign, version < 6)
   if (!campaign) return { ok: false, error: 'Não foi possível migrar: os dados da campanha estão incompletos ou inválidos.' }
   return {
     ok: true,
