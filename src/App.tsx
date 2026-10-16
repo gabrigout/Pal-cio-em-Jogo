@@ -9,6 +9,7 @@ import EconomyPanel from './components/EconomyPanel'
 import PolicyProjectsPanel from './components/PolicyProjectsPanel'
 import SocietyPanel from './components/SocietyPanel'
 import LegislaturePanel from './components/LegislaturePanel'
+import JudiciaryPanel from './components/JudiciaryPanel'
 import TopNavigation from './components/TopNavigation'
 import { createCampaign } from './engine/campaign'
 import {
@@ -28,6 +29,7 @@ import { advanceWeek, chooseNarrativeOption, dismissDecisionResult, dismissWeekl
 import { adjustPublicProjectPriority, startPublicProject, togglePublicProjectPause } from './engine/projects'
 import { applySocietyAction } from './engine/society'
 import { decidePresidentialSanction, negotiateLegislativeProposal, submitLegislativeProposal } from './engine/legislature'
+import { appealJudicialCase, complyWithJudicialDecision, formalizeJudicialAppointment, nominateJudicialCandidate } from './engine/judiciary'
 import { downloadCampaignBackup } from './persistence/backup'
 import {
   deleteCampaign,
@@ -45,6 +47,7 @@ const sectionTitles: Record<Exclude<SectionId, 'brasil'>, string> = {
   politicas: 'Políticas Públicas',
   sociedade: 'Sociedade',
   congresso: 'Congresso',
+  judiciario: 'Judiciário',
   relacoes: 'Relações',
   historico: 'Notícias/Histórico',
 }
@@ -347,6 +350,25 @@ export default function App() {
           onSubmitProposal={(input) => runPolicyAction(submitLegislativeProposal(campaign, input), 'A proposição não foi protocolada. Confira os requisitos, o impacto fiscal e os recursos disponíveis.')}
           onNegotiate={(billId) => runPolicyAction(negotiateLegislativeProposal(campaign, billId), 'A negociação não foi realizada. Confira se a proposta ainda está em tramitação e se há recursos disponíveis.')}
           onPresidentialDecision={(billId, decision) => runPolicyAction(decidePresidentialSanction(campaign, billId, decision), 'A decisão presidencial não foi registrada. Confira a etapa da proposição e os recursos disponíveis.')}
+        />
+      ) : activeSection === 'judiciario' ? (
+        <JudiciaryPanel campaign={campaign}
+          onNominate={(vacancyId, candidateId) => runPolicyAction(
+            nominateJudicialCandidate(campaign, vacancyId, candidateId),
+            'A indicação não foi apresentada. Confira os requisitos do candidato, a vaga e os recursos disponíveis.',
+          )}
+          onAppoint={(nominationId) => runPolicyAction(
+            formalizeJudicialAppointment(campaign, nominationId),
+            'A nomeação não pôde ser formalizada. Verifique a aprovação do Senado e se a vaga continua aberta.',
+          )}
+          onAppeal={(caseId) => runPolicyAction(
+            appealJudicialCase(campaign, caseId),
+            'O recurso não foi registrado. Confira a decisão, o prazo, a instância competente e os recursos disponíveis.',
+          )}
+          onComply={(caseId) => runPolicyAction(
+            complyWithJudicialDecision(campaign, caseId),
+            'O cumprimento não foi registrado. Verifique se há decisão final e obrigação pendente.',
+          )}
         />
       ) : (
         <main className="section-placeholder page-enter">
