@@ -16,7 +16,7 @@ A tramitação agora contempla PL, PLP, PEC, MP, PPA, LDO, LOA, crédito adicion
 
 A reforma tributária já registrada pelo sistema econômico e a reorganização ministerial são recuperadas como proposições quando uma campanha anterior é migrada. O formato de save foi elevado para v8. Saves v6 e v7 mantêm os valores já convertidos para reais, sem nova multiplicação; saves v5 e anteriores ainda recebem a conversão histórica. Ao migrar, campanhas de partidos predefinidos recebem a nova paleta e o tema é recalculado; cores de partidos personalizados são preservadas. Propostas antigas continuam na agenda legislativa.
 
-**Validação automatizada:** GitHub Actions passou `npm run test` com **62 testes aprovados, 0 falhas**, e `npm run build` com sucesso no commit `26612c65d62000a45b71cba31e2b421955d92258` (execução [38944301144](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38944301144)). O resultado automatiza testes e build, mas não equivale a uma revisão visual no navegador. A branch de trabalho não foi mesclada à `main`.
+**Validação automatizada:** GitHub Actions passou `npm run test` com **62 testes aprovados, 0 falhas**, e `npm run build` com sucesso no commit `3d9540d32eef587e36872c8920b5bef88264eb8a` (execução [38944697838](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38944697838)). O resultado automatiza testes e build, mas não equivale a uma revisão visual no navegador. A branch de trabalho não foi mesclada à `main`.
 
 ## Funcionalidades implementadas
 
