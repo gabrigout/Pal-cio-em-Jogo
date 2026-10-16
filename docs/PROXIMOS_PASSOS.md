@@ -25,7 +25,7 @@ Atualizado conforme `docs/STATUS.md` em 2026-10-16. A Fase 1 está concluída e 
 - **Políticas públicas e projetos: implementados e validados na base da branch `codex/phase-2a-public-projects`.**
 - **Sociedade e grupos de pressão: primeira versão implementada e validada** na branch `codex/phase-2b-society-finance`. O sistema acompanha cinco classes, sete grupos, diálogo/acordos, apoio, pressão, manifestação e paralisação.
 
-Brasil, Estado/Executivo, Economia, Políticas Públicas, Sociedade e Congresso têm telas funcionais na branch atual. Relações e Notícias/Histórico continuam pendentes. Save v8 inclui o estado legislativo e atualiza as paletas/temas das campanhas salvas para os partidos predefinidos, sem sobrescrever cores de partidos personalizados. Migrações de v6 preservam a escala monetária em reais e resgatam propostas antigas da reforma tributária/reorganização ministerial. GitHub Actions passou 61 testes, 0 falhas, e build no commit `4b4979065d5e2a9e4ccc4c00da93544abc267345` (workflow [38960919871](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38960919871)); a validação do HEAD documental atual também é repetida pelo workflow.
+Brasil, Estado/Executivo, Economia, Políticas Públicas, Sociedade e Congresso têm telas funcionais na branch atual. Relações e Notícias/Histórico continuam pendentes. Save v9 inclui o estado legislativo e aplica os códigos cromáticos revisados aos partidos predefinidos em campanhas existentes, sem sobrescrever cores de partidos personalizados. A v8 introduziu a primeira paleta. Migrações de v6 preservam a escala monetária em reais e resgatam propostas antigas da reforma tributária/reorganização ministerial. GitHub Actions passou 61 testes, 0 falhas, e build no commit `4b4979065d5e2a9e4ccc4c00da93544abc267345` (workflow [38960919871](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38960919871)); a validação do HEAD documental atual também é repetida pelo workflow.
 
 ## Histórico das entregas anteriores — Fase 2
 
@@ -135,7 +135,7 @@ Implementada e validada na branch `codex/phase-3a-congress`. Leia `docs/STATUS.m
 
 ## Pendências visuais e de conteúdo conhecidas
 
-- As seis paletas das paródias foram pesquisadas e aplicadas em `src/data/campaignConfig.ts`; consulte `docs/CORES_DOS_PARTIDOS.md` para fontes, códigos confirmados, aproximações visuais e limites de fidelidade. A migração v7→v8 atualiza temas de campanhas existentes, preservando partidos personalizados. Ainda é necessária uma revisão visual manual de contraste e hierarquia da interface no navegador.
+- As seis paletas das paródias foram pesquisadas e aplicadas em `src/data/campaignConfig.ts`; consulte `docs/CORES_DOS_PARTIDOS.md` para fontes, códigos confirmados, aproximações visuais e limites de fidelidade. A migração v8→v9 atualiza os códigos cromáticos revisados e os temas de campanhas existentes, preservando partidos personalizados. Ainda é necessária uma revisão visual manual de contraste e hierarquia da interface no navegador.
 - Há textos demonstrativos e conteúdo estático no dashboard, incluindo alertas, frentes de trabalho e contadores/títulos de atualizações. O conteúdo de ações, decisões e eventos também é inicial e precisa de expansão e balanceamento.
 - Relações e Notícias/Histórico ainda são placeholders; Políticas Públicas, Sociedade e Congresso têm telas e regras próprias na branch de trabalho.
 - Não há testes automatizados de interação visual nem screenshots desktop/celular. Revisar contraste, responsividade e telas densas ao avançar a interface.
