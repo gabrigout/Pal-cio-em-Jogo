@@ -128,6 +128,6 @@ export function createCampaignTheme(primaryColor: string, secondaryColor: string
     officialSecondary: secondaryColor.toLowerCase(),
     primary: ensureContrast(primaryColor, THEME_SURFACE),
     secondary: ensureContrast(secondaryColor, THEME_SURFACE),
-    buttonText: getButtonTextColor(ensureContrast(primaryColor, THEME_SURFACE)),
+    buttonText: getButtonTextColor(primaryColor),
   }
 }
