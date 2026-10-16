@@ -203,7 +203,7 @@ A execução GitHub Actions mais recente com o núcleo legislativo e os testes o
 2. `npm run test`
 3. `npm run build`
 
-O commit `210be129e4cce74603b59d6e6d7f4c48e6ec4c97` passou **57 testes, 0 falhas**, e build de produção com sucesso no [workflow 38942064992](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38942064992). Depois disso, uma revisão adicional reforçou os limites de crédito e acrescentou um teste específico para garantir consistência das parcelas setoriais e ausência de criação de caixa. **Confirme o workflow que cobre o HEAD atual antes de considerar esta entrega definitivamente encerrada**; os commits de código posteriores devem passar pela mesma rotina.
+O commit de código `0ba015153f9ce0b1318c35ae8bf6157a0737ecbf` passou **58 testes, 0 falhas**, e build de produção com sucesso no [workflow 38942516918](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38942516918), já incluindo a revisão de crédito adicional que recalcula as participações setoriais e não cria caixa. Os commits documentais posteriores registram o mesmo estado já validado; a execução também é repetida automaticamente pela branch. Esta evidência cobre testes automatizados e compilação/build, não uma revisão visual manual.
 
 Coberturas relevantes em `src/engine/legislature.test.ts`:
 - Totais exatos de 513 e 81 cadeiras.
