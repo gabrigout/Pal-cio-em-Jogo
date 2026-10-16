@@ -4,6 +4,7 @@ export type SectionId =
   | 'economia'
   | 'politicas'
   | 'sociedade'
+  | 'congresso'
   | 'relacoes'
   | 'historico'
 
@@ -67,12 +68,79 @@ export interface CampaignState {
   ministries: MinistryState[]
   projects: PublicProjectState[]
   society: SocietyState
+  legislature: LegislatureState
   executiveProposals: string[]
   economy: EconomicState
   turn: CampaignTurnState
   news: NewsItem[]
   pendingEffects: PendingEffect[]
   weeklySummary: WeeklySummary | null
+}
+
+export type LegislativeBillType = 'ordinary' | 'complementary' | 'pec' | 'mp' | 'ppa' | 'ldo' | 'loa' | 'credit' | 'amendment'
+export type LegislativeChamber = 'house' | 'senate' | 'joint'
+export type LegislativeStage = 'committee' | 'negotiation' | 'voting' | 'sanction' | 'veto-review' | 'approved' | 'rejected' | 'expired'
+export type LegislativeOrigin = 'executive' | 'parliamentary'
+
+export interface LegislativeBloc {
+  partyId: string
+  partyName: string
+  acronym: string
+  orientation: PoliticalOrientation | 'center'
+  seats: number
+}
+
+export interface LegislativeVote {
+  id: string
+  chamber: LegislativeChamber
+  round: number
+  dateLabel: string
+  yes: number
+  no: number
+  abstain: number
+  absent: number
+  present: number
+  totalSeats: number
+  quorumNeeded: number
+  requiredYes: number
+  passed: boolean
+  note: string
+}
+
+export interface LegislativeBill {
+  id: string
+  type: LegislativeBillType
+  title: string
+  summary: string
+  origin: LegislativeOrigin
+  authorPartyId: string
+  authorPartyAcronym: string
+  createdYear: number
+  createdMonth: string
+  createdWeek: number
+  stage: LegislativeStage
+  stageWeeks: number
+  daysInProcess: number
+  currentChamber: LegislativeChamber
+  currentRound: number
+  negotiatedSupport: number
+  fiscalImpact: number
+  targetSectorId: string | null
+  sourceSectorId: string | null
+  voteHistory: LegislativeVote[]
+  history: string[]
+  isUrgent: boolean
+  provisionalFiscalImpactApplied: boolean
+  vetoReason: string | null
+  sourceKey: string | null
+}
+
+export interface LegislatureState {
+  chamberOfDeputies: LegislativeBloc[]
+  senate: LegislativeBloc[]
+  bills: LegislativeBill[]
+  history: string[]
+  lastAdvancedKey: string | null
 }
 
 export type ExecutiveActionType =
