@@ -241,6 +241,17 @@ function validateProposal(campaign: CampaignState, input: LegislativeProposalInp
   } else if (input.type === 'credit') {
     if (impact <= 0 || impact > legislativeRules.creditProposalLimit) return 'O crédito adicional deve ser positivo e respeitar o limite configurado.'
     if (!input.targetSectorId || !campaign.economy.annualBudget.sectors.some((sector) => sector.id === input.targetSectorId)) return 'Selecione o setor que receberá o crédito.'
+    const proposedTotal = campaign.economy.annualBudget.total + impact
+    const proposedSectorEnvelope = proposedTotal * economicRules.sectorBudgetShare
+    const targetSector = campaign.economy.annualBudget.sectors.find((sector) => sector.id === input.targetSectorId)
+    if (!targetSector) return 'Setor de destino inválido.'
+    const addedSectorAllocation = impact * economicRules.sectorBudgetShare
+    if (campaign.economy.annualBudget.sectors.some((sector) => {
+      const allocation = sector.annualAllocation + (sector.id === targetSector.id ? addedSectorAllocation : 0)
+      const resultingShare = allocation / Math.max(1, proposedSectorEnvelope) * 100
+      return resultingShare < economicRules.minimumSectorShare - 0.05
+        || resultingShare > economicRules.maximumSectorShare + 0.05
+    })) return 'O crédito deixaria uma dotação setorial fora dos limites configurados; reduza o valor ou escolha outro setor.'
   } else if (input.type === 'amendment') {
     if (impact <= 0) return 'O valor da emenda precisa ser positivo.'
     if (!input.sourceSectorId || !input.targetSectorId || input.sourceSectorId === input.targetSectorId) return 'Escolha setores de origem e destino diferentes.'
@@ -546,11 +557,26 @@ function applyLegislativeFinancialEffect(campaign: CampaignState, bill: Legislat
     if (!sector || amount <= 0 || amount > legislativeRules.creditProposalLimit) return null
     const sectorIncrease = roundOne(amount * economicRules.sectorBudgetShare)
     const fixedIncrease = roundOne(amount * (1 - economicRules.sectorBudgetShare))
-    const sectors = campaign.economy.annualBudget.sectors.map((item) =>
+    const newTotal = roundOne(campaign.economy.annualBudget.total + amount)
+    const sectorEnvelope = roundOne(newTotal * economicRules.sectorBudgetShare)
+    const rawSectors = campaign.economy.annualBudget.sectors.map((item) =>
       item.id === sector.id ? { ...item, annualAllocation: roundOne(item.annualAllocation + sectorIncrease) } : item)
+    const allocatedTotal = rawSectors.reduce((sum, item) => sum + item.annualAllocation, 0)
+    let assignedShare = 0
+    const sectors = rawSectors.map((item, index) => {
+      const share = index === rawSectors.length - 1
+        ? roundOne(100 - assignedShare)
+        : roundOne(item.annualAllocation / Math.max(1, allocatedTotal) * 100)
+      assignedShare = roundOne(assignedShare + share)
+      return { ...item, share }
+    })
+    const roundingAdjustment = roundOne(sectorEnvelope - sectors.reduce((sum, item) => sum + item.annualAllocation, 0))
+    if (roundingAdjustment !== 0 && sectors.length) {
+      sectors[sectors.length - 1].annualAllocation = roundOne(sectors[sectors.length - 1].annualAllocation + roundingAdjustment)
+    }
     const annualBudget = {
       ...campaign.economy.annualBudget,
-      total: roundOne(campaign.economy.annualBudget.total + amount),
+      total: newTotal,
       fixedCommitments: roundOne(campaign.economy.annualBudget.fixedCommitments + fixedIncrease),
       sectors,
     }
