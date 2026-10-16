@@ -534,6 +534,7 @@ function freshTurnState(): CampaignTurnState {
 
 function migrateLegacyCampaign(value: unknown, scaleLegacyMoney = true): CampaignState | null {
   const hadLegislatureState = isRecord(value) && isLegislatureState(value.legislature)
+  const hadJudiciaryState = isRecord(value) && isJudiciaryState(value.judiciary)
   if (!isRecord(value) || !isRecord(value.party) || !isRecord(value.calendar) || !isRecord(value.country)) return null
   if (scaleLegacyMoney) value = scaleLegacyMoneyDeep(value)
   if (!isRecord(value) || !isRecord(value.party) || !isRecord(value.calendar) || !isRecord(value.country)) return null
@@ -555,6 +556,22 @@ function migrateLegacyCampaign(value: unknown, scaleLegacyMoney = true): Campaig
     : createCampaignTheme(party.colors[0], party.colors[1])
 
   const normalizedEconomy = isRecord(value.economy) ? { ...value.economy, projectExpensesPaidThisMonth: isNumber(value.economy.projectExpensesPaidThisMonth) && value.economy.projectExpensesPaidThisMonth >= 0 ? value.economy.projectExpensesPaidThisMonth : 0 } : undefined
+  const calendar = {
+    month: calendarMonths.includes(value.calendar.month as typeof calendarMonths[number]) ? value.calendar.month as typeof calendarMonths[number] : 'Janeiro',
+    year: isNumber(value.calendar.year) && Number.isInteger(value.calendar.year) ? value.calendar.year : 2027,
+    week: isNumber(value.calendar.week) && Number.isInteger(value.calendar.week) && value.calendar.week >= 1 && value.calendar.week <= 4 ? value.calendar.week : 1,
+    weeksPerMonth: 4 as const,
+  }
+  const normalizedLegislature = isLegislatureState(value.legislature)
+    ? value.legislature as unknown as CampaignState['legislature']
+    : createInitialLegislatureState({ party: party as unknown as CampaignState['party'] })
+  const normalizedJudiciary = isJudiciaryState(value.judiciary)
+    ? value.judiciary as unknown as CampaignState['judiciary']
+    : createInitialJudiciaryState({
+      id: typeof value.id === 'string' ? value.id : 'legacy-campaign',
+      calendar,
+      legislature: normalizedLegislature,
+    })
 
   const candidate = {
     ...value,
@@ -567,9 +584,8 @@ function migrateLegacyCampaign(value: unknown, scaleLegacyMoney = true): Campaig
       orientation: value.orientation === 'right' ? 'right' : 'left',
       country: country as unknown as CampaignState['country'],
     }),
-    legislature: isLegislatureState(value.legislature)
-      ? value.legislature as unknown as CampaignState['legislature']
-      : createInitialLegislatureState({ party: party as unknown as CampaignState['party'] }),
+    legislature: normalizedLegislature,
+    judiciary: normalizedJudiciary,
     executiveProposals: isStringArray(value.executiveProposals) ? value.executiveProposals : [],
     turn: isRecord(value.turn) ? { ...freshTurnState(), ...value.turn } : freshTurnState(),
     news: Array.isArray(value.news) ? value.news : dashboardNews.map((item) => ({ ...item })),
