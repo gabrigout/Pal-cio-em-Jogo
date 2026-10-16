@@ -52,7 +52,7 @@ function seededRandom(seedText: string): () => number {
 }
 
 function getPartyRows(campaign: Pick<CampaignState, 'party'>) {
-  const rows = parties.map((party) => ({
+  const rows: Array<{ partyId: string; partyName: string; acronym: string; orientation: 'left' | 'right' | 'center'; weight: number }> = parties.map((party) => ({
     partyId: party.id,
     partyName: party.fullName,
     acronym: party.acronym,
@@ -191,10 +191,6 @@ export function createDraftLegislativeBill(
     vetoReason: null,
     sourceKey: input.sourceKey ?? null,
   }
-}
-
-function appendLegislativeHistory(state: LegislatureState, message: string): LegislatureState {
-  return { ...state, history: [message, ...state.history].slice(0, 40) }
 }
 
 export function registerLegislativeProposal(
@@ -346,19 +342,18 @@ function getBlocs(campaign: CampaignState, chamber: LegislativeChamber): Legisla
   return combineJointBlocs(campaign)
 }
 
-function seatCount(campaign: CampaignState, chamber: LegislativeChamber): number {
+function seatCount(chamber: LegislativeChamber): number {
   return legislativeRules.chambers[chamber].seats
 }
 
 function requiredVotes(
-  campaign: CampaignState,
   bill: LegislativeBill,
   chamber: LegislativeChamber,
   yes: number,
   no: number,
   overrideVeto = false,
 ): { quorumNeeded: number; requiredYes: number; passed: boolean; present: number; totalSeats: number } {
-  const totalSeats = seatCount(campaign, chamber)
+  const totalSeats = seatCount(chamber)
   const present = yes + no
   const quorumNeeded = Math.floor(totalSeats * legislativeRules.ordinaryPresenceQuorumNumerator / legislativeRules.ordinaryPresenceQuorumDenominator) + 1
   let requiredYes: number
@@ -415,7 +410,7 @@ function castVote(
       else no += 1
     }
   }
-  const result = requiredVotes(campaign, bill, chamber, yes, no, overrideVeto)
+  const result = requiredVotes(bill, chamber, yes, no, overrideVeto)
   const present = yes + no + abstain
   const requiredYes = result.requiredYes
   return {
@@ -766,7 +761,7 @@ export function advanceLegislatureWeek(
 ): { campaign: CampaignState; events: string[] } {
   const key = endingCalendar.year + '-' + endingCalendar.month + '-' + endingCalendar.week
   if (campaign.legislature.lastAdvancedKey === key) return { campaign, events: [] }
-  let working = {
+  let working: CampaignState = {
     ...campaign,
     legislature: { ...campaign.legislature, lastAdvancedKey: key },
   }
