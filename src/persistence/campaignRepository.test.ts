@@ -290,6 +290,8 @@ test('migra save v6 para v7 sem reescalar valores que já estão em reais', () =
   campaign.economy.indicators.publicRevenue = 52
   campaign.economy.indicators.publicExpenses = 57
   campaign.economy.indicators.publicDebt = 900
+  campaign.economy.congressProposals = ['Reforma tributária estrutural']
+  campaign.executiveProposals = ['Reorganização da estrutura ministerial']
   delete campaign.legislature
 
   const result = migrateSave({
@@ -308,4 +310,7 @@ test('migra save v6 para v7 sem reescalar valores que já estão em reais', () =
   assert.equal(result.save.campaign.country.budget, 42)
   assert.equal(result.save.campaign.legislature.chamberOfDeputies.reduce((sum, bloc) => sum + bloc.seats, 0), 513)
   assert.equal(result.save.campaign.legislature.senate.reduce((sum, bloc) => sum + bloc.seats, 0), 81)
+  assert.equal(result.save.campaign.legislature.bills.length, 2)
+  assert.ok(result.save.campaign.legislature.bills.some((bill) => bill.title === 'Reforma tributária estrutural' && bill.type === 'complementary'))
+  assert.ok(result.save.campaign.legislature.bills.some((bill) => bill.title === 'Reorganização da estrutura ministerial'))
 })
