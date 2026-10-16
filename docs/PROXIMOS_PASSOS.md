@@ -16,7 +16,7 @@ Comandos disponíveis: `npm run test` executa os testes automatizados (`node:tes
 
 ## Estado atual
 
-Visão de arquitetura e dependências: `docs/MAPA_MENTAL.md`. Avaliação completa da prontidão: `docs/AVALIACAO_PRONTIDAO.md`. Pesquisa das paletas: `docs/CORES_DOS_PARTIDOS.md`.
+Visão de arquitetura e dependências: `docs/MAPA_MENTAL.md`. Avaliação completa da prontidão: `docs/AVALIACAO_PRONTIDAO.md`. Pesquisa das paletas: `docs/CORES_DOS_PARTIDOS.md`. Relatório desta atualização: `docs/RELATORIO_CORES_E_PRONTIDAO.md`.
 
 Atualizado conforme `docs/STATUS.md` em 2026-10-16. A Fase 1 está concluída e a primeira versão da Fase 2 está implementada. A Fase 3.1 (Congresso e legislação) foi concluída e validada na branch `codex/phase-3a-congress`.
 
