@@ -14,13 +14,13 @@ A branch `codex/phase-3a-congress` implementa uma área própria do Congresso e 
 
 A tramitação agora contempla PL, PLP, PEC, MP, PPA, LDO, LOA, crédito adicional e emenda de remanejamento. As etapas e votações avançam com as semanas do jogo; a negociação aumenta a margem de apoio, mas não garante aprovação. PL/PLP passam pelas duas Casas; PEC exige três quintos em dois turnos por Casa e não recebe sanção presidencial; MP exige declaração de relevância/urgência, tem prazo simulado e efeito fiscal provisório reversível; proposições orçamentárias vão à deliberação conjunta e, conforme o tipo, à sanção/veto. O veto volta às duas Casas para análise. As decisões fiscais integram o orçamento existente em R$ bilhões, sem transformar aprovação em caixa novo.
 
-A reforma tributária já registrada pelo sistema econômico e a reorganização ministerial são recuperadas como proposições quando uma campanha anterior é migrada. O formato de save foi elevado para v7. Saves v6 mantêm os valores já convertidos para reais, sem nova multiplicação; saves v5 e anteriores ainda recebem a conversão histórica. Dados antigos de propostas pendentes são preservados na agenda legislativa.
+A reforma tributária já registrada pelo sistema econômico e a reorganização ministerial são recuperadas como proposições quando uma campanha anterior é migrada. O save atual é v8: a v7 já incluía o estado legislativo e a v8 atualiza a paleta/tema de partidos predefinidos nas campanhas salvas, preservando cores de partidos personalizados. Saves v6 mantêm os valores já convertidos para reais, sem nova multiplicação; saves v5 e anteriores ainda recebem a conversão histórica. Dados antigos de propostas pendentes são preservados na agenda legislativa.
 
-**Validação automatizada:** GitHub Actions passou `npm run test` com **58 testes aprovados, 0 falhas**, e `npm run build` com sucesso no commit de código `0ba015153f9ce0b1318c35ae8bf6157a0737ecbf` (execução [38942516918](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38942516918)). O resultado automatiza testes e build, mas não equivale a uma revisão visual no navegador. A branch de trabalho não foi mesclada à `main`.
+**Validação automatizada:** GitHub Actions passou `npm run test` com **61 testes aprovados, 0 falhas**, e `npm run build` com sucesso no commit de código `601152eee8e9d17511a8ccb8d985516cddbef1a0` (execução [38947033246](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38947033246)). A execução do HEAD documental posterior também está sendo repetida no GitHub Actions. O resultado automatiza testes e build, mas não equivale a uma revisão visual no navegador. A branch de trabalho não foi mesclada à `main`.
 
 ## Funcionalidades implementadas
 
-- **Criação de campanha e tema:** escolha entre esquerda/direita, seis partidos fictícios ou partido personalizado com nome, sigla e duas cores. A interface deriva as cores do partido e usa tons neutros para preservar legibilidade.
+- **Criação de campanha e tema:** escolha entre esquerda/direita, seis partidos fictícios ou partido personalizado com nome, sigla e duas cores. A interface usa paletas pesquisadas para PT/PSOL/PDT/PL/PSDB/NOVO como referência das paródias e deriva variantes para contraste. Fontes e limitações estão em `docs/CORES_DOS_PARTIDOS.md`.
 - **Dashboard e turnos:** indicadores nacionais, calendário de quatro semanas por mês, escolhas semanais, eventos/reação, resumo de virada, notícias e histórico do estado da campanha.
 - **Ações e recursos:** pontos de ação, caixa/orçamento, capital político e capacidade administrativa são recursos distintos. Ações validam custos antes de aplicar efeitos imediatos ou pendentes.
 - **Múltiplas campanhas:** biblioteca local para criar, continuar e excluir campanhas; importação/exportação de backups JSON. Autosave local, sem serviço de nuvem.
@@ -42,6 +42,13 @@ A reforma tributária já registrada pelo sistema econômico e a reorganização
 - **Emenda de remanejamento:** reduz dotação não executada na origem e aumenta a do destino; não eleva o total do orçamento.
 - **Articulação:** cada negociação consome pontos de ação e capital político. A votação é calculada por bancada, orientação e indicadores de apoio, com resultado determinístico para a mesma campanha/proposição.
 - **Efeitos fiscais de leis comuns:** o impacto anual estimado alimenta a pressão mensal de despesas/economias; caixa, endividamento e execução real continuam sujeitos ao fechamento econômico mensal.
+
+## Documentação de continuidade
+
+- `docs/MAPA_MENTAL.md`: mapa geral dos sistemas, dependências, recursos e regras contínuas de documentação.
+- `docs/CORES_DOS_PARTIDOS.md`: pesquisa de cores e distinção entre códigos oficiais e aproximações.
+- `docs/AVALIACAO_PRONTIDAO.md`: avaliação geral do que está e do que não está pronto.
+- `docs/RELATORIO_FASE_3_1_CLAUDE.md`: relatório detalhado de Congresso, regras, testes e limitações.
 
 ## Pastas e arquivos principais
 
@@ -65,7 +72,7 @@ npm run test
 npm run build
 ```
 
-A suíte automatizada atual tem 58 testes. O workflow `.github/workflows/validate.yml` executa testes e build a cada push em `main` ou em branches `codex/**`, e em pull requests direcionados à `main`.
+A suíte automatizada atual tem 61 testes. O workflow `.github/workflows/validate.yml` executa testes e build a cada push em `main` ou em branches `codex/**`, e em pull requests direcionados à `main`.
 
 ## Decisões de design
 
@@ -74,7 +81,7 @@ A suíte automatizada atual tem 58 testes. O workflow `.github/workflows/validat
 - O modelo legislativo é uma abstração jogável. Quóruns e números principais são parametrizados, mas o sistema não implementa todo o processo regimental, todas as comissões, pareceres, apensamentos, urgências específicas, períodos de recesso ou todas as exceções constitucionais.
 - O resultado de uma votação não é decidido diretamente pelo jogador. Apoio no Congresso e articulação influenciam probabilidades, não substituem o voto.
 - Aprovar uma lei não cria dinheiro disponível automaticamente. A LOA altera o planejamento anual; emendas redistribuem dotação; crédito adicional altera orçamento planejado; caixa e despesas continuam sujeitos ao motor econômico.
-- A migração de v6 para v7 não reescala reais pela segunda vez. Valores v5 ou anteriores recebem a conversão histórica de unidades abstratas para a escala interna de R$ bilhões.
+- A migração de v7 para v8 atualiza a paleta dos partidos predefinidos; a migração de v6 para v8 não reescala reais pela segunda vez. Valores v5 ou anteriores recebem a conversão histórica de unidades abstratas para a escala interna de R$ bilhões.
 - LocalStorage é específico do navegador. Exporte backups para preservar campanhas fora da máquina.
 
 ## Pendências e limites conhecidos
