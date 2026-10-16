@@ -10,6 +10,7 @@ import PolicyProjectsPanel from './components/PolicyProjectsPanel'
 import SocietyPanel from './components/SocietyPanel'
 import LegislaturePanel from './components/LegislaturePanel'
 import JudiciaryPanel from './components/JudiciaryPanel'
+import OversightPanel from './components/OversightPanel'
 import TopNavigation from './components/TopNavigation'
 import { createCampaign } from './engine/campaign'
 import {
@@ -30,6 +31,7 @@ import { adjustPublicProjectPriority, startPublicProject, togglePublicProjectPau
 import { applySocietyAction } from './engine/society'
 import { decidePresidentialSanction, negotiateLegislativeProposal, submitLegislativeProposal } from './engine/legislature'
 import { appealJudicialCase, complyWithJudicialDecision, formalizeJudicialAppointment, nominateJudicialCandidate } from './engine/judiciary'
+import { requestOversightReview } from './engine/oversight'
 import { downloadCampaignBackup } from './persistence/backup'
 import {
   deleteCampaign,
@@ -48,6 +50,7 @@ const sectionTitles: Record<Exclude<SectionId, 'brasil'>, string> = {
   sociedade: 'Sociedade',
   congresso: 'Congresso',
   judiciario: 'Judiciário',
+  controle: 'Controle institucional',
   relacoes: 'Relações',
   historico: 'Notícias/Histórico',
 }
@@ -368,6 +371,14 @@ export default function App() {
           onComply={(caseId) => runPolicyAction(
             complyWithJudicialDecision(campaign, caseId),
             'O cumprimento não foi registrado. Verifique se há decisão final e obrigação pendente.',
+          )}
+        />
+      ) : activeSection === 'controle' ? (
+        <OversightPanel
+          campaign={campaign}
+          onRequest={(input) => runPolicyAction(
+            requestOversightReview(campaign, input),
+            'O pedido não foi encaminhado. Verifique objeto, órgão competente, pontos de ação e capacidade administrativa.',
           )}
         />
       ) : (
