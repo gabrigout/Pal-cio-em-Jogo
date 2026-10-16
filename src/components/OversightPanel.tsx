@@ -156,9 +156,12 @@ export default function OversightPanel({
     && capacity >= oversightRules.requestAdministrativeCapacity
   const cguTargets = cguScope === 'project' ? campaign.projects : campaign.ministries
   const tcuCanRequest = tcuScope === 'budget' || (tcuScope === 'project' && Boolean(tcuProjectId))
-  const aguTargets = aguScope === 'bill' ? campaign.legislature.bills
-    : aguScope === 'project' ? campaign.projects : campaign.ministries
-  const targetIsAvailable = aguTargets.length > 0 && Boolean(aguTargetId)
+  const aguTargetOptions = aguScope === 'bill'
+    ? campaign.legislature.bills.map((item) => ({ id: item.id, name: item.title }))
+    : aguScope === 'project'
+      ? campaign.projects.map((item) => ({ id: item.id, name: item.name }))
+      : campaign.ministries.map((item) => ({ id: item.id, name: item.name }))
+  const targetIsAvailable = aguTargetOptions.length > 0 && Boolean(aguTargetId)
   const countActive = activeCases.length
 
   return (
@@ -253,7 +256,7 @@ export default function OversightPanel({
             </label>
             <label>Item analisado
               <select onChange={(event) => setAguTargetId(event.target.value)} value={aguTargetId}>
-                {aguTargets.map((target) => <option key={target.id} value={target.id}>{aguScope === 'bill' ? target.title : target.name}</option>)}
+                {aguTargetOptions.map((target) => <option key={target.id} value={target.id}>{target.name}</option>)}
               </select>
             </label>
             <p className="oversight-muted">O parecer orienta juridicamente o Executivo; não controla tribunais ou órgãos de investigação.</p>
