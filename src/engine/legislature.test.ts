@@ -310,3 +310,37 @@ test('veto volta ao Congresso e uma rejeição não aplica o custo da lei', () =
   assert.deepEqual(concludedBill.voteHistory.map((vote) => vote.chamber), ['house', 'senate'])
   assert.equal(concluded.economy.pressures.expenses, originalExpensePressure)
 })
+
+
+test('sanção da LOA atualiza a dotação anual sem aumentar o caixa', () => {
+  const campaign = buildCampaign()
+  const originalCash = campaign.economy.availableFunds
+  const originalBudget = campaign.economy.annualBudget.total
+  const proposedBudget = Math.round(originalBudget * 1.05 * 10) / 10
+  const submitted = submitLegislativeProposal(campaign, {
+    type: 'loa',
+    title: 'Lei orçamentária anual de teste',
+    summary: 'Define a dotação anual proposta para políticas, serviços e compromissos públicos.',
+    fiscalImpact: proposedBudget,
+  })
+  assert.ok(submitted)
+  if (!submitted) return
+  const billId = submitted.legislature.bills[0].id
+  const atSanction: CampaignState = {
+    ...submitted,
+    legislature: {
+      ...submitted.legislature,
+      bills: submitted.legislature.bills.map((bill) => ({ ...bill, stage: 'sanction' })),
+    },
+  }
+  const sanctioned = decidePresidentialSanction(atSanction, billId, 'sanction')
+  assert.ok(sanctioned)
+  if (!sanctioned) return
+  assert.equal(sanctioned.legislature.bills[0].stage, 'approved')
+  assert.equal(sanctioned.economy.annualBudget.total, proposedBudget)
+  assert.equal(sanctioned.economy.availableFunds, originalCash)
+  assert.equal(sanctioned.economy.annualBudget.fixedCommitments, Math.round(proposedBudget * 0.15 * 10) / 10)
+  const sectorTotal = sanctioned.economy.annualBudget.sectors.reduce((sum, sector) => sum + sector.annualAllocation, 0)
+  assert.ok(Math.abs(sectorTotal - proposedBudget * 0.85) <= 0.1)
+  assert.notEqual(sanctioned.economy.annualBudget.total, originalBudget)
+})
