@@ -2,9 +2,9 @@
 ## Documento mestre de contexto e requisitos
 
 **Versão:** 1.1 — levantamento consolidado + catálogo adicional de personagens  
-**Data:** 14 de outubro de 2026  
-**Destino:** referência principal para implementação no Replit  
-**Status:** planejamento consolidado; programação ainda não iniciada
+**Data original:** 14 de outubro de 2026  
+**Destino:** referência principal de requisitos para implementação no Replit  
+**Status do documento:** requisitos consolidados; o projeto já está em desenvolvimento. Consulte docs/STATUS.md para a situação real do código e docs/AVALIACAO_PRONTIDAO.md para o diagnóstico de prontidão.
 
 > **Objetivo deste documento:** reunir em uma única referência as decisões tomadas para o jogo. Ele descreve o que o jogo deve fazer, suas regras e as prioridades de implementação. Não é código e não inicia a programação.
 
@@ -574,6 +574,8 @@ Este plano é uma ordem de trabalho, não uma alteração no escopo já confirma
 
 **Critério de aceite:** propostas passam por procedimentos coerentes, resultados têm requisitos e nenhum poder pode ser controlado pelo jogador fora de suas competências.
 
+**Andamento do código em 16/10/2026:** há primeiras versões implementadas do Congresso e do Judiciário nas branches codex/phase-3a-congress e codex/phase-3b-judiciary. Ambas passaram seus testes automatizados e build. O Judiciário atual simula roster ficcional do STF, indicação/aprovação, processos, decisões, recurso e cumprimento. Essas entregas não completam a Fase 3 inteira: órgãos de controle, investigação, fiscalização, impeachment e crises institucionais continuam pendentes. Veja docs/STATUS.md e os relatórios de continuidade para limites e resultados exatos.
+
 ### Fase 4 — Política viva
 
 - personagens, atributos, relações, memória e autonomia;
@@ -635,7 +637,7 @@ Essas pendências não impedem a construção da fundação jogável. Não devem
 - [ ] Regras de tramitação diferentes para lei ordinária, complementar, PEC e medida provisória.
 - [ ] Sanção, veto, orçamento, emendas e fiscalização funcionam com procedimentos adequados.
 - [ ] Nomeações e aprovações obedecem aos requisitos de cada cargo.
-- [ ] Judiciário não pode ser controlado diretamente pelo presidente.
+- [x] O motor judicial implementado não permite ao presidente escolher o mérito de uma decisão; há teste automatizado de independência. A revisão integral dos procedimentos judiciais continua pendente.
 - [ ] Investigação não equivale automaticamente a culpa.
 - [ ] Corrupção e polarização afetam todas as áreas e geram consequências coerentes.
 - [ ] Aprovação, Maré Ideológica e força eleitoral são indicadores distintos.
