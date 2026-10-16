@@ -10,7 +10,7 @@ import type {
   JudicialNomineeCandidate,
   JudicialOutcome,
   JudicialSenateVote,
-  JudicialState,
+  JudiciaryState,
   JudicialVacancy,
 } from '../state/types'
 
@@ -176,7 +176,7 @@ export function isEligibleJudicialCandidate(candidate: JudicialNomineeCandidate)
 
 export function createInitialJudiciaryState(
   campaign: Pick<CampaignState, 'id' | 'calendar' | 'legislature'>,
-): JudicialState {
+): JudiciaryState {
   const vacancy = makeVacancy(
     campaign.id,
     judicialRules.initialVacancySeat,
@@ -202,11 +202,11 @@ export function createInitialJudiciaryState(
   }
 }
 
-function pushHistory(state: JudicialState, message: string): JudicialState {
+function pushHistory(state: JudiciaryState, message: string): JudiciaryState {
   return { ...state, history: [message, ...state.history].slice(0, 50) }
 }
 
-function withJudiciary(campaign: CampaignState, judiciary: JudicialState): CampaignState {
+function withJudiciary(campaign: CampaignState, judiciary: JudiciaryState): CampaignState {
   return { ...campaign, judiciary }
 }
 
@@ -235,7 +235,7 @@ function publishEvent(
   }
 }
 
-function activeNominationForVacancy(state: JudicialState, vacancyId: string): JudicialNomination | undefined {
+function activeNominationForVacancy(state: JudiciaryState, vacancyId: string): JudicialNomination | undefined {
   return state.nominations.find((nomination) => nomination.vacancyId === vacancyId
     && (nomination.status === 'awaiting-senate' || nomination.status === 'approved'))
 }
