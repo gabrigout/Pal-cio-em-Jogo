@@ -1,8 +1,8 @@
 # Mapa mental — Palácio em Jogo
 
 Atualizado em: 2026-10-16  
-Branch de referência: `codex/phase-3a-congress`  
-Versão atual do save: `v8`
+Branch de referência: `codex/phase-3b-judiciary`  
+Versão atual do save: `v9`
 
 Este arquivo é o mapa geral do projeto para pessoas e IAs que forem continuar o desenvolvimento. Antes de alterar qualquer sistema, leia também `AGENTS.md`, `docs/STATUS.md`, `docs/PROXIMOS_PASSOS.md` e as seções relevantes do Documento Mestre.
 
@@ -20,6 +20,8 @@ flowchart TD
   Monthly --> Economy[Economia e orçamento]
   Monthly --> Society[Sociedade e grupos de pressão]
   Turn --> Legislature[Congresso e tramitação]
+  Turn --> Judiciary[Judiciário: casos, decisões e recursos]
+  Judiciary --> News
   Economy --> Projects[Políticas públicas e projetos]
   Executive[Poder Executivo] --> Economy
   Executive --> Legislature
@@ -59,8 +61,8 @@ Calendário atual: início em janeiro de 2027, quatro semanas por mês. Dinheiro
 | Políticas públicas | `src/engine/projects.ts`, `src/data/publicPrograms.ts`, `src/components/PolicyProjectsPanel.tsx` | Dotação setorial, caixa, capacidade administrativa, indicadores e eventos | Primeira versão |
 | Sociedade | `src/engine/society.ts`, `src/data/society.ts`, `src/components/SocietyPanel.tsx` | Cinco classes, sete grupos organizados, pressão, diálogo, compromissos e acontecimentos mensais | Primeira versão |
 | Congresso | `src/engine/legislature.ts`, `src/data/legislature.ts`, `src/components/LegislaturePanel.tsx` | PL/PLP/PEC/MP/PPA/LDO/LOA, votações, sanção/veto e efeitos orçamentários | Fase 3.1 implementada; rito simplificado |
+| Judiciário | `src/engine/judiciary.ts`, `src/data/judiciary.ts`, `src/components/JudiciaryPanel.tsx` | Processos fictícios, fases, fundamentos, recurso, cumprimento e aposentadoria; indicação e aprovação pelo Senado | Fase 3.2 implementada; rito simplificado |
 | Relações internacionais/defesa | Componentes e dados a completar | Diplomacia, comércio, defesa e indicadores externos | Incompleto |
-| Judiciário | Próximo subsistema planejado | Processos, decisões e recursos independentes do Executivo | Pendente — Fase 3.2 |
 | Órgãos de controle/crises | Próximo subsistema planejado | Investigações, fiscalização e crises institucionais | Pendente — Fase 3.3 |
 | Personagens e relações | Documento Mestre, seção 15 | Lealdade, ambição, alianças, promessas, memória e autonomia | Parcial/pendente — Fase 4 |
 | Imprensa | Documento Mestre, seção 16 | Rumores, evidências e crises de imagem | Pendente — Fase 4 |
@@ -87,12 +89,13 @@ Calendário atual: início em janeiro de 2027, quatro semanas por mês. Dinheiro
 
 ## 6. Persistência e migração
 
-- Versão atual do save: v8.
-- v7 → v8: atualiza tema/paleta de partidos predefinidos nas campanhas existentes; mantém as cores de partido personalizado.
-- v6 → v8: migra o estado legislativo e atualiza a paleta; não reescala os valores financeiros já convertidos para reais.
-- v5 e versões mais antigas: passam pela regra histórica de conversão monetária para a escala em R$ bilhões, além de inicializações/migrações dos sistemas posteriores.
+- Versão atual do save: v9.
+- v8 → v9: adiciona o estado judicial determinístico sem reescalar valores financeiros já convertidos para reais.
+- v7 → v8: atualiza a paleta/tema de partidos predefinidos nas campanhas existentes; mantém as cores de partido personalizado.
+- v6 → v9: migra o estado legislativo e judicial; não reescala valores monetários já em reais.
+- v5 e versões mais antigas: passam pela regra histórica de conversão monetária para a escala em R$ bilhões, além das inicializações dos sistemas posteriores.
 - LocalStorage é local ao navegador. Backup JSON é a forma atual de transportar a campanha.
-- Sempre que alterar o shape do estado persistido, aumente `CURRENT_SAVE_VERSION`, adicione migração determinística e testes específicos para v atual, versões imediatamente anteriores e versões legadas relevantes.
+- Sempre que alterar o estado persistido, eleve CURRENT_SAVE_VERSION, adicione migração determinística e testes específicos para a versão atual, a imediatamente anterior e versões legadas relevantes.
 
 ## 7. Arquitetura e fluxo de mudança
 
@@ -128,8 +131,8 @@ flowchart LR
 1. **Fundação/Fase 1:** campanha, navegação principal, calendário, decisões, recursos e saves locais.
 2. **Fase 2:** primeira versão do Executivo, economia, políticas públicas e sociedade; não é uma simulação macroeconômica completa.
 3. **Fase 3.1:** Congresso com tramitação e votação aproximadas; precisa de auditoria jurídica/regimental e testes manuais de interface.
-4. **Fase 3.2:** Judiciário independente.
-5. **Fase 3.3:** órgãos de controle e crises institucionais.
+4. **Fase 3.2:** primeira versão judicial implementada; o motor protege a independência do mérito, mas prazos e procedimentos seguem simplificados.
+5. **Fase 3.3:** órgãos de controle e crises institucionais — próxima entrega.
 6. **Fase 4:** personagens, autonomia/memória, imprensa e interesses sistêmicos.
 7. **Fase 5:** Maré Ideológica, pesquisas, eleições e continuidade.
 8. **Fase 6:** catálogo amplo de personagens/eventos, balanceamento de campanhas longas e revisão visual/institucional.
