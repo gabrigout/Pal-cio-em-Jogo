@@ -18,14 +18,14 @@ export const partyPalette = [
 
 // Paletas inspiradas em materiais/identidades oficiais consultados em outubro de 2026.
 // PTP: vermelho + branco, referência visual do PT.
-// PSÓ: amarelo + laranja, referência ao sol e às cores tradicionais do PSOL.
+// PSÓ: vermelho + amarelo, códigos digitais do manual de identidade visual do PSOL.
 // PDTT: vermelho + azul; o PDT também utiliza branco em sua identidade tricolor.
 // PLIM: verde + amarelo; a marca do PL também contém azul.
 // PSSDB: azul + amarelo, cores oficiais reafirmadas pelo PSDB em 2023.
 // NOVA: laranja + azul-marinho, cores primárias da identidade visual do NOVO.
 export const partyColors = {
   ptp: ['#E30613', '#FFFFFF'],
-  pso: ['#F58220', '#FFD43B'],
+  pso: ['#E02028', '#FEDF00'],
   pdtt: ['#C8102E', '#00529B'],
   plim: ['#009640', '#FFD500'],
   pssdb: ['#064A8C', '#F6C700'],
