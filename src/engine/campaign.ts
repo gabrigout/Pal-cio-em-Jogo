@@ -6,6 +6,7 @@ import { initializeCampaignTurn } from './turn'
 import { createInitialMinistries } from './executive'
 import { createInitialSocietyState } from './society'
 import { createInitialLegislatureState } from './legislature'
+import { createInitialJudiciaryState } from './judiciary'
 import { allocateSectorBudgetToMinistries, createEconomicState } from './economy'
 import { dashboardNews } from '../data/dashboard'
 import type {
@@ -148,10 +149,14 @@ export function createCampaign(
     weeklySummary: null,
   }
 
-  const socialCampaign = {
+  const institutionalCampaign = {
     ...campaignBase,
     society: createInitialSocietyState(campaignBase),
     legislature: createInitialLegislatureState(campaignBase),
+  }
+  const socialCampaign = {
+    ...institutionalCampaign,
+    judiciary: createInitialJudiciaryState(institutionalCampaign),
   }
   const ministries = createInitialMinistries(socialCampaign, random)
   const economicCampaign = { ...socialCampaign, ministries }
