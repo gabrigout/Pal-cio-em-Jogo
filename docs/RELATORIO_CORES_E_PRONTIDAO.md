@@ -10,7 +10,7 @@
 - Pesquisa de cores feita usando manuais/estatutos e páginas de identidade partidária quando disponíveis.
 - Atualizada a paleta das seis legendas satíricas em `src/data/campaignConfig.ts`; o PTP agora usa **vermelho e branco**, como foi pedido.
 - PDTT foi ajustado para vermelho e azul, em vez de vermelho/verde, com base na tradição cromática documentada do PDT e na cartela digital publicada pelo PDT-RS.
-- O tema do jogo aplica os pares em novas campanhas. A lógica existente deriva variantes contrastantes para a interface escura, sem remover os valores oficiais armazenados.
+- O tema do jogo aplica os pares em novas campanhas. Os botões principais agora usam o HEX primário exato da legenda e texto com contraste calculado; outros destaques e textos pequenos usam variantes contrastantes para a interface escura, sem remover os valores armazenados.
 - Saves de campanha existentes são migrados de v7 para v8: partidos predefinidos recebem as novas cores e o tema é recalculado; campanhas de partido personalizado conservam suas cores.
 - Adicionados testes de regressão para os seis pares e aplicação do tema em campanhas novas, além de testes de migração que confirmam que v7→v8 preserva partido personalizado.
 - Criados/atualizados documentos de continuidade: pesquisa de cores, mapa mental, avaliação de prontidão, status, próximos passos e relatório de handoff.
@@ -24,7 +24,7 @@
 | PDTT — Partido do Discurso, da Tese e do Trabalhismo | PDT | #E4002B — vermelho | #005AB2 — azul | O PDT identifica o símbolo com rosa vermelha e a tradição partidária inclui vermelho, branco e azul. Os códigos selecionados aparecem na cartela digital PDT-RS 2025. |
 | PLIM — Partido da Live, Influência e Mobilização | PL | #004F9F — azul | #009640 — verde | Valores RGB publicados no manual de marca do PL (azul 0/79/159; verde 0/150/64); o manual também usa amarelo. |
 | PSSDB — Partido dos Senhores, Slides e Debates de Brasília | PSDB | #004C94 — azul | #FFD600 — amarelo | Valores RGB publicados no manual oficial do PSDB de 2012; a marca renovada em 2023 manteve a família azul/amarelo. Os códigos exatos de 2012 não são apresentados como novos HEX oficiais da marca de 2023. |
-| NOVA — Núcleo de Otimização, Valor e Austeridade | NOVO | #F17021 — laranja | #1A2948 — azul-marinho | Códigos HEX publicados no manual de marca do NOVO de 2021. |
+| NOVA — Núcleo de Otimização, Valor e Austeridade | NOVO | #EC671C — laranja | #1A2644 — azul-marinho | Códigos HEX publicados no brandbook do NOVO hospedado em 2024. |
 
 As cores servem para reconhecer as **paródias** e não reproduzem necessariamente todos os tons oficiais, os gradientes, os logotipos ou a proporção entre cores de cada partido real. Fontes e observações detalhadas: `docs/CORES_DOS_PARTIDOS.md`.
 
