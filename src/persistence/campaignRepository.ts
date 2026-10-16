@@ -445,6 +445,8 @@ function migrateLegacyCampaign(value: unknown, scaleLegacyMoney = true): Campaig
     }
   }
 
+  // Re-establish record narrowing after replacing the unknown payload with migrated data.
+  if (!isRecord(value) || !isRecord(value.party) || !isRecord(value.calendar) || !isRecord(value.country)) return null
   const party = value.party
   if (!Array.isArray(party.colors) || party.colors.length !== 2 || !party.colors.every(isHexColor)) return null
 
