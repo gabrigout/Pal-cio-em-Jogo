@@ -302,7 +302,7 @@ function isLegislatureState(value: unknown): boolean {
     && typeof bloc.acronym === 'string'
     && ['left', 'right', 'center'].includes(String(bloc.orientation))
     && isNumber(bloc.seats) && Number.isInteger(bloc.seats) && bloc.seats >= 0
-  const seatTotal = (blocs: unknown[]) => blocs.reduce((sum, bloc) =>
+  const seatTotal = (blocs: unknown[]) => blocs.reduce<number>((sum, bloc) =>
     sum + (isRecord(bloc) && isNumber(bloc.seats) ? bloc.seats : 0), 0)
   const billTypes = ['ordinary', 'complementary', 'pec', 'mp', 'ppa', 'ldo', 'loa', 'credit', 'amendment']
   const stages = ['committee', 'negotiation', 'voting', 'sanction', 'veto-review', 'approved', 'rejected', 'expired']
