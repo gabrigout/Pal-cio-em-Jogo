@@ -244,6 +244,7 @@ export default function App() {
     '--cor-primaria': campaign.theme.primary,
     '--cor-secundaria': campaign.theme.secondary,
     '--cor-botao-texto': campaign.theme.buttonText,
+    '--cor-fundo-botao': campaign.theme.officialPrimary,
   } as CSSProperties
 
   return (
