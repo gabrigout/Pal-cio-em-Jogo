@@ -6,7 +6,7 @@ Este documento permite que outra IA continue o projeto sem depender do históric
 
 - Trabalhe em **um pedido por vez** e implemente partes pequenas, completas e verificáveis. Não tente concluir uma fase inteira em uma única mudança.
 - Ao terminar cada parte, execute os testes pertinentes e `npm run build`; corrija falhas antes de encerrar. Atualize `docs/STATUS.md` com o que foi feito, o resultado dos testes e o próximo passo; então crie um commit.
-- O estado da campanha é serializado e salvo automaticamente. A versão atual é `versaoDoSave: 8`, definida em `src/persistence/campaignRepository.ts`. Sempre que mudar o formato do estado salvo, aumente a versão e implemente/teste a migração de saves antigos. Preserve campanhas e dados existentes; migrações devem ser determinísticas quando gerarem valores.
+- O estado da campanha é serializado e salvo automaticamente. A versão atual é `versaoDoSave: 9`, definida em `src/persistence/campaignRepository.ts`. Sempre que mudar o formato do estado salvo, aumente a versão e implemente/teste a migração de saves antigos. Preserve campanhas e dados existentes; migrações devem ser determinísticas quando gerarem valores.
 - Siga a arquitetura existente: estado e tipos em `src/state/`, regras e simulação em `src/engine/`, catálogos e configuração em `src/data/`, apresentação em `src/components/` e persistência/migrações em `src/persistence/`. Componentes exibem estado e encaminham ações; não contêm lógica política.
 - Use somente as cores oficiais do partido ativo e tons neutros na interface. Não introduza cores fixas para sucesso/alerta/erro; comunique estados também por rótulos e ícones. Mantenha contraste e legibilidade.
 - Preserve as regras institucionais e a separação entre pontos de ação, dinheiro, capital político e capacidade administrativa; aprovação, Maré Ideológica e força eleitoral também são indicadores diferentes. Partidos, eventos e acusações são ficcionais e satíricos.
@@ -18,14 +18,14 @@ Comandos disponíveis: `npm run test` executa os testes automatizados (`node:tes
 
 Visão de arquitetura e dependências: `docs/MAPA_MENTAL.md`. Avaliação completa da prontidão: `docs/AVALIACAO_PRONTIDAO.md`. Pesquisa das paletas: `docs/CORES_DOS_PARTIDOS.md`. Relatório desta atualização: `docs/RELATORIO_CORES_E_PRONTIDAO.md`.
 
-Atualizado conforme `docs/STATUS.md` em 2026-10-16. A Fase 1 está concluída e a primeira versão da Fase 2 está implementada. A Fase 3.1 (Congresso e legislação) foi concluída e validada na branch `codex/phase-3a-congress`.
+Atualizado conforme `docs/STATUS.md` em 2026-10-16. A Fase 1 está concluída e a primeira versão da Fase 2 está implementada. As Fases 3.1 (Congresso) e 3.2 (Judiciário) têm primeira versão implementada e validada nas branches `codex/phase-3a-congress` e `codex/phase-3b-judiciary`.
 
 - **Executivo e ministérios: implementados.** Há 17 ministérios de referência, ministros e candidatos ficcionais, nomeação, negociação e exoneração, decisões executivas, desempenho e fechamento mensal, além de proposta de reorganização sujeita ao Congresso. Implementação principal em `src/engine/executive.ts`, `src/data/ministries.ts`, `src/data/executiveDecisions.ts` e `src/components/ExecutivePanel.tsx`.
 - **Economia e orçamento base: implementados.** Há indicadores e histórico, orçamento anual por setor e dotações ministeriais, execução mensal, ajustes tributários limitados, propostas legislativas, empréstimos e pagamentos adiados. Implementação principal em `src/engine/economy.ts`, `src/data/economy.ts`, `src/data/economicDecisions.ts` e `src/components/EconomyPanel.tsx`. Isso ainda não equivale ao sistema econômico completo previsto no documento mestre.
 - **Políticas públicas e projetos: implementados e validados na base da branch `codex/phase-2a-public-projects`.**
 - **Sociedade e grupos de pressão: primeira versão implementada e validada** na branch `codex/phase-2b-society-finance`. O sistema acompanha cinco classes, sete grupos, diálogo/acordos, apoio, pressão, manifestação e paralisação.
 
-Brasil, Estado/Executivo, Economia, Políticas Públicas, Sociedade e Congresso têm telas funcionais na branch atual. Relações e Notícias/Histórico continuam pendentes. Save v8 inclui o estado legislativo e atualiza as paletas/temas das campanhas salvas para os partidos predefinidos, sem sobrescrever cores de partidos personalizados. Migrações de v6 preservam a escala monetária em reais e resgatam propostas antigas da reforma tributária/reorganização ministerial. GitHub Actions passou 61 testes e build no commit `601152eee8e9d17511a8ccb8d985516cddbef1a0`; a validação do HEAD documental atual também é repetida pelo workflow.
+Brasil, Estado/Executivo, Economia, Políticas Públicas, Sociedade, Congresso e Judiciário têm telas funcionais na branch de trabalho. Relações e Notícias/Histórico ainda não têm subsistemas completos. Save v9 inclui o estado judicial; migração v8→v9 preserva a escala monetária em reais e inicializa estado judicial determinístico. O código passou 73 testes e build no commit `303045f8a13fc523edef3ef5911553a25b5d0976`, workflow [38950949874](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38950949874).
 
 ## Histórico das entregas anteriores — Fase 2
 
@@ -51,9 +51,9 @@ A sequência abaixo segue as Fases 3 a 6 da seção 19 do documento mestre. A Fa
 
 ### Fase 3 — Instituições e crises
 
-1. **Congresso, legislação e orçamento legislativo — concluída** na branch `codex/phase-3a-congress`. Inclui as Casas, proposições, tramitação, negociação, votações, sanção/veto, remanejamento e migração de saves v7. Os limites do modelo estão descritos em `docs/STATUS.md`.
-2. **Judiciário e indicações — próxima entrega** (seção 8). Modelar processos, decisões, recursos e nomeações aplicáveis sem permitir controle presidencial sobre julgamentos.
-3. **Órgãos de controle e crises institucionais** — seções 7.4, 8.3 e 9. Representar MP/PGR, PF, CGU, TCU, AGU e Justiça Eleitoral dentro de suas competências; conectar fiscalização, investigações, impeachment e crises entre poderes sem equiparar suspeita a culpa.
+1. **Congresso, legislação e orçamento legislativo — primeira versão implementada** na branch `codex/phase-3a-congress`. Inclui Casas, proposições, tramitação, negociação, votações, sanção/veto, remanejamento e migração de saves.
+2. **Judiciário e indicações — primeira versão implementada** na branch `codex/phase-3b-judiciary`. Inclui roster ficcional, indicação e aprovação do Senado, processos, decisões, recursos, cumprimento e aposentadoria simulada. Relatório: `docs/RELATORIO_FASE_3_2_JUDICIARIO.md`.
+3. **Órgãos de controle e crises institucionais — próxima entrega** (seções 7.4, 8.3 e 9). Representar MP/PGR, PF, CGU, TCU, AGU e Justiça Eleitoral dentro de suas competências; conectar fiscalização, investigações, impeachment e crises entre Poderes sem equiparar suspeita a culpa.
 
 Critério de aceite da Fase 3 (seção 19): propostas seguem procedimentos coerentes e nenhum poder pode ser controlado pelo jogador fora de suas competências.
 
@@ -97,9 +97,9 @@ Copie um modelo por vez e ajuste somente o nome da entrega quando necessário. A
 
 Implementada e validada na branch `codex/phase-3a-congress`. Leia `docs/STATUS.md` e `docs/RELATORIO_FASE_3_1_CLAUDE.md` para entender as regras, testes e simplificações. A próxima entrega é a Fase 3.2 — Judiciário.
 
-**Fase 3.2 — Judiciário**
+**Fase 3.2 — Judiciário (primeira versão implementada; não repetir)**
 
-> Leia `AGENTS.md`, `docs/STATUS.md`, `docs/PROXIMOS_PASSOS.md`, a seção 8 e a parte da Fase 3 na seção 19 de `docs/Palacio_em_Jogo_Documento_Mestre.md`. Implemente somente processos, decisões, recursos e indicações judiciais desta parte; preserve a independência do Judiciário. Siga as regras do item “Como trabalhar”. Ao terminar, rode testes e build, atualize `docs/STATUS.md` e faça commit. Não faça push.
+A branch `codex/phase-3b-judiciary` contém o sistema inicial de processos, decisões, recursos, cumprimento e indicação ao STF. Leia `docs/STATUS.md` e `docs/RELATORIO_FASE_3_2_JUDICIARIO.md` para entender regras, validação e simplificações. Não reimplemente do zero; a etapa seguinte é a Fase 3.3 — órgãos de controle e crises institucionais.
 
 **Fase 3.3 — Controle e crises institucionais**
 
@@ -135,7 +135,7 @@ Implementada e validada na branch `codex/phase-3a-congress`. Leia `docs/STATUS.m
 
 ## Pendências visuais e de conteúdo conhecidas
 
-- As seis paletas das paródias foram pesquisadas e aplicadas em `src/data/campaignConfig.ts`; consulte `docs/CORES_DOS_PARTIDOS.md` para fontes, códigos confirmados, aproximações visuais e limites de fidelidade. A migração v7→v8 atualiza temas de campanhas existentes, preservando partidos personalizados. Ainda é necessária uma revisão visual manual de contraste e hierarquia da interface no navegador.
+- As seis paletas das paródias foram pesquisadas e aplicadas em `src/data/campaignConfig.ts`; consulte `docs/CORES_DOS_PARTIDOS.md` para fontes, códigos confirmados, aproximações visuais e limites de fidelidade. A migração v7→v8 atualiza temas; a migração v8→v9 inicializa o Judiciário sem reescalar os valores em reais. Ambas preservam campanhas personalizadas. Ainda é necessária uma revisão visual manual de contraste e hierarquia da interface no navegador.
 - Há textos demonstrativos e conteúdo estático no dashboard, incluindo alertas, frentes de trabalho e contadores/títulos de atualizações. O conteúdo de ações, decisões e eventos também é inicial e precisa de expansão e balanceamento.
-- Relações e Notícias/Histórico ainda são placeholders; Políticas Públicas, Sociedade e Congresso têm telas e regras próprias na branch de trabalho.
+- Relações e Notícias/Histórico ainda são placeholders; Políticas Públicas, Sociedade, Congresso e Judiciário têm telas e regras próprias na branch de trabalho.
 - Não há testes automatizados de interação visual nem screenshots desktop/celular. Revisar contraste, responsividade e telas densas ao avançar a interface.
