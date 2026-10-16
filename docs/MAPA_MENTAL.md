@@ -120,6 +120,7 @@ flowchart LR
 - `docs/CORES_DOS_PARTIDOS.md`: pesquisa visual partidária.
 - `docs/AVALIACAO_PRONTIDAO.md`: prontidão real do produto e lacunas.
 - `docs/RELATORIO_FASE_3_1_CLAUDE.md`: handoff detalhado da Fase 3.1.
+- `docs/RELATORIO_CORES_E_PRONTIDAO.md`: histórico desta mudança de cores, resultado de validação e visão geral de prontidão.
 - Este arquivo: mapa sistêmico de alto nível.
 
 ## 8. Mapa do estado atual e próximos passos
