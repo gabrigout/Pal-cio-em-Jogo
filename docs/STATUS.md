@@ -6,17 +6,17 @@ Atualizado em: 2026-10-16
 
 Palácio em Jogo é um simulador político de navegador, satírico e sistêmico, ambientado em um Brasil fictício a partir de janeiro de 2027. O jogador assume a Presidência e governa em turnos semanais. A aplicação é de navegador, sem backend ou banco de dados; as campanhas são salvas localmente, com backup JSON.
 
-**Stack:** React 18, TypeScript 5, Vite 6 e \`lucide-react\`. Os testes usam \`node:test\` com \`tsx\`.
+**Stack:** React 18, TypeScript 5, Vite 6 e `lucide-react`. Os testes usam `node:test` com `tsx`.
 
 ## Última entrega validada — Fase 3.1: Congresso e legislação
 
-A branch \`codex/phase-3a-congress\` implementa uma área própria do Congresso e um motor legislativo serializável. A composição inicial soma 513 cadeiras na Câmara e 81 no Senado; as bancadas são ficcionais e distribuídas por pesos iniciais. Um partido personalizado com 3% de popularidade começa com uma bancada pequena. A representação é agregada por partido, sem criar deputados ou senadores individualmente.
+A branch `codex/phase-3a-congress` implementa uma área própria do Congresso e um motor legislativo serializável. A composição inicial soma 513 cadeiras na Câmara e 81 no Senado; as bancadas são ficcionais e distribuídas por pesos iniciais. Um partido personalizado com 3% de popularidade começa com uma bancada pequena. A representação é agregada por partido, sem criar deputados ou senadores individualmente.
 
 A tramitação agora contempla PL, PLP, PEC, MP, PPA, LDO, LOA, crédito adicional e emenda de remanejamento. As etapas e votações avançam com as semanas do jogo; a negociação aumenta a margem de apoio, mas não garante aprovação. PL/PLP passam pelas duas Casas; PEC exige três quintos em dois turnos por Casa e não recebe sanção presidencial; MP exige declaração de relevância/urgência, tem prazo simulado e efeito fiscal provisório reversível; proposições orçamentárias vão à deliberação conjunta e, conforme o tipo, à sanção/veto. O veto volta às duas Casas para análise. As decisões fiscais integram o orçamento existente em R$ bilhões, sem transformar aprovação em caixa novo.
 
 A reforma tributária já registrada pelo sistema econômico e a reorganização ministerial são recuperadas como proposições quando uma campanha anterior é migrada. O formato de save foi elevado para v7. Saves v6 mantêm os valores já convertidos para reais, sem nova multiplicação; saves v5 e anteriores ainda recebem a conversão histórica. Dados antigos de propostas pendentes são preservados na agenda legislativa.
 
-**Validação automatizada:** GitHub Actions passou \`npm run test\` com **57 testes aprovados, 0 falhas**, e \`npm run build\` com sucesso no commit de código \`210be129e4cce74603b59d6e6d7f4c48e6ec4c97\` (execução [38942064992](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38942064992)). O resultado automatiza testes e build, mas não equivale a uma revisão visual no navegador. A branch de trabalho não foi mesclada à \`main\`.
+**Validação automatizada:** GitHub Actions passou `npm run test` com **57 testes aprovados, 0 falhas**, e `npm run build` com sucesso no commit de código `210be129e4cce74603b59d6e6d7f4c48e6ec4c97` (execução [38942064992](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38942064992)). O resultado automatiza testes e build, mas não equivale a uma revisão visual no navegador. A branch de trabalho não foi mesclada à `main`.
 
 ## Funcionalidades implementadas
 
@@ -32,7 +32,7 @@ A reforma tributária já registrada pelo sistema econômico e a reorganização
 
 ## Regras centrais do Congresso implementadas
 
-- **Cadeiras e quóruns:** números e regras são configurados em \`src/data/legislature.ts\`. A Câmara totaliza 513 e o Senado 81. A composição inicial é uma aproximação ficcional baseada nos pesos configurados; não é uma eleição real nem altera cadeiras conforme eventos semanais.
+- **Cadeiras e quóruns:** números e regras são configurados em `src/data/legislature.ts`. A Câmara totaliza 513 e o Senado 81. A composição inicial é uma aproximação ficcional baseada nos pesos configurados; não é uma eleição real nem altera cadeiras conforme eventos semanais.
 - **PL:** análise inicial → negociação → Câmara → Senado → sanção ou veto.
 - **PLP:** fluxo equivalente ao PL, com maioria absoluta dos membros da Casa.
 - **PEC:** duas votações em cada Casa; cada turno exige três quintos dos membros. Não vai à sanção presidencial.
@@ -45,31 +45,31 @@ A reforma tributária já registrada pelo sistema econômico e a reorganização
 
 ## Pastas e arquivos principais
 
-- \`src/App.tsx\`: conecta navegação, componentes, ações do engine e persistência.
-- \`src/components/TopNavigation.tsx\`: navegação superior, incluindo Congresso.
-- \`src/components/LegislaturePanel.tsx\`: formulários e apresentação das Casas, proposições, votações, histórico, sanção/veto e remanejamento.
-- \`src/state/types.ts\`: tipos serializáveis da campanha, proposições, bancadas, etapas e votações.
-- \`src/data/legislature.ts\`: números de cadeiras, requisitos, custos de ação, limites e rótulos legislativos.
-- \`src/engine/legislature.ts\`: distribuição inicial de cadeiras, validação e submissão de proposições, negociação, votos, tramitação, efeitos fiscais e sanção/veto.
-- \`src/engine/turn.ts\`: avança a tramitação legislativa uma vez por semana.
-- \`src/engine/economy.ts\` e \`src/engine/executive.ts\`: conectam reforma tributária e reorganização ministerial à agenda legislativa.
-- \`src/persistence/campaignRepository.ts\`: valida, salva e migra campanhas; versão atual do save é 7.
-- \`src/styles.css\`: estilo responsivo do painel legislativo e telas existentes.
+- `src/App.tsx`: conecta navegação, componentes, ações do engine e persistência.
+- `src/components/TopNavigation.tsx`: navegação superior, incluindo Congresso.
+- `src/components/LegislaturePanel.tsx`: formulários e apresentação das Casas, proposições, votações, histórico, sanção/veto e remanejamento.
+- `src/state/types.ts`: tipos serializáveis da campanha, proposições, bancadas, etapas e votações.
+- `src/data/legislature.ts`: números de cadeiras, requisitos, custos de ação, limites e rótulos legislativos.
+- `src/engine/legislature.ts`: distribuição inicial de cadeiras, validação e submissão de proposições, negociação, votos, tramitação, efeitos fiscais e sanção/veto.
+- `src/engine/turn.ts`: avança a tramitação legislativa uma vez por semana.
+- `src/engine/economy.ts` e `src/engine/executive.ts`: conectam reforma tributária e reorganização ministerial à agenda legislativa.
+- `src/persistence/campaignRepository.ts`: valida, salva e migra campanhas; versão atual do save é 7.
+- `src/styles.css`: estilo responsivo do painel legislativo e telas existentes.
 
 ## Rodar e testar
 
-\`\`\`bash
+```bash
 npm install
 npm run dev
 npm run test
 npm run build
-\`\`\`
+```
 
-A suíte automatizada atual tem 57 testes. O workflow \`.github/workflows/validate.yml\` executa testes e build a cada push em \`main\` ou em branches \`codex/**\`, e em pull requests direcionados à \`main\`.
+A suíte automatizada atual tem 57 testes. O workflow `.github/workflows/validate.yml` executa testes e build a cada push em `main` ou em branches `codex/**`, e em pull requests direcionados à `main`.
 
 ## Decisões de design
 
-- O estado de campanha é serializável; as regras ficam em \`engine/\`, os catálogos/configurações em \`data/\`, a apresentação em \`components/\` e os saves/migrações em \`persistence/\`.
+- O estado de campanha é serializável; as regras ficam em `engine/`, os catálogos/configurações em `data/`, a apresentação em `components/` e os saves/migrações em `persistence/`.
 - Partidos, bancadas e resultados são ficcionais. O jogo não representa legisladores reais nem atribui declarações ou votos individuais a pessoas reais.
 - O modelo legislativo é uma abstração jogável. Quóruns e números principais são parametrizados, mas o sistema não implementa todo o processo regimental, todas as comissões, pareceres, apensamentos, urgências específicas, períodos de recesso ou todas as exceções constitucionais.
 - O resultado de uma votação não é decidido diretamente pelo jogador. Apoio no Congresso e articulação influenciam probabilidades, não substituem o voto.
@@ -93,7 +93,7 @@ A suíte automatizada atual tem 57 testes. O workflow \`.github/workflows/valida
 
 - **Fase 1 — Fundação jogável:** concluída.
 - **Fase 2 — Governo e execução:** primeira versão implementada; inclui Executivo, economia, políticas públicas, sociedade e revisão financeira em branches anteriores.
-- **Fase 3.1 — Congresso e legislação:** implementada e validada na branch \`codex/phase-3a-congress\`.
+- **Fase 3.1 — Congresso e legislação:** implementada e validada na branch `codex/phase-3a-congress`.
 - **Fase 3.2 — Judiciário:** próxima etapa.
 - **Fase 3.3 — Órgãos de controle e crises institucionais:** pendente.
 - **Fase 4 — Política viva:** parcial; reações/notícias existem, mas personagens autônomos, imprensa e interesses sistêmicos estão pendentes.
@@ -102,4 +102,4 @@ A suíte automatizada atual tem 57 testes. O workflow \`.github/workflows/valida
 
 ## Próximo passo
 
-Iniciar **Fase 3.2 — Judiciário**, lendo as seções 8 e 19 do Documento Mestre. Manter processos, decisões e indicações judiciais independentes do Executivo; testar o motor e build; depois atualizar este documento. A branch \`codex/phase-3a-congress\` ainda precisa de revisão/integração pelo responsável do projeto antes de entrar na \`main\`.
+Iniciar **Fase 3.2 — Judiciário**, lendo as seções 8 e 19 do Documento Mestre. Manter processos, decisões e indicações judiciais independentes do Executivo; testar o motor e build; depois atualizar este documento. A branch `codex/phase-3a-congress` ainda precisa de revisão/integração pelo responsável do projeto antes de entrar na `main`.
