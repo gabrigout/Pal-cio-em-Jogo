@@ -87,6 +87,7 @@ test('migra campanha legada sem versão para o save atual', () => {
   delete legacyCountry.executiveSupport
   delete legacyCountry.judiciaryRelation
   delete legacy.theme
+  delete legacy.judiciary
   delete legacy.turn
   delete legacy.news
   delete legacy.pendingEffects
@@ -108,6 +109,7 @@ test('migra save v3 sem economia e cria ministérios e orçamento determinístic
   const campaign = createTestCampaign()
   const oldCampaign = structuredClone(campaign) as unknown as Record<string, unknown>
   delete oldCampaign.economy
+  delete oldCampaign.judiciary
   delete oldCampaign.ministries
 
   const first = migrateSave({ versaoDoSave: 3, savedAt: '2027-01-01T00:00:00.000Z', campaign: oldCampaign })
@@ -138,6 +140,7 @@ test('migra save versão 1 preservando pontos e inicializando o modelo de evento
   delete versionOneTurn.decisionResult
   versionOneTurn.availableActionPoints = 3
   const versionOneCampaign = { ...campaign, turn: versionOneTurn }
+  delete (versionOneCampaign as unknown as Record<string, unknown>).judiciary
 
   const result = migrateSave({ versaoDoSave: 1, savedAt: '2027-01-01T00:00:00.000Z', campaign: versionOneCampaign })
   assert.equal(result.ok, true)
@@ -151,6 +154,7 @@ test('migra save versão 1 preservando pontos e inicializando o modelo de evento
 test('migra save versão 2 e gera o gabinete para campanha existente', () => {
   const campaign = createTestCampaign() as unknown as Record<string, unknown>
   delete campaign.ministries
+  delete campaign.judiciary
   delete campaign.executiveProposals
 
   const result = migrateSave({
@@ -352,4 +356,37 @@ test('migra paleta e tema de campanhas existentes sem alterar partido personaliz
   assert.equal(customMigration.ok, true)
   if (!customMigration.ok) return
   assert.deepEqual(customMigration.save.campaign.party.colors, customColors)
+})
+
+
+test('migra save v8 para v9 e cria o Judiciário sem reescalar o caixa', () => {
+  const campaign = createTestCampaign() as unknown as Record<string, any>
+  campaign.country.budget = 42
+  campaign.economy.availableFunds = 42
+  campaign.economy.indicators.publicRevenue = 52
+  campaign.economy.indicators.publicDebt = 900
+  delete campaign.judiciary
+
+  const result = migrateSave({
+    versaoDoSave: 8,
+    savedAt: '2027-01-01T00:00:00.000Z',
+    campaign,
+  })
+  assert.equal(result.ok, true)
+  if (!result.ok) return
+  assert.equal(result.migrated, true)
+  assert.equal(result.save.versaoDoSave, 9)
+  assert.equal(result.save.campaign.economy.availableFunds, 42)
+  assert.equal(result.save.campaign.economy.indicators.publicRevenue, 52)
+  assert.equal(result.save.campaign.economy.indicators.publicDebt, 900)
+  assert.equal(result.save.campaign.country.budget, 42)
+  assert.equal(result.save.campaign.judiciary.stfJustices.length, 10)
+  assert.equal(result.save.campaign.judiciary.vacancies.length, 1)
+  assert.equal(result.save.campaign.judiciary.cases.length, 1)
+  const alreadyMigrated = migrateSave(result.save)
+  assert.equal(alreadyMigrated.ok, true)
+  if (alreadyMigrated.ok) {
+    assert.equal(alreadyMigrated.migrated, false)
+    assert.deepEqual(alreadyMigrated.save.campaign.judiciary, result.save.campaign.judiciary)
+  }
 })
