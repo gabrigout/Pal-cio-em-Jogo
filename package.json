@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "tsx --test src/engine/turn.test.ts src/engine/executive.test.ts src/engine/economy.test.ts src/engine/dashboard.test.ts src/engine/projects.test.ts src/engine/society.test.ts src/data/partyColors.test.ts src/engine/legislature.test.ts src/utils/money.test.ts src/persistence/campaignRepository.test.ts",
+    "test": "tsx --test src/engine/turn.test.ts src/engine/executive.test.ts src/engine/economy.test.ts src/engine/dashboard.test.ts src/engine/projects.test.ts src/engine/society.test.ts src/data/partyColors.test.ts src/engine/legislature.test.ts src/engine/judiciary.test.ts src/utils/money.test.ts src/persistence/campaignRepository.test.ts",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },
