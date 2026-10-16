@@ -116,7 +116,7 @@ test('migra save v3 sem economia e cria ministérios e orçamento determinístic
   assert.equal(second.ok, true)
   if (!first.ok || !second.ok) return
 
-  assert.equal(first.save.versaoDoSave, 7)
+  assert.equal(first.save.versaoDoSave, 8)
   assert.equal(first.save.campaign.ministries.length, 17)
   assert.deepEqual(first.save.campaign.projects, [])
   assert.equal(first.save.campaign.economy.projectExpensesPaidThisMonth, 0)
