@@ -294,7 +294,7 @@ Ao fazer correções, verifique a norma oficial vigente e documente exatamente q
 
 Após validar a Fase 3.1, foi criada a branch `codex/party-brand-palettes` para uma tarefa visual separada. As paletas fixas foram pesquisadas e aplicadas em `src/data/campaignConfig.ts`: PTP (vermelho/branco), PSÓ (vermelho/amarelo, segundo o manual de identidade visual do PSOL), PDTT (vermelho/azul), PLIM (verde/amarelo), PSSDB (azul/amarelo) e NOVA (laranja/azul-marinho). As fontes oficiais e as aproximações de HEX ficam em `docs/STATUS.md`.
 
-A alteração elevou o save para v8 para atualizar o tema de campanhas já salvas com partido predefinido sem alterar a paleta de partidos personalizados nem reescalar reais de saves v6/v7. A execução de CI no commit `26612c65d62000a45b71cba31e2b421955d92258` passou **62 testes e build** ([workflow 38944301144](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38944301144)). Não houve alteração de mecânicas nesta tarefa visual; a revisão manual em navegador permanece pendente.
+A alteração elevou o save para v8 para atualizar o tema de campanhas já salvas com partido predefinido sem alterar a paleta de partidos personalizados nem reescalar reais de saves v6/v7. O PSÓ usa os códigos vermelho `#E02028` e amarelo `#FEDF00` do manual oficial de identidade do PSOL. A execução de CI no commit `3d9540d32eef587e36872c8920b5bef88264eb8a` passou **62 testes e build** ([workflow 38944697838](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38944697838)). Não houve alteração de mecânicas nesta tarefa visual; a revisão manual em navegador permanece pendente.
 
 ## 10. Estado de integração
 
