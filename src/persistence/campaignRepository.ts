@@ -1,4 +1,5 @@
 import { dashboardNews } from '../data/dashboard'
+import { partyColors } from '../data/campaignConfig'
 import { createCampaignTheme } from '../engine/theme'
 import { createInitialMinistries } from '../engine/executive'
 import { allocateSectorBudgetToMinistries, createEconomicState } from '../engine/economy'
@@ -9,7 +10,7 @@ import { legislativeRules } from '../data/legislature'
 import { calendarMonths } from '../state/initialState'
 import type { CampaignState, CampaignTurnState } from '../state/types'
 
-export const CURRENT_SAVE_VERSION = 7
+export const CURRENT_SAVE_VERSION = 8
 const SAVE_KEY_PREFIX = 'palacio-em-jogo:campaign:'
 
 export interface StorageLike {
@@ -488,7 +489,7 @@ function migrateLegacyCampaign(value: unknown, scaleLegacyMoney = true): Campaig
     country: { ...migratedCandidate.country, budget: economy.availableFunds },
   }
   if (!isCampaignState(economicCandidate)) return null
-  let migratedCampaign = economicCandidate
+  let migratedCampaign = refreshPredefinedPartyPalette(economicCandidate)
   if (!hadLegislatureState) {
     for (const [index, proposal] of migratedCampaign.economy.congressProposals.entries()) {
       const title = proposal.trim()
@@ -517,6 +518,17 @@ function migrateLegacyCampaign(value: unknown, scaleLegacyMoney = true): Campaig
   const hasDecisionStateV2 = isRecord(value.turn) && 'activeReactionEventId' in value.turn
   if (!hasDecisionStateV2) return initializeCampaignTurn(migratedCampaign)
   return migratedCampaign
+}
+
+function refreshPredefinedPartyPalette(campaign: CampaignState): CampaignState {
+  const palette = partyColors[campaign.party.id as keyof typeof partyColors]
+  if (!palette) return campaign
+  const colors: [string, string] = [palette[0], palette[1]]
+  return {
+    ...campaign,
+    party: { ...campaign.party, colors },
+    theme: createCampaignTheme(colors[0], colors[1]),
+  }
 }
 
 function migrationRandom(seedText: string): () => number {
