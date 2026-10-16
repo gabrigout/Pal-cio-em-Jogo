@@ -110,6 +110,17 @@ function collectEvidence(campaign: CampaignState, item: OversightCase, round: nu
   const records: OversightEvidenceRecord[] = []
   let varianceFound = false
   let recommendationLikely = false
+  const add = (
+    kind: OversightEvidenceKind,
+    title: string,
+    description: string,
+    source: string,
+    strength: number,
+    verified: boolean,
+  ) => {
+    if (records.length >= oversightRules.maximumEvidenceRecords) return
+    records.push(makeEvidence(item.id, round * 10 + records.length + 1, kind, title, description, source, strength, verified, campaign.calendar))
+  }
   if (item.type === 'legal-opinion') {
     const targetBill = item.targetKind === 'bill' && item.targetId
       ? campaign.legislature.bills.find((bill) => bill.id === item.targetId)
@@ -128,18 +139,6 @@ function collectEvidence(campaign: CampaignState, item: OversightCase, round: nu
       true,
     )
     return { records, varianceFound: false, recommendationLikely: false }
-  }
-
-  const add = (
-    kind: OversightEvidenceKind,
-    title: string,
-    description: string,
-    source: string,
-    strength: number,
-    verified: boolean,
-  ) => {
-    if (records.length >= oversightRules.maximumEvidenceRecords) return
-    records.push(makeEvidence(item.id, round * 10 + records.length + 1, kind, title, description, source, strength, verified, campaign.calendar))
   }
 
   const project = targetProject(campaign, item)
