@@ -1,183 +1,105 @@
 # Estado do projeto
 
-Atualizado em: 2026-10-15
+Atualizado em: 2026-10-16
 
 ## Projeto
-Palácio em Jogo é um simulador político de navegador, satírico e sistêmico, ambientado em um Brasil fictício a partir de janeiro de 2027.
-O jogador inicia na Presidência e governa em turnos semanais, tomando decisões que alteram indicadores, recursos e acontecimentos.
 
-**Stack:** React 18, TypeScript 5, Vite 6 e `lucide-react`. Persistência local versionada em LocalStorage; não há backend, banco de dados nem API externa de IA. Os testes usam `node:test` com `tsx`.
+Palácio em Jogo é um simulador político de navegador, satírico e sistêmico, ambientado em um Brasil fictício a partir de janeiro de 2027. O jogador assume a Presidência e governa em turnos semanais. A aplicação é de navegador, sem backend ou banco de dados; as campanhas são salvas localmente, com backup JSON.
 
-## Última etapa validada — Fase 2B e revisão financeira
+**Stack:** React 18, TypeScript 5, Vite 6 e \`lucide-react\`. Os testes usam \`node:test\` com \`tsx\`.
 
-A aba Sociedade já representa cinco classes econômicas e sete grupos organizados, com apoio, pressão pública, diálogo, compromissos setoriais, protestos/paralisações e revisão mensal. As políticas públicas integram esses resultados à simulação. A economia usa R$ bilhões como unidade interna, formata a interface em reais, vincula caixa e dívida ao fechamento mensal e impede ultrapassar a dotação anual setorial. Saves avançam para v6 com migração dos dados legados.
+## Última entrega validada — Fase 3.1: Congresso e legislação
 
-Validação no GitHub Actions, commit `bffec5e`: **45 testes passaram e `npm run build` foi concluído com sucesso**. A branch não foi mesclada à `main`.
+A branch \`codex/phase-3a-congress\` implementa uma área própria do Congresso e um motor legislativo serializável. A composição inicial soma 513 cadeiras na Câmara e 81 no Senado; as bancadas são ficcionais e distribuídas por pesos iniciais. Um partido personalizado com 3% de popularidade começa com uma bancada pequena. A representação é agregada por partido, sem criar deputados ou senadores individualmente.
 
-## Implementado
+A tramitação agora contempla PL, PLP, PEC, MP, PPA, LDO, LOA, crédito adicional e emenda de remanejamento. As etapas e votações avançam com as semanas do jogo; a negociação aumenta a margem de apoio, mas não garante aprovação. PL/PLP passam pelas duas Casas; PEC exige três quintos em dois turnos por Casa e não recebe sanção presidencial; MP exige declaração de relevância/urgência, tem prazo simulado e efeito fiscal provisório reversível; proposições orçamentárias vão à deliberação conjunta e, conforme o tipo, à sanção/veto. O veto volta às duas Casas para análise. As decisões fiscais integram o orçamento existente em R$ bilhões, sem transformar aprovação em caixa novo.
 
-- **Criação de campanha:** escolha entre esquerda/direita, seleção entre seis partidos ficcionais compatíveis ou criação de partido personalizado com nome, sigla e exatamente duas cores. A abertura satírica varia conforme a orientação. Indicadores e atributos iniciais são sorteados em faixas configuradas.
-- **Tema visual:** primária e secundária derivadas do partido, com variantes calculadas por contraste; a aplicação usa tema e neutros. Texto de botão é escolhido conforme contraste. Os hexadecimais fixos da interface são neutros.
-- **Estados do dashboard:** todos os indicadores usam faixas configuradas: abaixo de 35 = Crítico, 35–49 = Atenção e 50 ou mais = Estável. Recursos globais e Polarização/Confiança calculam um score agregado coerente com o valor exibido.
-- **Calendário:** quatro semanas por mês, virada de mês/ano, avanço semanal, resumo semanal e balanço econômico simplificado no fechamento do mês.
-- **Pontos e recursos:** 2 pontos de ação base, bônus para os quatro apoios acima de 49%, teto de 6 novos pontos, até 2 carregados e máximo de 8 disponíveis. Dinheiro/orçamento, capital político e capacidade administrativa são recursos separados.
-- **Ações:** cinco ações de exemplo em `data/actions.ts`, com custos, efeitos imediatos ou pendentes, bloqueio por falta de recurso e motivo apresentado ao jogador.
-- **Decisões e eventos:** 32 decisões semanais gerais, seis cartões executivos sobre ministros e seis cartões econômicos, com opções, efeitos e justificativas; oito reações condicionais com pesos e histórico antirrepetição; dois eventos encadeáveis; três eventos mensais com opções.
-- **Feed e resumo:** ações, escolhas e encerramentos atualizam o feed. O resumo registra indicadores alterados, motivos, eventos, ações e pontos carregados/expirados.
-- **Múltiplas campanhas:** biblioteca local para continuar, criar, excluir com confirmação, importar e exportar backups JSON. Cada campanha tem chave e identificador próprios.
-- **Persistência:** autosave após criação, ação, decisão, resultado/fechamento e avanço semanal. Save atual em `versaoDoSave: 6`; migração de saves sem versão e das versões 1 a 5 inicializa projetos e sociedade, e converte valores monetários legados para a nova escala de R$ bilhões. Valores sociais gerados para campanhas antigas são determinísticos.
-- **Poder Executivo:** 17 ministérios de referência para janeiro de 2027, ministros ficcionais com sete atributos e candidatos gerados por afinidade partidária; nomeação, negociação e exoneração custam recursos e atualizam o apoio político. A ficha mostra competências, orçamento, execução anterior, desempenho, pendências, riscos e alertas. A virada mensal recalcula desempenho e inclui execução e riscos no resumo. Reorganização ministerial só pode ser registrada como proposta dependente do Congresso, sem tramitação nesta fase.
-- **Economia:** indicadores serializáveis e histórico mensal; orçamento anual distribuído por oito setores e integrado às dotações dos ministérios, com revisões limitadas ao início do ano e às janelas trimestrais. Tributos permitem ajustes administrativos limitados e reformas ficam como propostas ao Congresso. Caixa, empréstimos, juros, dívida e pagamentos adiados são finitos; a execução mensal considera ministérios, confiança, integridade, polarização, estabilidade, desempenho e decisões, explica os resultados e reduz a execução quando falta dinheiro. A tela apresenta indicadores, tendências, gráficos SVG, execução setorial, tributos, empréstimos, riscos e alternativas emergenciais.
-- **Instituições:** opções modelam negociação e interlocução; não permitem ao presidente comandar o Congresso ou o Judiciário.
+A reforma tributária já registrada pelo sistema econômico e a reorganização ministerial são recuperadas como proposições quando uma campanha anterior é migrada. O formato de save foi elevado para v7. Saves v6 mantêm os valores já convertidos para reais, sem nova multiplicação; saves v5 e anteriores ainda recebem a conversão histórica. Dados antigos de propostas pendentes são preservados na agenda legislativa.
+
+**Validação automatizada:** GitHub Actions passou \`npm run test\` com **57 testes aprovados, 0 falhas**, e \`npm run build\` com sucesso no commit de código \`210be129e4cce74603b59d6e6d7f4c48e6ec4c97\` (execução [38942064992](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38942064992)). O resultado automatiza testes e build, mas não equivale a uma revisão visual no navegador. A branch de trabalho não foi mesclada à \`main\`.
+
+## Funcionalidades implementadas
+
+- **Criação de campanha e tema:** escolha entre esquerda/direita, seis partidos fictícios ou partido personalizado com nome, sigla e duas cores. A interface deriva as cores do partido e usa tons neutros para preservar legibilidade.
+- **Dashboard e turnos:** indicadores nacionais, calendário de quatro semanas por mês, escolhas semanais, eventos/reação, resumo de virada, notícias e histórico do estado da campanha.
+- **Ações e recursos:** pontos de ação, caixa/orçamento, capital político e capacidade administrativa são recursos distintos. Ações validam custos antes de aplicar efeitos imediatos ou pendentes.
+- **Múltiplas campanhas:** biblioteca local para criar, continuar e excluir campanhas; importação/exportação de backups JSON. Autosave local, sem serviço de nuvem.
+- **Poder Executivo:** 17 ministérios de referência, ministros e candidatos fictícios, nomeação, negociação, exoneração, execução mensal, pendências, alertas e efeitos de coordenação.
+- **Economia e finanças:** orçamento anual por oito setores, dotações ministeriais, execução mensal, tributos com ajustes limitados, propostas legislativas, caixa, empréstimos, dívida, juros e pagamentos adiados. Valores monetários usam R$ bilhões internamente e são formatados como reais na interface. A execução não ultrapassa a dotação anual nem paga despesas sem caixa.
+- **Políticas públicas:** catálogo de programas e projetos por setor, investimento, duração, prioridade, avanço semanal, resultado mensal, histórico e riscos de execução.
+- **Sociedade e grupos de pressão:** cinco classes econômicas e sete grupos organizados, com apoio, pressão, diálogo, compromissos, protestos/paralisações, histórico e revisão mensal.
+- **Congresso e legislação — Fase 3.1:** composição bicameral agregada, protocolo de proposições, negociação, tramitação, votações, sanção/veto, revisão de veto e efeitos de orçamento legislativo. Detalhes e limites estão documentados abaixo.
+
+## Regras centrais do Congresso implementadas
+
+- **Cadeiras e quóruns:** números e regras são configurados em \`src/data/legislature.ts\`. A Câmara totaliza 513 e o Senado 81. A composição inicial é uma aproximação ficcional baseada nos pesos configurados; não é uma eleição real nem altera cadeiras conforme eventos semanais.
+- **PL:** análise inicial → negociação → Câmara → Senado → sanção ou veto.
+- **PLP:** fluxo equivalente ao PL, com maioria absoluta dos membros da Casa.
+- **PEC:** duas votações em cada Casa; cada turno exige três quintos dos membros. Não vai à sanção presidencial.
+- **MP:** só é registrada se o jogador declara relevância e urgência; começa na Câmara. O prazo é contado por semanas (7 dias por avanço), entra em urgência aos 45 dias e perde vigência ao atingir 120 dias se não tiver sido concluída. O impacto fiscal é provisório e revertido em caso de rejeição/perda de vigência.
+- **PPA/LDO/LOA:** passam pela sessão conjunta simplificada; a LOA altera o total de orçamento anual e distribui a dotação setorial antes da sanção/veto.
+- **Crédito adicional:** eleva o orçamento planejado e distribui aumento entre dotação setorial e compromissos fixos; não injeta caixa de imediato.
+- **Emenda de remanejamento:** reduz dotação não executada na origem e aumenta a do destino; não eleva o total do orçamento.
+- **Articulação:** cada negociação consome pontos de ação e capital político. A votação é calculada por bancada, orientação e indicadores de apoio, com resultado determinístico para a mesma campanha/proposição.
+- **Efeitos fiscais de leis comuns:** o impacto anual estimado alimenta a pressão mensal de despesas/economias; caixa, endividamento e execução real continuam sujeitos ao fechamento econômico mensal.
 
 ## Pastas e arquivos principais
 
-- `src/App.tsx`: alterna biblioteca, criação e jogo; conecta ações da UI ao engine e persiste alterações.
-- `src/main.tsx`: inicializa React e importa estilos.
-- `src/styles.css`: tema neutro/partidário, layout responsivo e estilos das telas.
-- `src/components/`: inclui `PolicyProjectsPanel.tsx` para catálogo, carteira e histórico de projetos, além da biblioteca, configuração de campanha, dashboard, controles de turno, painéis executivo/econômico e componentes de resultado.
-- `src/state/`: `types.ts` define o estado serializável e os contratos; `initialState.ts` define calendário inicial e meses.
-- `src/engine/`: `campaign.ts` cria campanhas; `executive.ts` implementa ministérios; `economy.ts` implementa orçamento, tributos, empréstimos e fechamento fiscal; `projects.ts` implementa custos, progresso e avaliação de projetos; `turn.ts` integra calendário, decisões e fechamentos. Testes incluem `projects.test.ts`.
-- `src/data/`: inclui `publicPrograms.ts`, catálogo de programas públicos por setor, junto aos catálogos de partidos, ministérios, orçamento, ações, decisões e eventos.
-- `src/components/`: `EconomyPanel.tsx` apresenta os indicadores, gráficos SVG, orçamento, tributos, dívida e explicações econômicas.
-- `src/persistence/`: `campaignRepository.ts` valida, salva, lista, carrega, exclui e migra saves; `backup.ts` exporta JSON; `campaignRepository.test.ts` cobre persistência, migração determinística, backup e falhas.
-- Raiz: `package.json` define comandos e dependências; `vite.config.ts` e `tsconfig*.json` configuram build; `index.html` é a entrada Vite.
-- `docs/`: documento mestre e catálogos de personagens em Markdown/CSV/JSON.
+- \`src/App.tsx\`: conecta navegação, componentes, ações do engine e persistência.
+- \`src/components/TopNavigation.tsx\`: navegação superior, incluindo Congresso.
+- \`src/components/LegislaturePanel.tsx\`: formulários e apresentação das Casas, proposições, votações, histórico, sanção/veto e remanejamento.
+- \`src/state/types.ts\`: tipos serializáveis da campanha, proposições, bancadas, etapas e votações.
+- \`src/data/legislature.ts\`: números de cadeiras, requisitos, custos de ação, limites e rótulos legislativos.
+- \`src/engine/legislature.ts\`: distribuição inicial de cadeiras, validação e submissão de proposições, negociação, votos, tramitação, efeitos fiscais e sanção/veto.
+- \`src/engine/turn.ts\`: avança a tramitação legislativa uma vez por semana.
+- \`src/engine/economy.ts\` e \`src/engine/executive.ts\`: conectam reforma tributária e reorganização ministerial à agenda legislativa.
+- \`src/persistence/campaignRepository.ts\`: valida, salva e migra campanhas; versão atual do save é 7.
+- \`src/styles.css\`: estilo responsivo do painel legislativo e telas existentes.
 
 ## Rodar e testar
 
-```bash
+\`\`\`bash
 npm install
 npm run dev
 npm run test
 npm run build
-```
+\`\`\`
 
-`npm run test` executa testes do turno, executivo, economia, dashboard, projetos, sociedade, moeda e persistência. A validação da Fase 2B registrou 45 testes aprovados. `npm run build` valida TypeScript e gera a versão de produção. O LocalStorage é específico do navegador; exporte um backup JSON para cópia externa.
-
-## Decisões de design
-
-- Estado da campanha é serializável; regras ficam em `engine/`, conteúdo em `data/`, componentes em `components/` e saves em `persistence/`.
-- Tema oficial fica no estado da campanha e é reaplicado ao reabrir/importar. Cores de interface vêm das duas cores partidárias ou de neutros; estados positivos/negativos usam rótulo e ícone, não verde/vermelho fixos.
-- Status dos indicadores usa faixas comuns definidas em `src/data/campaignConfig.ts`: `<35` Crítico, `35–49` Atenção e `>=50` Estável. Métricas inversas ou compostas, como polarização/confiança, são normalizadas antes da classificação.
-- Os pontos de ação não são dinheiro, capital político ou capacidade administrativa. Navegação e consulta não custam pontos; a decisão narrativa semanal é gratuita.
-- Caixa disponível acompanha o recurso orçamentário usado pelas ações comuns. Receitas, despesas financiadas, amortizações e juros são contabilizados no fechamento mensal; compromissos sem caixa são adiados, não pagos com saldo negativo. O endividamento acima do limite aumenta riscos institucionais e econômicos.
-- Seleção de eventos combina condições, pesos e desempate estável por campanha/semana; reações recentes são evitadas. Eventos futuros são dados serializados no estado.
-- Os conteúdos, ações e indicadores atuais são demonstrativos e equilibrados para a fundação, não uma simulação política completa.
-
-## Pendências e retoques conhecidos
-
-- Políticas Públicas e Sociedade têm telas funcionais na branch `codex/phase-2b-society-finance`; Relações e Notícias/Histórico seguem como placeholders.
-- Alertas e cartões “Em andamento”, “Aguardando resposta” e “Encerrado” ainda usam conteúdo demonstrativo. Há textos/contadores estáticos no dashboard, como o total anunciado de atualizações.
-- As ações, decisões, reações e eventos são conteúdo inicial, sujeito a balanceamento. A economia agora é expressa em reais, com caixa realista em R$ bi, orçamento anual, dívida, empréstimos e custos de projetos; ainda falta aprofundar o sistema tributário e macroeconômico.
-- Personagens ainda não têm memória/autonomia real, relações persistentes ou efeitos de promessas; imprensa, investigações, crises entre poderes e eleições também não têm sistemas completos.
-- Não há testes automatizados de interação visual nem screenshots em desktop/celular. O tema calcula contraste em código, mas merece revisão visual nas telas densas e com cores extremas. O resumo semanal agora recebe foco sem scroll ao abrir e devolve o foco ao título do dashboard ao fechar.
-- A folha importa Manrope e DM Mono do Google Fonts; sem rede, o fallback local é usado.
-
-## Plano de fases
-
-- **Fase 1 — Fundação jogável: completa.** Criação de campanha, dashboard, calendário, recursos/pontos, decisões, avanço semanal, notícias e saves múltiplos estão implementados. As ações e os conteúdos seguem como exemplos.
-- **Fase 2 — Governo e execução: primeira versão concluída e validada.** Executivo, economia, políticas públicas e sociedade têm telas e regras funcionais; a branch de trabalho passou 45 testes e build.
-- **Fase 3 — Instituições e crises: não iniciada como sistema completo.** Criar procedimentos próprios do Congresso, Judiciário e demais órgãos, respeitando competências.
-- **Fase 4 — Política viva: parcial.** Há cartões de reação, notícias e encadeamentos; faltam personagens autônomos, alianças, memória, imprensa sistêmica e modelos globais de corrupção/interesses.
-- **Fase 5 — Eleições e Maré Ideológica: não iniciada.** Pesquisas, candidatos, regras eleitorais, composição pós-eleição e ciclo de oito anos.
-- **Fase 6 — Conteúdo, balanceamento e revisão: não iniciada.** Importar/validar o catálogo de 150 personagens, ampliar conteúdo, testar campanhas longas e revisar regras legais/eleitorais.
-
-## Próximo passo
-
-Próximo passo: revisar o balanceamento em campanhas longas e iniciar a Fase 3 — Congresso, legislação e orçamento legislativo, em outra branch.
-
-
-## Entrega — Fase 2B e revisão financeira
-
-Branch: `codex/phase-2b-society-finance`. O sistema social cobre cinco classes econômicas e sete grupos de pressão; diálogo e acordos custam recursos, os grupos evoluem com emprego, inflação, crescimento e entregas, e manifestações/paralisações podem aparecer no fechamento mensal. A economia guarda valores em R$ bilhões, usa `R# Estado do projeto
-
-Atualizado em: 2026-10-15
-
-## Projeto
-Palácio em Jogo é um simulador político de navegador, satírico e sistêmico, ambientado em um Brasil fictício a partir de janeiro de 2027.
-O jogador inicia na Presidência e governa em turnos semanais, tomando decisões que alteram indicadores, recursos e acontecimentos.
-
-**Stack:** React 18, TypeScript 5, Vite 6 e `lucide-react`. Persistência local versionada em LocalStorage; não há backend, banco de dados nem API externa de IA. Os testes usam `node:test` com `tsx`.
-
-## Última etapa validada — Fase 2B e revisão financeira
-
-A aba Sociedade já representa cinco classes econômicas e sete grupos organizados, com apoio, pressão pública, diálogo, compromissos setoriais, protestos/paralisações e revisão mensal. As políticas públicas integram esses resultados à simulação. A economia usa R$ bilhões como unidade interna, formata a interface em reais, vincula caixa e dívida ao fechamento mensal e impede ultrapassar a dotação anual setorial. Saves avançam para v6 com migração dos dados legados.
-
-Validação no GitHub Actions, commit `bffec5e`: **45 testes passaram e `npm run build` foi concluído com sucesso**. A branch não foi mesclada à `main`.
-
-## Implementado
-
-- **Criação de campanha:** escolha entre esquerda/direita, seleção entre seis partidos ficcionais compatíveis ou criação de partido personalizado com nome, sigla e exatamente duas cores. A abertura satírica varia conforme a orientação. Indicadores e atributos iniciais são sorteados em faixas configuradas.
-- **Tema visual:** primária e secundária derivadas do partido, com variantes calculadas por contraste; a aplicação usa tema e neutros. Texto de botão é escolhido conforme contraste. Os hexadecimais fixos da interface são neutros.
-- **Estados do dashboard:** todos os indicadores usam faixas configuradas: abaixo de 35 = Crítico, 35–49 = Atenção e 50 ou mais = Estável. Recursos globais e Polarização/Confiança calculam um score agregado coerente com o valor exibido.
-- **Calendário:** quatro semanas por mês, virada de mês/ano, avanço semanal, resumo semanal e balanço econômico simplificado no fechamento do mês.
-- **Pontos e recursos:** 2 pontos de ação base, bônus para os quatro apoios acima de 49%, teto de 6 novos pontos, até 2 carregados e máximo de 8 disponíveis. Dinheiro/orçamento, capital político e capacidade administrativa são recursos separados.
-- **Ações:** cinco ações de exemplo em `data/actions.ts`, com custos, efeitos imediatos ou pendentes, bloqueio por falta de recurso e motivo apresentado ao jogador.
-- **Decisões e eventos:** 32 decisões semanais gerais, seis cartões executivos sobre ministros e seis cartões econômicos, com opções, efeitos e justificativas; oito reações condicionais com pesos e histórico antirrepetição; dois eventos encadeáveis; três eventos mensais com opções.
-- **Feed e resumo:** ações, escolhas e encerramentos atualizam o feed. O resumo registra indicadores alterados, motivos, eventos, ações e pontos carregados/expirados.
-- **Múltiplas campanhas:** biblioteca local para continuar, criar, excluir com confirmação, importar e exportar backups JSON. Cada campanha tem chave e identificador próprios.
-- **Persistência:** autosave após criação, ação, decisão, resultado/fechamento e avanço semanal. Save atual em `versaoDoSave: 6`; migração de saves sem versão e das versões 1 a 5 inicializa projetos e sociedade, e converte valores monetários legados para a nova escala de R$ bilhões. Valores sociais gerados para campanhas antigas são determinísticos.
-- **Poder Executivo:** 17 ministérios de referência para janeiro de 2027, ministros ficcionais com sete atributos e candidatos gerados por afinidade partidária; nomeação, negociação e exoneração custam recursos e atualizam o apoio político. A ficha mostra competências, orçamento, execução anterior, desempenho, pendências, riscos e alertas. A virada mensal recalcula desempenho e inclui execução e riscos no resumo. Reorganização ministerial só pode ser registrada como proposta dependente do Congresso, sem tramitação nesta fase.
-- **Economia:** indicadores serializáveis e histórico mensal; orçamento anual distribuído por oito setores e integrado às dotações dos ministérios, com revisões limitadas ao início do ano e às janelas trimestrais. Tributos permitem ajustes administrativos limitados e reformas ficam como propostas ao Congresso. Caixa, empréstimos, juros, dívida e pagamentos adiados são finitos; a execução mensal considera ministérios, confiança, integridade, polarização, estabilidade, desempenho e decisões, explica os resultados e reduz a execução quando falta dinheiro. A tela apresenta indicadores, tendências, gráficos SVG, execução setorial, tributos, empréstimos, riscos e alternativas emergenciais.
-- **Instituições:** opções modelam negociação e interlocução; não permitem ao presidente comandar o Congresso ou o Judiciário.
-
-## Pastas e arquivos principais
-
-- `src/App.tsx`: alterna biblioteca, criação e jogo; conecta ações da UI ao engine e persiste alterações.
-- `src/main.tsx`: inicializa React e importa estilos.
-- `src/styles.css`: tema neutro/partidário, layout responsivo e estilos das telas.
-- `src/components/`: inclui `PolicyProjectsPanel.tsx` para catálogo, carteira e histórico de projetos, além da biblioteca, configuração de campanha, dashboard, controles de turno, painéis executivo/econômico e componentes de resultado.
-- `src/state/`: `types.ts` define o estado serializável e os contratos; `initialState.ts` define calendário inicial e meses.
-- `src/engine/`: `campaign.ts` cria campanhas; `executive.ts` implementa ministérios; `economy.ts` implementa orçamento, tributos, empréstimos e fechamento fiscal; `projects.ts` implementa custos, progresso e avaliação de projetos; `turn.ts` integra calendário, decisões e fechamentos. Testes incluem `projects.test.ts`.
-- `src/data/`: inclui `publicPrograms.ts`, catálogo de programas públicos por setor, junto aos catálogos de partidos, ministérios, orçamento, ações, decisões e eventos.
-- `src/components/`: `EconomyPanel.tsx` apresenta os indicadores, gráficos SVG, orçamento, tributos, dívida e explicações econômicas.
-- `src/persistence/`: `campaignRepository.ts` valida, salva, lista, carrega, exclui e migra saves; `backup.ts` exporta JSON; `campaignRepository.test.ts` cobre persistência, migração determinística, backup e falhas.
-- Raiz: `package.json` define comandos e dependências; `vite.config.ts` e `tsconfig*.json` configuram build; `index.html` é a entrada Vite.
-- `docs/`: documento mestre e catálogos de personagens em Markdown/CSV/JSON.
-
-## Rodar e testar
-
-```bash
-npm install
-npm run dev
-npm run test
-npm run build
-```
-
-`npm run test` executa testes do turno, executivo, economia, dashboard, projetos, sociedade, moeda e persistência. A validação da Fase 2B registrou 45 testes aprovados. `npm run build` valida TypeScript e gera a versão de produção. O LocalStorage é específico do navegador; exporte um backup JSON para cópia externa.
+A suíte automatizada atual tem 57 testes. O workflow \`.github/workflows/validate.yml\` executa testes e build a cada push em \`main\` ou em branches \`codex/**\`, e em pull requests direcionados à \`main\`.
 
 ## Decisões de design
 
-- Estado da campanha é serializável; regras ficam em `engine/`, conteúdo em `data/`, componentes em `components/` e saves em `persistence/`.
-- Tema oficial fica no estado da campanha e é reaplicado ao reabrir/importar. Cores de interface vêm das duas cores partidárias ou de neutros; estados positivos/negativos usam rótulo e ícone, não verde/vermelho fixos.
-- Status dos indicadores usa faixas comuns definidas em `src/data/campaignConfig.ts`: `<35` Crítico, `35–49` Atenção e `>=50` Estável. Métricas inversas ou compostas, como polarização/confiança, são normalizadas antes da classificação.
-- Os pontos de ação não são dinheiro, capital político ou capacidade administrativa. Navegação e consulta não custam pontos; a decisão narrativa semanal é gratuita.
-- Caixa disponível acompanha o recurso orçamentário usado pelas ações comuns. Receitas, despesas financiadas, amortizações e juros são contabilizados no fechamento mensal; compromissos sem caixa são adiados, não pagos com saldo negativo. O endividamento acima do limite aumenta riscos institucionais e econômicos.
-- Seleção de eventos combina condições, pesos e desempate estável por campanha/semana; reações recentes são evitadas. Eventos futuros são dados serializados no estado.
-- Os conteúdos, ações e indicadores atuais são demonstrativos e equilibrados para a fundação, não uma simulação política completa.
+- O estado de campanha é serializável; as regras ficam em \`engine/\`, os catálogos/configurações em \`data/\`, a apresentação em \`components/\` e os saves/migrações em \`persistence/\`.
+- Partidos, bancadas e resultados são ficcionais. O jogo não representa legisladores reais nem atribui declarações ou votos individuais a pessoas reais.
+- O modelo legislativo é uma abstração jogável. Quóruns e números principais são parametrizados, mas o sistema não implementa todo o processo regimental, todas as comissões, pareceres, apensamentos, urgências específicas, períodos de recesso ou todas as exceções constitucionais.
+- O resultado de uma votação não é decidido diretamente pelo jogador. Apoio no Congresso e articulação influenciam probabilidades, não substituem o voto.
+- Aprovar uma lei não cria dinheiro disponível automaticamente. A LOA altera o planejamento anual; emendas redistribuem dotação; crédito adicional altera orçamento planejado; caixa e despesas continuam sujeitos ao motor econômico.
+- A migração de v6 para v7 não reescala reais pela segunda vez. Valores v5 ou anteriores recebem a conversão histórica de unidades abstratas para a escala interna de R$ bilhões.
+- LocalStorage é específico do navegador. Exporte backups para preservar campanhas fora da máquina.
 
-## Pendências e retoques conhecidos
+## Pendências e limites conhecidos
 
-- Políticas Públicas e Sociedade têm telas funcionais na branch `codex/phase-2b-society-finance`; Relações e Notícias/Histórico seguem como placeholders.
-- Alertas e cartões “Em andamento”, “Aguardando resposta” e “Encerrado” ainda usam conteúdo demonstrativo. Há textos/contadores estáticos no dashboard, como o total anunciado de atualizações.
-- As ações, decisões, reações e eventos são conteúdo inicial, sujeito a balanceamento. A economia agora é expressa em reais, com caixa realista em R$ bi, orçamento anual, dívida, empréstimos e custos de projetos; ainda falta aprofundar o sistema tributário e macroeconômico.
-- Personagens ainda não têm memória/autonomia real, relações persistentes ou efeitos de promessas; imprensa, investigações, crises entre poderes e eleições também não têm sistemas completos.
-- Não há testes automatizados de interação visual nem screenshots em desktop/celular. O tema calcula contraste em código, mas merece revisão visual nas telas densas e com cores extremas. O resumo semanal agora recebe foco sem scroll ao abrir e devolve o foco ao título do dashboard ao fechar.
-- A folha importa Manrope e DM Mono do Google Fonts; sem rede, o fallback local é usado.
+- **Revisão visual manual pendente:** ainda não foi feita uma sessão real de navegador/screenshot para revisar layout, navegação e formulários do Congresso em desktop e celular. O build valida tipos e bundle, não usabilidade visual.
+- **Simplificação parlamentar:** não há biografias, lideranças individuais, comissões funcionais, relatórios de parecer completos, emendas ao texto de uma proposição, substitutivos, pedidos de vista, obstrução ou negociação individual com cada parlamentar.
+- **Processo orçamentário simplificado:** PPA/LDO/LOA são representados por votação conjunta agregada; o rito integral constitucional e regimental não está implementado. Crédito adicional e emenda seguem limites de simulação configurados, não substituem análise jurídica/orçamentária.
+- **Medidas provisórias simplificadas:** o jogo simula 60+60 dias como prazo total de 120 dias, urgência após 45 dias e uma tramitação semanal. Não modela toda hipótese de suspensão de prazo, recesso, comissão mista ou restrições materiais constitucionais.
+- **Composição inicial:** números totais de cadeiras conferem, mas a distribuição por partido é uma aproximação ficcional; atualização eleitoral de bancadas fica para a Fase 5, sem mudar cadeiras de modo semanal.
+- **Efeitos fiscais:** o impacto financeiro de PL/PLP/PEC aprovado usa uma pressão mensal agregada; ele não cria automaticamente um programa público, contrato, arrecadação tributária detalhada ou obrigação plurianual individual.
+- **Outras instituições:** o Judiciário, órgãos de controle, investigações e crises entre poderes ainda não têm o sistema previsto nas Fases 3.2 e 3.3. Relações e Notícias/Histórico ainda precisam de telas sistêmicas próprias.
+- **Eleições e personagens:** continuam pendentes sistemas completos de candidatos, cálculo eleitoral, mudanças de cadeiras só após eleição, memória/autonomia de personagens e imprensa sistêmica.
+- **Balanceamento legal e econômico:** as faixas e efeitos são valores ficcionais para jogo. Regras legais/eleitorais precisam de revisão atualizada antes de qualquer alegação de simulador juridicamente fiel.
 
 ## Plano de fases
 
-- **Fase 1 — Fundação jogável: completa.** Criação de campanha, dashboard, calendário, recursos/pontos, decisões, avanço semanal, notícias e saves múltiplos estão implementados. As ações e os conteúdos seguem como exemplos.
-- **Fase 2 — Governo e execução: primeira versão concluída e validada.** Executivo, economia, políticas públicas e sociedade têm telas e regras funcionais; a branch de trabalho passou 45 testes e build.
-- **Fase 3 — Instituições e crises: não iniciada como sistema completo.** Criar procedimentos próprios do Congresso, Judiciário e demais órgãos, respeitando competências.
-- **Fase 4 — Política viva: parcial.** Há cartões de reação, notícias e encadeamentos; faltam personagens autônomos, alianças, memória, imprensa sistêmica e modelos globais de corrupção/interesses.
-- **Fase 5 — Eleições e Maré Ideológica: não iniciada.** Pesquisas, candidatos, regras eleitorais, composição pós-eleição e ciclo de oito anos.
-- **Fase 6 — Conteúdo, balanceamento e revisão: não iniciada.** Importar/validar o catálogo de 150 personagens, ampliar conteúdo, testar campanhas longas e revisar regras legais/eleitorais.
+- **Fase 1 — Fundação jogável:** concluída.
+- **Fase 2 — Governo e execução:** primeira versão implementada; inclui Executivo, economia, políticas públicas, sociedade e revisão financeira em branches anteriores.
+- **Fase 3.1 — Congresso e legislação:** implementada e validada na branch \`codex/phase-3a-congress\`.
+- **Fase 3.2 — Judiciário:** próxima etapa.
+- **Fase 3.3 — Órgãos de controle e crises institucionais:** pendente.
+- **Fase 4 — Política viva:** parcial; reações/notícias existem, mas personagens autônomos, imprensa e interesses sistêmicos estão pendentes.
+- **Fase 5 — Eleições e Maré Ideológica:** pendente.
+- **Fase 6 — Conteúdo, balanceamento e revisão:** pendente.
 
 ## Próximo passo
 
-Próximo passo: revisar o balanceamento em campanhas longas e iniciar a Fase 3 — Congresso, legislação e orçamento legislativo, em outra branch.
-
-
- na interface, mede a reserva em meses de cobertura, limita os gastos ao caixa e à dotação setorial anual, e formata relatórios ministeriais e fiscais em reais. O save v6 converte os montantes financeiros antigos e inicializa o estado social de modo determinístico. GitHub Actions: 45 testes e build aprovados no commit `bffec5e`.
+Iniciar **Fase 3.2 — Judiciário**, lendo as seções 8 e 19 do Documento Mestre. Manter processos, decisões e indicações judiciais independentes do Executivo; testar o motor e build; depois atualizar este documento. A branch \`codex/phase-3a-congress\` ainda precisa de revisão/integração pelo responsável do projeto antes de entrar na \`main\`.
