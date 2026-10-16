@@ -75,7 +75,6 @@ function getPartyRows(campaign: Pick<CampaignState, 'party'>) {
 function allocateSeats(
   campaign: Pick<CampaignState, 'party'>,
   totalSeats: number,
-  _chamber: LegislativeChamber,
 ): LegislativeBloc[] {
   const rows = getPartyRows(campaign)
   const weightTotal = rows.reduce((sum, row) => sum + Math.max(1, row.weight), 0)
@@ -102,8 +101,8 @@ function allocateSeats(
 
 export function createInitialLegislatureState(campaign: Pick<CampaignState, 'party'>): LegislatureState {
   return {
-    chamberOfDeputies: allocateSeats(campaign, legislativeRules.chambers.house.seats, 'house'),
-    senate: allocateSeats(campaign, legislativeRules.chambers.senate.seats, 'senate'),
+    chamberOfDeputies: allocateSeats(campaign, legislativeRules.chambers.house.seats),
+    senate: allocateSeats(campaign, legislativeRules.chambers.senate.seats),
     bills: [],
     history: [
       'Composição parlamentar inicializada para a campanha ficcional. As bancadas são agregadas; não representam deputados ou senadores individuais.',
