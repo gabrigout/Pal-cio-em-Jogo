@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { legislativeRules } from '../data/legislature'
-import type { PartySelection } from '../state/types'
+import type { CampaignState, PartySelection } from '../state/types'
 import {
   advanceLegislatureWeek,
   createInitialLegislatureState,
@@ -202,14 +202,14 @@ test('emenda aprovada remaneja dotação sem elevar o total orçamentário', () 
     targetSectorId: target.id,
     sourceKey: billId,
   })
-  let working = {
+  let working: CampaignState = {
     ...registered,
     legislature: {
       ...registered.legislature,
       bills: registered.legislature.bills.map((bill) => ({
         ...bill,
-        stage: 'voting' as const,
-        currentChamber: 'joint' as const,
+        stage: 'voting',
+        currentChamber: 'joint',
         negotiatedSupport: 35,
       })),
     },
