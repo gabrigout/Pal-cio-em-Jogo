@@ -90,7 +90,7 @@ Calendário atual: início em janeiro de 2027, quatro semanas por mês. Dinheiro
 - Versão atual do save: v9.
 - v8 → v9: atualiza os códigos de cor revisados e recalcula o tema das campanhas existentes; mantém as cores de partido personalizado.
 - v7 → v8: introduziu a primeira versão das paletas partidárias.
-- v6 → v8: migra o estado legislativo e atualiza a paleta; não reescala os valores financeiros já convertidos para reais.
+- v6 → v9: migra o estado legislativo e atualiza a paleta; não reescala os valores financeiros já convertidos para reais.
 - v5 e versões mais antigas: passam pela regra histórica de conversão monetária para a escala em R$ bilhões, além de inicializações/migrações dos sistemas posteriores.
 - LocalStorage é local ao navegador. Backup JSON é a forma atual de transportar a campanha.
 - Sempre que alterar o shape do estado persistido, aumente `CURRENT_SAVE_VERSION`, adicione migração determinística e testes específicos para v atual, versões imediatamente anteriores e versões legadas relevantes.
