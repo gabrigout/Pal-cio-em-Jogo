@@ -1,6 +1,7 @@
 import {
   Building2,
   BookOpen,
+  ShieldCheck,
   Globe2,
   Gavel,
   Landmark,
@@ -26,6 +27,7 @@ const navigationItems: NavigationItem[] = [
   { id: 'sociedade', label: 'Sociedade', icon: UsersRound },
   { id: 'congresso', label: 'Congresso', icon: Gavel },
   { id: 'judiciario', label: 'Judiciário', icon: BookOpen },
+  { id: 'controle', label: 'Controle', icon: ShieldCheck },
   { id: 'relacoes', label: 'Relações', icon: Scale },
   { id: 'historico', label: 'Notícias/Histórico', icon: Newspaper },
 ]
