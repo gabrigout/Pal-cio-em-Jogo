@@ -20,7 +20,7 @@ A reforma tributária já registrada pelo sistema econômico e a reorganização
 
 ## Funcionalidades implementadas
 
-- **Criação de campanha e tema:** escolha entre esquerda/direita, seis partidos fictícios ou partido personalizado com nome, sigla e duas cores. A interface usa paletas pesquisadas para PT/PSOL/PDT/PL/PSDB/NOVO como referência das paródias e deriva variantes para contraste. Fontes e limitações estão em `docs/CORES_DOS_PARTIDOS.md`.
+- **Criação de campanha e tema:** escolha entre esquerda/direita, seis partidos fictícios ou partido personalizado com nome, sigla e duas cores. A interface usa paletas pesquisadas para PT/PSOL/PDT/PL/PSDB/NOVO como referência das paródias; botões principais usam a cor primária pesquisada e texto com contraste calculado, enquanto indicadores e textos pequenos usam variantes legíveis. Fontes e limitações estão em `docs/CORES_DOS_PARTIDOS.md`.
 - **Dashboard e turnos:** indicadores nacionais, calendário de quatro semanas por mês, escolhas semanais, eventos/reação, resumo de virada, notícias e histórico do estado da campanha.
 - **Ações e recursos:** pontos de ação, caixa/orçamento, capital político e capacidade administrativa são recursos distintos. Ações validam custos antes de aplicar efeitos imediatos ou pendentes.
 - **Múltiplas campanhas:** biblioteca local para criar, continuar e excluir campanhas; importação/exportação de backups JSON. Autosave local, sem serviço de nuvem.
