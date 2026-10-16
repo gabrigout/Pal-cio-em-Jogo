@@ -534,7 +534,6 @@ function freshTurnState(): CampaignTurnState {
 
 function migrateLegacyCampaign(value: unknown, scaleLegacyMoney = true): CampaignState | null {
   const hadLegislatureState = isRecord(value) && isLegislatureState(value.legislature)
-  const hadJudiciaryState = isRecord(value) && isJudiciaryState(value.judiciary)
   if (!isRecord(value) || !isRecord(value.party) || !isRecord(value.calendar) || !isRecord(value.country)) return null
   if (scaleLegacyMoney) value = scaleLegacyMoneyDeep(value)
   if (!isRecord(value) || !isRecord(value.party) || !isRecord(value.calendar) || !isRecord(value.country)) return null
