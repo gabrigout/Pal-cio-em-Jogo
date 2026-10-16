@@ -5,6 +5,7 @@ export type SectionId =
   | 'politicas'
   | 'sociedade'
   | 'congresso'
+  | 'judiciario'
   | 'relacoes'
   | 'historico'
 
@@ -69,6 +70,7 @@ export interface CampaignState {
   projects: PublicProjectState[]
   society: SocietyState
   legislature: LegislatureState
+  judiciary: JudiciaryState
   executiveProposals: string[]
   economy: EconomicState
   turn: CampaignTurnState
@@ -141,6 +143,135 @@ export interface LegislatureState {
   bills: LegislativeBill[]
   history: string[]
   lastAdvancedKey: string | null
+}
+
+export type JudicialCourtId = 'stf' | 'stj' | 'trf' | 'tj' | 'tse' | 'tst' | 'stm' | 'cnj'
+export type JudicialCaseType = 'constitutional-review' | 'administrative' | 'fiscal' | 'federal-dispute' | 'electoral' | 'labor' | 'disciplinary'
+export type JudicialCaseStage = 'filed' | 'admissibility' | 'evidence' | 'awaiting-decision' | 'decision' | 'appeal' | 'final' | 'dismissed'
+export type JudicialOutcome = 'plaintiff' | 'government' | 'partial' | 'inadmissible'
+export type JudicialComplianceStatus = 'not-required' | 'pending' | 'complied' | 'overdue'
+export type JudicialNominationStatus = 'awaiting-senate' | 'approved' | 'rejected' | 'appointed'
+
+export interface JudicialJustice {
+  id: string
+  name: string
+  seatNumber: number
+  age: number
+  legalKnowledge: number
+  precedentReliance: number
+  proceduralRigour: number
+  independence: number
+  publicReputation: number
+  joinedYear: number
+  monthsUntilRetirement: number | null
+}
+
+export interface JudicialNomineeCandidate {
+  id: string
+  name: string
+  age: number
+  legalKnowledge: number
+  precedentReliance: number
+  proceduralRigour: number
+  independence: number
+  publicReputation: number
+  profile: string
+}
+
+export interface JudicialVacancy {
+  id: string
+  court: 'stf'
+  seatNumber: number
+  openedYear: number
+  openedMonth: string
+  reason: string
+  candidates: JudicialNomineeCandidate[]
+  nominatedCandidateIds: string[]
+}
+
+export interface JudicialSenateVote {
+  id: string
+  yes: number
+  no: number
+  abstain: number
+  absent: number
+  present: number
+  totalSeats: number
+  requiredYes: number
+  approved: boolean
+  dateLabel: string
+  note: string
+}
+
+export interface JudicialNomination {
+  id: string
+  vacancyId: string
+  candidate: JudicialNomineeCandidate
+  status: JudicialNominationStatus
+  createdYear: number
+  createdMonth: string
+  createdWeek: number
+  weeksRemaining: number
+  vote: JudicialSenateVote | null
+  history: string[]
+}
+
+export interface JudicialDecisionRecord {
+  id: string
+  court: JudicialCourtId
+  year: number
+  month: string
+  week: number
+  outcome: JudicialOutcome
+  score: number
+  rationale: string
+  panelNames: string[]
+}
+
+export interface JudicialCase {
+  id: string
+  title: string
+  summary: string
+  type: JudicialCaseType
+  court: JudicialCourtId
+  stage: JudicialCaseStage
+  plaintiff: string
+  defendant: string
+  origin: string
+  sourceKey: string | null
+  governmentIsParty: boolean
+  filedYear: number
+  filedMonth: string
+  filedWeek: number
+  stageWeeks: number
+  daysInProcess: number
+  legalMerit: number
+  evidenceStrength: number
+  precedentFit: number
+  proceduralRegularity: number
+  publicImpact: number
+  severity: 'routine' | 'important' | 'critical'
+  appealTo: JudicialCourtId | null
+  appealCount: number
+  appealWindowWeeks: number
+  outcome: JudicialOutcome | null
+  decisions: JudicialDecisionRecord[]
+  complianceStatus: JudicialComplianceStatus
+  complianceWeeksRemaining: number
+  publicReactionSummary: string | null
+  closedReason: string | null
+  history: string[]
+}
+
+export interface JudiciaryState {
+  stfJustices: JudicialJustice[]
+  vacancies: JudicialVacancy[]
+  nominations: JudicialNomination[]
+  cases: JudicialCase[]
+  history: string[]
+  processedSourceKeys: string[]
+  lastAdvancedKey: string | null
+  lastClosedMonthKey: string | null
 }
 
 export type ExecutiveActionType =
