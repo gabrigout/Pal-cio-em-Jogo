@@ -40,6 +40,7 @@ export default function CampaignSetup({ onStart, onBackToLibrary }: CampaignSetu
     '--cor-primaria': previewTheme.primary,
     '--cor-secundaria': previewTheme.secondary,
     '--cor-botao-texto': previewTheme.buttonText,
+    '--cor-fundo-botao': previewTheme.officialPrimary,
   } as CSSProperties : undefined
 
   function chooseOrientation(value: PoliticalOrientation) {
