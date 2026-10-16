@@ -121,7 +121,7 @@ function makeInitialJustices(campaignId: string, year: number): JudicialJustice[
       independence: 68 + Math.floor(random() * 31),
       publicReputation: 65 + Math.floor(random() * 32),
       joinedYear: year - (4 + Math.floor(random() * 20)),
-      monthsUntilRetirement: retiringSoon ? 8 : null,
+      monthsUntilRetirement: retiringSoon ? Math.max(1, (judicialRules.mandatoryRetirementAge - age) * 12) : null,
     }
   })
 }
@@ -376,7 +376,7 @@ export function formalizeJudicialAppointment(
     independence: candidate.independence,
     publicReputation: candidate.publicReputation,
     joinedYear: campaign.calendar.year,
-    monthsUntilRetirement: Math.max(1, (judicialRules.mandatoryRetirementAge - candidate.age) * 12 - 6),
+    monthsUntilRetirement: Math.max(1, (judicialRules.mandatoryRetirementAge - candidate.age) * 12),
   }
   const historyMessage = formatDate(campaign.calendar) + ': ' + candidate.name + ' foi nomeado(a) para a vaga do STF após aprovação do Senado.'
   let next: CampaignState = {
