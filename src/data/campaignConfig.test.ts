@@ -7,7 +7,7 @@ import { contrastRatio } from '../engine/theme'
 
 test('paletas predefinidas refletem as referências visuais pesquisadas', () => {
   assert.deepEqual(partyColors.ptp, ['#E30613', '#FFFFFF'])
-  assert.deepEqual(partyColors.pso, ['#F58220', '#FFD43B'])
+  assert.deepEqual(partyColors.pso, ['#E02028', '#FEDF00'])
   assert.deepEqual(partyColors.pdtt, ['#C8102E', '#00529B'])
   assert.deepEqual(partyColors.plim, ['#009640', '#FFD500'])
   assert.deepEqual(partyColors.pssdb, ['#064A8C', '#F6C700'])
