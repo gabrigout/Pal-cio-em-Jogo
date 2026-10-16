@@ -11,8 +11,8 @@
 - Atualizada a paleta das seis legendas satíricas em `src/data/campaignConfig.ts`; o PTP agora usa **vermelho e branco**, como foi pedido.
 - PDTT foi ajustado para vermelho e azul, em vez de vermelho/verde, com base na tradição cromática documentada do PDT e na cartela digital publicada pelo PDT-RS.
 - O tema do jogo aplica os pares em novas campanhas. Os botões principais agora usam o HEX primário exato da legenda e texto com contraste calculado; outros destaques e textos pequenos usam variantes contrastantes para a interface escura, sem remover os valores armazenados.
-- Saves de campanha existentes são migrados de v7 para v8: partidos predefinidos recebem as novas cores e o tema é recalculado; campanhas de partido personalizado conservam suas cores.
-- Adicionados testes de regressão para os seis pares e aplicação do tema em campanhas novas, além de testes de migração que confirmam que v7→v8 preserva partido personalizado.
+- Saves v8 migram para v9 para receber os códigos cromáticos revisados e recalcular o tema; saves v7 e anteriores passam pelas migrações sequenciais. Campanhas de partido personalizado conservam suas cores.
+- Adicionados testes de regressão para os seis pares e aplicação do tema em campanhas novas, além de testes de migração que confirmam que v8→v9 atualiza a paleta sem reescalar dinheiro e preserva partidos personalizados.
 - Criados/atualizados documentos de continuidade: pesquisa de cores, mapa mental, avaliação de prontidão, status, próximos passos e relatório de handoff.
 
 ## 2. Paleta escolhida
@@ -32,8 +32,8 @@ As cores servem para reconhecer as **paródias** e não reproduzem necessariamen
 
 - `src/data/campaignConfig.ts`: catálogo central das seis paletas e URLs de referência.
 - `src/data/partyColors.test.ts`: teste para os pares e tema de novas campanhas.
-- `src/persistence/campaignRepository.ts`: atualização do save para v8, troca de paleta/tema apenas nos partidos predefinidos.
-- `src/persistence/campaignRepository.test.ts`: migração de v7 para v8 e preservação do partido personalizado.
+- `src/persistence/campaignRepository.ts`: atualização do save para v9, troca de paleta/tema apenas nos partidos predefinidos.
+- `src/persistence/campaignRepository.test.ts`: migração de v7→v9 e v8→v9, incluindo preservação do partido personalizado.
 - `src/components/CampaignSetup.tsx`: explicação de como as cores são usadas no tema.
 - `docs/CORES_DOS_PARTIDOS.md`: fontes, paletas, limites de certeza e aplicação no jogo.
 - `docs/MAPA_MENTAL.md`: visão sistêmica e regra de documentação de cada etapa.
@@ -52,7 +52,7 @@ A versão atual é `CURRENT_SAVE_VERSION = 9`.
 
 ## 5. Validação
 
-O código de paletas/save v8, incluindo o uso do HEX primário oficial nos botões principais, foi validado no commit `4b4979065d5e2a9e4ccc4c00da93544abc267345`: **61 testes passaram, 0 falhas, e o build de produção concluiu com sucesso** no [workflow 38960919871](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38960919871).
+O código de paletas/save v9, incluindo o uso do HEX primário oficial nos botões principais e a migração de v8, foi validado no commit `dff95f7b7b776ce2d4045d72f46eedfabe42be51`: **62 testes passaram, 0 falhas, e o build de produção concluiu com sucesso** no [workflow 38961218149](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38961218149).
 
 O workflow que cobre a atualização documental posterior também executa testes/build. A validação automatizada comprova testes e compilação, mas não substitui revisão visual. Ainda não foi realizada uma sessão real de navegação visual desktop/celular para medir contraste, hierarquia e consistência do tema em todos os painéis.
 
