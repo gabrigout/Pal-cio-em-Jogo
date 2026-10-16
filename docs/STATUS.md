@@ -37,7 +37,7 @@ As cores oficiais foram consultadas como referências visuais para os partidos f
 | Partido fictício | Referência | Cores usadas |
 |---|---|---|
 | PTP | PT | Vermelho `#E30613` e branco `#FFFFFF`, seguindo a referência histórica da primeira bandeira vermelha com estrela branca ([PT](https://pt.org.br/dona-marisa-costurei-a-primeira-bandeira-do-pt-ficou-linda/)). |
-| PSÓ | PSOL | Laranja `#F58220` e amarelo `#FFD43B`, referências da identidade solar associada ao PSOL ([PSOL](https://psol50.org.br/votepsol/identidade-visual-2026/)). |
+| PSÓ | PSOL | Vermelho `#E02028` e amarelo `#FEDF00`, códigos hexadecimais do manual de identidade visual do PSOL ([manual do PSOL](https://psol50.org.br/wp-content/uploads/2018/11/manual-logotipo.pdf)). |
 | PDTT | PDT | Vermelho `#C8102E` e azul `#00529B`; o PDT usa a rosa vermelha e registra vermelho, branco e azul na identidade ([PDT](https://pdt.org.br/index.php/pdt-renova-sua-identidade-visual/)). |
 | PLIM | PL | Verde `#009640` e amarelo `#FFD500`, cores RGB indicadas no manual oficial do PL; a identidade também contém azul ([manual do PL](https://partidoliberal.org.br/wp-content/uploads/2023/03/manual-da-marca-pl-2023.pdf)). |
 | PSSDB | PSDB | Azul `#064A8C` e amarelo `#F6C700`, as duas cores oficiais reafirmadas pelo PSDB em 2023 ([PSDB](https://www.psdb.org.br/acompanhe/noticias/psdb-moderniza-sua-marca/)). |
