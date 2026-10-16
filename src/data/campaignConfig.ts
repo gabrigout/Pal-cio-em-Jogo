@@ -16,16 +16,14 @@ export const partyPalette = [
   { name: 'Azul-marinho', color: '#416488' },
 ]
 
-// Pares de cores das legendas satíricas: cor primária de destaque e cor secundária.
-// Referências de marca: PT Digital (vermelho/branco); emblema do PSOL (bandeira vermelha/sol amarelo);
-// PDT (rosa vermelha; verde usado como cor de apoio do símbolo); PL 2023 (azul/verde/amarelo);
- // PSDB (azul/amarelo); NOVO (laranja/azul). Valores HEX oficiais são usados quando publicados;
-// nos demais casos, o HEX é uma aproximação visual para a paleta do jogo, não uma declaração oficial.
-// PT: https://pt.org.br/ | PSOL: https://psol50.org.br/partido/estatuto/
- // PDT: https://www.pdtrs.org.br/identidadevisual
- // PL: https://partidoliberal.org.br/wp-content/uploads/2023/03/manual-da-marca-pl-2023.pdf
- // PSDB: https://www.psdb.org.br/acompanhe/noticias/psdb-moderniza-sua-marca/
- // NOVO: https://novo.org.br/wp-content/uploads/2021/07/NOVO_Manual-de-marca-2021-2.pdf
+// Paletas das legendas satíricas. As cores são aplicadas ao tema da campanha, preservando contraste.
+// Quando a fonte publica HEX/RGB institucional, o jogo usa esses códigos; nos demais casos,
+// as cores são aproximações digitais inspiradas pelo símbolo oficial, não HEX oficiais declarados.
+// Referências: PT Digital https://pt.org.br/ | PSOL https://psol50.org.br/partido/estatuto/
+// PDT https://www.pdtrs.org.br/identidadevisual
+// PL https://partidoliberal.org.br/wp-content/uploads/2023/03/manual-da-marca-pl-2023.pdf
+// PSDB https://www.psdb.org.br/acompanhe/noticias/psdb-moderniza-sua-marca/
+// NOVO https://novo.org.br/wp-content/uploads/2021/07/NOVO_Manual-de-marca-2021-2.pdf
 export const partyColors = {
   ptp: ['#E4142C', '#FFFFFF'],
   pso: ['#D71920', '#FFD52B'],
