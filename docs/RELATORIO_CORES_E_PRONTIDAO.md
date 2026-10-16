@@ -2,7 +2,7 @@
 
 **Data:** 16/10/2026  
 **Branch:** `codex/phase-3a-congress`  
-**Versão do save atual:** v8  
+**Versão do save atual:** v9  
 **Objetivo:** pesquisar e aplicar as cores de cada legenda satírica no tema principal, avaliar a prontidão real do jogo e registrar o que precisa acontecer a seguir.
 
 ## 1. Resumo do que mudou
@@ -42,10 +42,10 @@ As cores servem para reconhecer as **paródias** e não reproduzem necessariamen
 
 ## 4. Compatibilidade de saves
 
-A versão atual é `CURRENT_SAVE_VERSION = 8`.
+A versão atual é `CURRENT_SAVE_VERSION = 9`.
 
 - Novas campanhas já recebem a paleta selecionada.
-- Saves v7 migram para v8 e atualizam o tema dos seis partidos predefinidos.
+- Saves v8 migram para v9 e atualizam o tema dos seis partidos predefinidos com os códigos cromáticos revisados. Saves v7 e anteriores também chegam à versão atual por suas migrações sequenciais.
 - Saves de partidos personalizados não recebem a paleta predefinida, mesmo se uma sigla/ID coincidir; sua escolha original é preservada.
 - Migrações v6 continuam mantendo a escala em R$ bilhões sem uma segunda multiplicação; v5 e anteriores seguem a conversão histórica original.
 - O tema oficial da campanha e as variantes de contraste são recalculados na migração.
