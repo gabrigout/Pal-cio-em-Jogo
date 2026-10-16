@@ -7,12 +7,14 @@ import { initializeCampaignTurn } from '../engine/turn'
 import { createInitialSocietyState } from '../engine/society'
 import { createInitialLegislatureState, registerLegislativeProposal } from '../engine/legislature'
 import { createInitialJudiciaryState } from '../engine/judiciary'
+import { createInitialOversightState } from '../engine/oversight'
 import { legislativeRules } from '../data/legislature'
 import { judicialRules } from '../data/judiciary'
+import { oversightRules } from '../data/oversight'
 import { calendarMonths } from '../state/initialState'
 import type { CampaignState, CampaignTurnState } from '../state/types'
 
-export const CURRENT_SAVE_VERSION = 9
+export const CURRENT_SAVE_VERSION = 10
 const SAVE_KEY_PREFIX = 'palacio-em-jogo:campaign:'
 
 export interface StorageLike {
@@ -451,6 +453,61 @@ function isJudiciaryState(value: unknown): boolean {
     && value.cases.every(validCase)
 }
 
+function isOversightState(value: unknown): boolean {
+  if (!isRecord(value) || !Array.isArray(value.cases)
+    || !isStringArray(value.history) || !isStringArray(value.processedSourceKeys)
+    || !(typeof value.lastAdvancedKey === 'string' || value.lastAdvancedKey === null)) return false
+  const bodies = ['mpf', 'pf', 'cgu', 'tcu', 'agu', 'tse', 'congress']
+  const caseTypes = ['internal-audit', 'external-audit', 'federal-investigation', 'prosecutorial-review', 'legal-opinion', 'electoral-proceeding']
+  const stages = ['received', 'screening', 'evidence', 'analysis', 'finding', 'referred', 'archived']
+  const targetKinds = ['project', 'ministry', 'budget', 'bill', 'general']
+  const findings = [
+    'inconclusive', 'no-irregularity-found', 'administrative-recommendation',
+    'accounting-adjustment', 'referred-to-mpf', 'referred-to-pf',
+    'electoral-referral', 'legal-opinion-issued',
+  ]
+  const sourceKinds = ['citizen-report', 'executive-request', 'automatic-audit-trigger', 'legislative-referral', 'judicial-referral', 'institutional-referral']
+  const evidenceKinds = ['financial-record', 'project-document', 'audit-trail', 'contradictory-record', 'testimony', 'public-data', 'legal-document']
+  const validEvidence = (record: unknown) => isRecord(record)
+    && typeof record.id === 'string'
+    && evidenceKinds.includes(String(record.kind))
+    && typeof record.title === 'string'
+    && typeof record.description === 'string'
+    && typeof record.source === 'string'
+    && isNumber(record.strength) && record.strength >= 0 && record.strength <= 100
+    && typeof record.verified === 'boolean'
+    && typeof record.dateLabel === 'string'
+  const validCase = (item: unknown) => isRecord(item)
+    && typeof item.id === 'string' && typeof item.title === 'string' && typeof item.summary === 'string'
+    && caseTypes.includes(String(item.type)) && bodies.includes(String(item.body))
+    && targetKinds.includes(String(item.targetKind))
+    && (typeof item.targetId === 'string' || item.targetId === null)
+    && typeof item.targetName === 'string' && typeof item.origin === 'string'
+    && sourceKinds.includes(String(item.sourceKind))
+    && (typeof item.sourceKey === 'string' || item.sourceKey === null)
+    && isNumber(item.createdYear) && Number.isInteger(item.createdYear)
+    && typeof item.createdMonth === 'string'
+    && isNumber(item.createdWeek) && Number.isInteger(item.createdWeek) && item.createdWeek >= 1 && item.createdWeek <= 4
+    && stages.includes(String(item.stage))
+    && isNumber(item.stageWeeks) && Number.isInteger(item.stageWeeks) && item.stageWeeks >= 0
+    && isNumber(item.daysInProcess) && Number.isInteger(item.daysInProcess) && item.daysInProcess >= 0
+    && ['suspicionScore', 'evidenceStrength', 'publicImpact']
+      .every((key) => isNumber(item[key]) && Number(item[key]) >= 0 && Number(item[key]) <= 100)
+    && ['routine', 'important', 'critical'].includes(String(item.severity))
+    && Array.isArray(item.evidence) && item.evidence.length <= oversightRules.maximumEvidenceRecords
+    && item.evidence.every(validEvidence)
+    && (item.finding === null || findings.includes(String(item.finding)))
+    && (item.referralTarget === null || bodies.includes(String(item.referralTarget)))
+    && (typeof item.linkedCaseId === 'string' || item.linkedCaseId === null)
+    && (typeof item.closureReason === 'string' || item.closureReason === null)
+    && isStringArray(item.history)
+  const cases = value.cases as unknown[]
+  const ids = cases.map((item) => isRecord(item) ? item.id : null)
+  return cases.length <= oversightRules.maximumCases
+    && cases.every(validCase)
+    && new Set(ids).size === ids.length
+}
+
 function isCampaignState(
   value: unknown,
   allowEmptyMinistries = false,
@@ -506,6 +563,7 @@ function isCampaignState(
     || !isSocietyState(value.society)
     || !isLegislatureState(value.legislature)
     || !isJudiciaryState(value.judiciary)
+    || !isOversightState(value.oversight)
     || !isStringArray(value.executiveProposals)) return false
   if (!isEconomicState(value.economy) && !allowMissingEconomy) return false
   return true
@@ -572,6 +630,13 @@ function migrateLegacyCampaign(value: unknown, scaleLegacyMoney = true): Campaig
       legislature: normalizedLegislature,
     })
 
+  const normalizedOversight = isOversightState(value.oversight)
+    ? value.oversight as unknown as CampaignState['oversight']
+    : createInitialOversightState({
+      id: typeof value.id === 'string' ? value.id : 'legacy-campaign',
+      calendar,
+    })
+
   const candidate = {
     ...value,
     country,
@@ -585,6 +650,7 @@ function migrateLegacyCampaign(value: unknown, scaleLegacyMoney = true): Campaig
     }),
     legislature: normalizedLegislature,
     judiciary: normalizedJudiciary,
+    oversight: normalizedOversight,
     executiveProposals: isStringArray(value.executiveProposals) ? value.executiveProposals : [],
     turn: isRecord(value.turn) ? { ...freshTurnState(), ...value.turn } : freshTurnState(),
     news: Array.isArray(value.news) ? value.news : dashboardNews.map((item) => ({ ...item })),
