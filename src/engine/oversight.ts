@@ -312,7 +312,7 @@ function targetNameForRequest(campaign: CampaignState, kind: OversightTargetKind
 }
 
 function makeCase(
-  campaign: CampaignState,
+  campaign: Pick<CampaignState, 'calendar'>,
   input: {
     id: string
     body: OversightBodyId
@@ -368,7 +368,7 @@ export function createInitialOversightState(campaign: Pick<CampaignState, 'id' |
   const initial = makeCase({
     ...campaign,
     calendar: { ...campaign.calendar, week: 1 },
-  } as CampaignState, {
+  }, {
     id: campaign.id + '-oversight-initial-report',
     body: 'cgu',
     type: 'internal-audit',
