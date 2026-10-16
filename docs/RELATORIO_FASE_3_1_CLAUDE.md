@@ -6,6 +6,8 @@
 **Escopo concluído nesta etapa:** Fase 3.1 — Congresso, propostas legislativas, tramitação, votações e orçamento legislativo simplificado.  
 **Atenção:** a branch ainda não foi mesclada à `main`. Testes automatizados e build não substituem a revisão visual manual em navegador.
 
+**Atualização posterior (16/10/2026):** este relatório começou documentando a entrega original da Fase 3.1, quando o save foi elevado de v6 para v7. Na continuidade, foi implementada a tarefa de cores partidárias e a versão atual do save passou para **v8**, com migração de tema/paleta para campanhas existentes e preservação das cores personalizadas. O código de cores foi validado com 61 testes e build aprovados no [workflow 38947033246](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38947033246). Leia também `docs/CORES_DOS_PARTIDOS.md`, `docs/AVALIACAO_PRONTIDAO.md` e `docs/MAPA_MENTAL.md`. Referências a v7 e a 58 testes nas seções históricas abaixo descrevem a primeira entrega legislativa, não substituem esse estado mais recente.
+
 ---
 
 ## 1. Resumo executivo
@@ -286,7 +288,7 @@ Ao fazer correções, verifique a norma oficial vigente e documente exatamente q
 
 ### Prompt de continuidade para colar no Claude
 
-> Você está continuando o projeto Palácio em Jogo. Leia `AGENTS.md`, `docs/STATUS.md`, `docs/PROXIMOS_PASSOS.md`, `docs/RELATORIO_FASE_3_1_CLAUDE.md` e as seções 7 e 19 do Documento Mestre. A Fase 3.1 — Congresso e legislação já foi implementada na branch `codex/phase-3a-congress`; não a recrie. Faça primeiro uma auditoria de gaps do código existente, com foco em quóruns, sequência por Casa, veto, MP/prazos, PPA/LDO/LOA, créditos/emendas, efeito no caixa e migração v6→v7. Use as fontes oficiais indicadas no relatório e não assuma que a abstração de jogo é uma implementação legal completa. Liste achados confirmados em P0/P1/P2 com arquivo/função, cenário, efeito e correção sugerida. Corrija apenas os problemas confirmados, escreva testes de regressão, execute `npm run test` e `npm run build`, e atualize a documentação com o resultado real. Faça/relate a revisão visual em desktop e celular se a ferramenta permitir. Depois, e apenas depois de estabilizar a Fase 3.1, prepare a Fase 3.2 — Judiciário numa branch separada, respeitando a separação dos Poderes. Não faça push nem merge sem autorização explícita do responsável.
+> Você está continuando o projeto Palácio em Jogo. Leia `AGENTS.md`, `docs/STATUS.md`, `docs/PROXIMOS_PASSOS.md`, `docs/RELATORIO_FASE_3_1_CLAUDE.md` e as seções 7 e 19 do Documento Mestre. A Fase 3.1 — Congresso e legislação já foi implementada na branch `codex/phase-3a-congress`; não a recrie. Faça primeiro uma auditoria de gaps do código existente, com foco em quóruns, sequência por Casa, veto, MP/prazos, PPA/LDO/LOA, créditos/emendas, efeito no caixa e migração v7→v8 (sem perder a preservação monetária de versões mais antigas). Use as fontes oficiais indicadas no relatório e não assuma que a abstração de jogo é uma implementação legal completa. Liste achados confirmados em P0/P1/P2 com arquivo/função, cenário, efeito e correção sugerida. Corrija apenas os problemas confirmados, escreva testes de regressão, execute `npm run test` e `npm run build`, e atualize a documentação com o resultado real. Faça/relate a revisão visual em desktop e celular se a ferramenta permitir. Depois, e apenas depois de estabilizar a Fase 3.1, prepare a Fase 3.2 — Judiciário numa branch separada, respeitando a separação dos Poderes. Não faça push nem merge sem autorização explícita do responsável.
 
 ---
 
