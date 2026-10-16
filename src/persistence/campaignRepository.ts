@@ -6,11 +6,13 @@ import { allocateSectorBudgetToMinistries, createEconomicState } from '../engine
 import { initializeCampaignTurn } from '../engine/turn'
 import { createInitialSocietyState } from '../engine/society'
 import { createInitialLegislatureState, registerLegislativeProposal } from '../engine/legislature'
+import { createInitialJudiciaryState } from '../engine/judiciary'
 import { legislativeRules } from '../data/legislature'
+import { judicialRules } from '../data/judiciary'
 import { calendarMonths } from '../state/initialState'
 import type { CampaignState, CampaignTurnState } from '../state/types'
 
-export const CURRENT_SAVE_VERSION = 8
+export const CURRENT_SAVE_VERSION = 9
 const SAVE_KEY_PREFIX = 'palacio-em-jogo:campaign:'
 
 export interface StorageLike {
@@ -345,6 +347,110 @@ function isLegislatureState(value: unknown): boolean {
     && value.bills.every(validBill)
 }
 
+function isJudiciaryState(value: unknown): boolean {
+  if (!isRecord(value)
+    || !Array.isArray(value.stfJustices) || !Array.isArray(value.vacancies)
+    || !Array.isArray(value.nominations) || !Array.isArray(value.cases)
+    || !isStringArray(value.history) || !isStringArray(value.processedSourceKeys)
+    || !(typeof value.lastAdvancedKey === 'string' || value.lastAdvancedKey === null)
+    || !(typeof value.lastClosedMonthKey === 'string' || value.lastClosedMonthKey === null)) return false
+  const courts = ['stf', 'stj', 'trf', 'tj', 'tse', 'tst', 'stm', 'cnj']
+  const caseTypes = ['constitutional-review', 'administrative', 'fiscal', 'federal-dispute', 'electoral', 'labor', 'disciplinary']
+  const caseStages = ['filed', 'admissibility', 'evidence', 'awaiting-decision', 'decision', 'appeal', 'final', 'dismissed']
+  const outcomes = ['plaintiff', 'government', 'partial', 'inadmissible']
+  const complianceStatuses = ['not-required', 'pending', 'complied', 'overdue']
+  const nominationStatuses = ['awaiting-senate', 'approved', 'rejected', 'appointed']
+  const validMetric = (key: string, record: Record<string, unknown>) =>
+    isNumber(record[key]) && Number(record[key]) >= 0 && Number(record[key]) <= 100
+  const validJustice = (justice: unknown) => isRecord(justice)
+    && typeof justice.id === 'string' && typeof justice.name === 'string'
+    && isNumber(justice.seatNumber) && Number.isInteger(justice.seatNumber)
+    && Number(justice.seatNumber) >= 1 && Number(justice.seatNumber) <= judicialRules.supremeCourtSeats
+    && isNumber(justice.age) && Number.isInteger(justice.age)
+    && ['legalKnowledge', 'precedentReliance', 'proceduralRigour', 'independence', 'publicReputation']
+      .every((key) => validMetric(key, justice))
+    && isNumber(justice.joinedYear) && Number.isInteger(justice.joinedYear)
+    && (justice.monthsUntilRetirement === null
+      || (isNumber(justice.monthsUntilRetirement) && Number.isInteger(justice.monthsUntilRetirement) && justice.monthsUntilRetirement >= 0))
+  const validCandidate = (candidate: unknown) => isRecord(candidate)
+    && typeof candidate.id === 'string' && typeof candidate.name === 'string'
+    && isNumber(candidate.age) && Number.isInteger(candidate.age)
+    && ['legalKnowledge', 'precedentReliance', 'proceduralRigour', 'independence', 'publicReputation']
+      .every((key) => validMetric(key, candidate))
+    && typeof candidate.profile === 'string'
+  const validVacancy = (vacancy: unknown) => isRecord(vacancy)
+    && typeof vacancy.id === 'string' && vacancy.court === 'stf'
+    && isNumber(vacancy.seatNumber) && Number.isInteger(vacancy.seatNumber)
+    && Number(vacancy.seatNumber) >= 1 && Number(vacancy.seatNumber) <= judicialRules.supremeCourtSeats
+    && isNumber(vacancy.openedYear) && Number.isInteger(vacancy.openedYear)
+    && typeof vacancy.openedMonth === 'string' && typeof vacancy.reason === 'string'
+    && Array.isArray(vacancy.candidates) && vacancy.candidates.every(validCandidate)
+    && isStringArray(vacancy.nominatedCandidateIds)
+  const validSenateVote = (vote: unknown) => isRecord(vote)
+    && typeof vote.id === 'string'
+    && ['yes', 'no', 'abstain', 'absent', 'present', 'totalSeats', 'requiredYes']
+      .every((key) => isNumber(vote[key]) && Number.isInteger(vote[key]) && Number(vote[key]) >= 0)
+    && typeof vote.approved === 'boolean' && typeof vote.dateLabel === 'string' && typeof vote.note === 'string'
+    && Number(vote.totalSeats) === judicialRules.senateSeats
+    && Number(vote.requiredYes) === judicialRules.senateAbsoluteMajority
+    && Number(vote.yes) + Number(vote.no) + Number(vote.abstain) === Number(vote.present)
+    && Number(vote.present) + Number(vote.absent) === Number(vote.totalSeats)
+    && vote.approved === (Number(vote.yes) >= Number(vote.requiredYes))
+  const validNomination = (nomination: unknown) => isRecord(nomination)
+    && typeof nomination.id === 'string' && typeof nomination.vacancyId === 'string'
+    && validCandidate(nomination.candidate)
+    && nominationStatuses.includes(String(nomination.status))
+    && isNumber(nomination.createdYear) && Number.isInteger(nomination.createdYear)
+    && typeof nomination.createdMonth === 'string'
+    && isNumber(nomination.createdWeek) && Number.isInteger(nomination.createdWeek)
+    && Number(nomination.createdWeek) >= 1 && Number(nomination.createdWeek) <= 4
+    && isNumber(nomination.weeksRemaining) && Number.isInteger(nomination.weeksRemaining) && Number(nomination.weeksRemaining) >= 0
+    && (nomination.vote === null || validSenateVote(nomination.vote))
+    && isStringArray(nomination.history)
+  const validDecision = (decision: unknown) => isRecord(decision)
+    && typeof decision.id === 'string' && courts.includes(String(decision.court))
+    && isNumber(decision.year) && Number.isInteger(decision.year)
+    && typeof decision.month === 'string'
+    && isNumber(decision.week) && Number.isInteger(decision.week) && Number(decision.week) >= 1 && Number(decision.week) <= 4
+    && outcomes.includes(String(decision.outcome))
+    && isNumber(decision.score) && Number(decision.score) >= 0 && Number(decision.score) <= 100
+    && typeof decision.rationale === 'string' && isStringArray(decision.panelNames)
+  const validCase = (judicialCase: unknown) => isRecord(judicialCase)
+    && typeof judicialCase.id === 'string' && typeof judicialCase.title === 'string'
+    && typeof judicialCase.summary === 'string' && caseTypes.includes(String(judicialCase.type))
+    && courts.includes(String(judicialCase.court)) && caseStages.includes(String(judicialCase.stage))
+    && typeof judicialCase.plaintiff === 'string' && typeof judicialCase.defendant === 'string'
+    && typeof judicialCase.origin === 'string'
+    && (typeof judicialCase.sourceKey === 'string' || judicialCase.sourceKey === null)
+    && typeof judicialCase.governmentIsParty === 'boolean'
+    && isNumber(judicialCase.filedYear) && Number.isInteger(judicialCase.filedYear)
+    && typeof judicialCase.filedMonth === 'string'
+    && isNumber(judicialCase.filedWeek) && Number.isInteger(judicialCase.filedWeek)
+    && Number(judicialCase.filedWeek) >= 1 && Number(judicialCase.filedWeek) <= 4
+    && ['stageWeeks', 'daysInProcess', 'legalMerit', 'evidenceStrength', 'precedentFit', 'proceduralRegularity', 'publicImpact', 'appealCount', 'appealWindowWeeks', 'complianceWeeksRemaining']
+      .every((key) => isNumber(judicialCase[key]) && Number.isFinite(Number(judicialCase[key])))
+    && Number(judicialCase.stageWeeks) >= 0 && Number(judicialCase.daysInProcess) >= 0
+    && ['legalMerit', 'evidenceStrength', 'precedentFit', 'proceduralRegularity', 'publicImpact']
+      .every((key) => validMetric(key, judicialCase))
+    && ['routine', 'important', 'critical'].includes(String(judicialCase.severity))
+    && (judicialCase.appealTo === null || courts.includes(String(judicialCase.appealTo)))
+    && Number.isInteger(judicialCase.appealCount) && Number(judicialCase.appealCount) >= 0
+    && Number.isInteger(judicialCase.appealWindowWeeks) && Number(judicialCase.appealWindowWeeks) >= 0
+    && (judicialCase.outcome === null || outcomes.includes(String(judicialCase.outcome)))
+    && Array.isArray(judicialCase.decisions) && judicialCase.decisions.every(validDecision)
+    && complianceStatuses.includes(String(judicialCase.complianceStatus))
+    && (typeof judicialCase.publicReactionSummary === 'string' || judicialCase.publicReactionSummary === null)
+    && (typeof judicialCase.closedReason === 'string' || judicialCase.closedReason === null)
+    && isStringArray(judicialCase.history)
+  const justiceSeats = value.stfJustices.map((justice) => isRecord(justice) ? justice.seatNumber : null)
+  return value.stfJustices.length <= judicialRules.supremeCourtSeats
+    && value.stfJustices.every(validJustice)
+    && new Set(justiceSeats).size === justiceSeats.length
+    && value.vacancies.every(validVacancy)
+    && value.nominations.every(validNomination)
+    && value.cases.every(validCase)
+}
+
 function isCampaignState(
   value: unknown,
   allowEmptyMinistries = false,
@@ -399,6 +505,7 @@ function isCampaignState(
     || !Array.isArray(value.projects) || !value.projects.every(isPublicProject)
     || !isSocietyState(value.society)
     || !isLegislatureState(value.legislature)
+    || !isJudiciaryState(value.judiciary)
     || !isStringArray(value.executiveProposals)) return false
   if (!isEconomicState(value.economy) && !allowMissingEconomy) return false
   return true
