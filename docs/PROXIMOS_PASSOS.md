@@ -47,7 +47,7 @@ Referência: seção 12 de `docs/Palacio_em_Jogo_Documento_Mestre.md`. Validaç�
 
 ## Fases seguintes
 
-A sequência abaixo segue as Fases 3 a 6 da seção 19 do documento mestre. A Fase 3.1 foi concluída; não repita seu escopo. As subdivisões restantes são entregas menores: faça cada uma em um pedido separado e na ordem indicada. Releia também as regras específicas das seções citadas antes de implementar.
+A sequência abaixo segue as Fases 3 a 6 da seção 19 do documento mestre. As Fases 3.1 e 3.2 têm primeiras versões implementadas e validadas; não repita seus escopos. A próxima entrega é a Fase 3.3. As subdivisões restantes são entregas menores: faça cada uma em um pedido separado e na ordem indicada. Releia também as regras específicas das seções citadas antes de implementar.
 
 ### Fase 3 — Instituições e crises
 
@@ -95,7 +95,7 @@ Copie um modelo por vez e ajuste somente o nome da entrega quando necessário. A
 
 **Fase 3.1 — Congresso e legislação (concluída; não repetir)**
 
-Implementada e validada na branch `codex/phase-3a-congress`. Leia `docs/STATUS.md` e `docs/RELATORIO_FASE_3_1_CLAUDE.md` para entender as regras, testes e simplificações. A próxima entrega é a Fase 3.2 — Judiciário.
+Implementada e validada na branch `codex/phase-3a-congress`. Leia `docs/STATUS.md` e `docs/RELATORIO_FASE_3_1_CLAUDE.md` para entender as regras, testes e simplificações. A próxima entrega é a Fase 3.3 — órgãos de controle e crises institucionais.
 
 **Fase 3.2 — Judiciário (primeira versão implementada; não repetir)**
 
