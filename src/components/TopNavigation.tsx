@@ -1,5 +1,6 @@
 import {
   Building2,
+  BookOpen,
   Globe2,
   Gavel,
   Landmark,
@@ -24,6 +25,7 @@ const navigationItems: NavigationItem[] = [
   { id: 'politicas', label: 'Políticas Públicas', icon: Building2 },
   { id: 'sociedade', label: 'Sociedade', icon: UsersRound },
   { id: 'congresso', label: 'Congresso', icon: Gavel },
+  { id: 'judiciario', label: 'Judiciário', icon: BookOpen },
   { id: 'relacoes', label: 'Relações', icon: Scale },
   { id: 'historico', label: 'Notícias/Histórico', icon: Newspaper },
 ]
