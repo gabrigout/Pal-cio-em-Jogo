@@ -12,6 +12,7 @@ import { applyEconomicDecision, closeEconomicMonth, prepareEconomicYear } from '
 import { advancePublicProjectsWeek, closePublicProjectsMonth } from './projects'
 import { closeSocietyMonth } from './society'
 import { advanceLegislatureWeek } from './legislature'
+import { advanceJudiciaryWeek, closeJudiciaryMonth } from './judiciary'
 import { formatBRLMoney } from '../utils/money'
 import type {
   ActionAvailability,
@@ -558,6 +559,10 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
   workingCampaign = legislatureWeek.campaign
   events.push(...legislatureWeek.events)
 
+  const judiciaryWeek = advanceJudiciaryWeek(workingCampaign, endingCalendar)
+  workingCampaign = judiciaryWeek.campaign
+  events.push(...judiciaryWeek.events)
+
   const isMonthEnd = endingCalendar.week === endingCalendar.weeksPerMonth
   const monthEndEvent = isMonthEnd ? endingMonthlyEvent ?? null : null
   if (monthEndEvent && campaign.turn.chosenMonthlyOptionId) events.push(monthEndEvent.description)
@@ -566,6 +571,10 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
   let executiveReport: string[] = []
   let economicReport: string[] = []
   if (isMonthEnd) {
+    const judiciaryClose = closeJudiciaryMonth(workingCampaign, endingCalendar)
+    workingCampaign = judiciaryClose.campaign
+    events.push(...judiciaryClose.events)
+
     const openingBudget = workingCampaign.country.budget
     const executiveClose = closeExecutiveMonth(workingCampaign)
     workingCampaign = executiveClose.campaign
