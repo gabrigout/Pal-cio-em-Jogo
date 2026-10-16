@@ -865,3 +865,103 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cor-primaria); 
 .legislature-note strong{color:#ddd;font-weight:600}
 @media(max-width:900px){.legislature-summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.legislature-summary-grid article>strong{font-size:16px}}
 @media(max-width:700px){.legislature-panel{width:min(100% - 30px,560px);gap:15px;padding-top:24px}.legislature-heading{flex-direction:column}.legislature-heading h1{font-size:22px}.legislature-heading-status{width:100%;box-sizing:border-box}.legislature-chamber-grid,.legislature-work-grid,.legislature-two-column{grid-template-columns:1fr}.legislature-summary-grid{grid-template-columns:1fr}.legislature-summary-grid article{grid-template-columns:minmax(0,1fr) auto;align-items:center}.legislature-summary-grid article>p{grid-column:1/-1}.legislature-summary-grid article>strong{grid-row:1;grid-column:2}.legislature-section-heading{align-items:flex-start}.legislature-bill-head{flex-direction:column}.legislature-status{max-width:100%}.legislature-two-fields{grid-template-columns:1fr}.legislature-form .legislature-button{width:100%}.legislature-filter{align-items:flex-start;flex-direction:column}.legislature-filter select{min-width:0}}
+
+
+/* Judiciary cases, independence and nominations */
+.judiciary-panel{width:min(1160px,calc(100% - 64px));display:grid;gap:20px;margin:0 auto;padding:34px 0 60px}
+.judiciary-heading,.judiciary-section-heading,.judiciary-case-header,.judiciary-vacancy-workflow>header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.judiciary-heading h1{margin:7px 0;font-size:28px;font-weight:600}
+.judiciary-heading>div:first-child>p:not(.eyebrow){max-width:760px;color:#999;font-size:10px;line-height:1.7}
+.judiciary-heading-status{display:flex;align-items:center;gap:10px;border:1px solid var(--line);padding:12px;color:var(--cor-secundaria);font-size:9px;white-space:nowrap}
+.judiciary-heading-status span{display:grid;gap:4px;color:#aaa}
+.judiciary-heading-status strong{color:#eee;font-family:var(--mono);font-size:17px}
+.judiciary-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.judiciary-summary-grid article{display:grid;align-content:start;gap:6px;padding:12px;border:1px solid #373737;background:#191919}
+.judiciary-summary-grid article>span{color:#999;font-size:8px;letter-spacing:.08em}
+.judiciary-summary-grid article>strong{color:#eee;font-family:var(--mono);font-size:17px;font-weight:500}
+.judiciary-summary-grid article>p{margin:0;color:#8c8c8c;font-size:8px;line-height:1.5}
+.judiciary-roster-section,.judiciary-nominations-section,.judiciary-cases-section,.judiciary-institutions-section,.judiciary-history-section{display:grid;gap:12px}
+.judiciary-section-heading{align-items:center}
+.judiciary-section-heading h2{margin:5px 0 0;color:#eee;font-size:16px;font-weight:600}
+.judiciary-section-heading>svg{flex:0 0 auto;color:var(--cor-secundaria)}
+.judiciary-justice-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.judiciary-justice-card,.judiciary-vacancy-card,.judiciary-candidate-card,.judiciary-institution-card{display:grid;align-content:start;gap:9px;min-width:0;padding:13px;border:1px solid #373737;background:#1b1b1b}
+.judiciary-seat-label{color:var(--cor-secundaria);font-family:var(--mono);font-size:8px;letter-spacing:.04em}
+.judiciary-justice-card h3,.judiciary-vacancy-card h3{margin:0;color:#eee;font-size:11px;line-height:1.45}
+.judiciary-justice-age,.judiciary-vacancy-date{color:#999;font-size:8px;line-height:1.5}
+.judiciary-justice-attributes{display:grid;gap:6px;padding-top:7px;border-top:1px solid #303030}
+.judiciary-justice-attributes span{display:flex;align-items:center;justify-content:space-between;gap:7px;color:#999;font-size:8px}
+.judiciary-justice-attributes strong{color:#e7e7e7;font-family:var(--mono);font-size:9px;font-weight:500}
+.judiciary-vacancy-card{border-style:dashed;border-color:color-mix(in srgb,var(--cor-secundaria),#363636 55%)}
+.judiciary-vacancy-card p{margin:0;color:#aaa;font-size:8px;line-height:1.6}
+.judiciary-vacancy-workflow{display:grid;gap:13px;padding:14px;border:1px solid #373737;background:#1b1b1b}
+.judiciary-vacancy-workflow>header{align-items:center;padding-bottom:10px;border-bottom:1px solid #323232}
+.judiciary-vacancy-workflow>header h3{margin:5px 0 0;font-size:12px}
+.judiciary-vacancy-workflow>header>span{color:#bbb;font-size:8px;text-align:right}
+.judiciary-candidate-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.judiciary-candidate-card h4{margin:0;color:#eee;font-size:11px}
+.judiciary-candidate-card>p{margin:0;color:#999;font-size:8px;line-height:1.6}
+.judiciary-candidate-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+.judiciary-candidate-metrics span{display:grid;gap:4px;padding:7px;background:#171717;border:1px solid #303030;color:#888;font-size:7px}
+.judiciary-candidate-metrics strong{color:#ddd;font-family:var(--mono);font-size:11px;font-weight:500}
+.judiciary-candidate-card .judiciary-button{width:100%;margin-top:auto}
+.judiciary-ineligible{color:#c8b8a8!important}
+.judiciary-nomination-status{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:9px;border:1px solid #333;background:#171717}
+.judiciary-nomination-status>div{min-width:0}
+.judiciary-nomination-status>div>strong{font-size:11px;color:#eee}
+.judiciary-nomination-status p{margin:5px 0 0;color:#999;font-size:8px;line-height:1.55}
+.judiciary-nomination-status .judiciary-vote-line{color:#c9c9c9}
+.judiciary-caption{margin:0;color:#888;font-size:8px;line-height:1.6}
+.judiciary-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:31px;padding:7px 10px;border:1px solid var(--cor-secundaria);background:color-mix(in srgb,var(--cor-secundaria),#171717 88%);color:#eee;font-size:8px;font-weight:600;cursor:pointer}
+.judiciary-button-secondary{border-color:#555;background:#222}
+.judiciary-button:disabled{opacity:.4;cursor:not-allowed}
+.judiciary-archive{padding:10px;border:1px solid #343434;color:#aaa;font-size:8px;line-height:1.5}
+.judiciary-archive summary{cursor:pointer}
+.judiciary-archive ol{display:grid;gap:8px;padding-left:19px}
+.judiciary-archive li>strong{color:#ddd}
+.judiciary-archive ul{display:grid;gap:4px;padding-left:18px}
+.judiciary-archive ul li{color:#888}
+.judiciary-filter{display:flex;align-items:center;gap:8px;color:#999;font-size:8px}
+.judiciary-filter select{min-width:145px;min-height:31px;padding:6px 9px;border:1px solid #444;border-radius:0;background:#151515;color:#eee;font:inherit}
+.judiciary-case-types{display:flex;flex-wrap:wrap;gap:5px}
+.judiciary-case-types span{padding:5px 7px;border:1px solid #393939;background:#191919;color:#aaa;font-size:7px;line-height:1.35}
+.judiciary-case-list{display:grid;gap:9px}
+.judiciary-case{display:grid;gap:10px;padding:14px;border:1px solid #383838;background:#1b1b1b}
+.judiciary-case-header{align-items:flex-start}
+.judiciary-case-title{min-width:0;display:grid;gap:5px}
+.judiciary-case-type{color:var(--cor-secundaria);font-size:8px}
+.judiciary-case-title h3{margin:0;color:#eee;font-size:12px;line-height:1.5}
+.judiciary-status{display:inline-flex;flex:0 0 auto;max-width:190px;padding:4px 6px;border:1px solid #444;color:#bbb;font-size:7px;line-height:1.4;text-align:center}
+.judiciary-status-active{border-color:color-mix(in srgb,var(--cor-secundaria),transparent 48%);color:var(--cor-secundaria)}
+.judiciary-status-final{border-color:#555;color:#eee}
+.judiciary-status-closed{border-color:#444;color:#999}
+.judiciary-case-summary{margin:0;color:#aaa;font-size:9px;line-height:1.65}
+.judiciary-case-meta{display:flex;flex-wrap:wrap;gap:7px 13px;padding:8px 0;border-top:1px solid #303030;border-bottom:1px solid #303030;color:#888;font-size:8px}
+.judiciary-case-meta strong{display:block;margin-top:3px;color:#ddd;font-weight:500}
+.judiciary-decision{display:grid;gap:6px;padding:10px;border:1px solid #3b3b3b;background:#171717}
+.judiciary-decision-heading{display:flex;align-items:center;gap:7px;color:var(--cor-secundaria);font-size:9px}
+.judiciary-decision-heading strong{color:#eee;font-weight:600}
+.judiciary-decision p{margin:0;color:#aaa;font-size:8px;line-height:1.65}
+.judiciary-tone-attention{border-left:2px solid var(--cor-secundaria)}
+.judiciary-tone-neutral{border-left:2px solid #555}
+.judiciary-compliance-status{color:#d5d5d5;font-size:8px}
+.judiciary-public-reaction{display:flex;align-items:flex-start;gap:7px;padding:9px;border:1px solid #333;color:var(--cor-secundaria)}
+.judiciary-public-reaction svg{flex:0 0 auto;margin-top:1px}
+.judiciary-public-reaction strong{color:#ddd;font-size:8px}
+.judiciary-public-reaction p{margin:4px 0 0;color:#999;font-size:8px;line-height:1.6}
+.judiciary-case-actions{display:flex;flex-wrap:wrap;gap:7px;padding-top:2px}
+.judiciary-case-history,.judiciary-global-history{display:grid;gap:8px;margin:0;padding:10px 10px 10px 28px;border-top:1px solid #303030;color:#999;font-size:8px;line-height:1.6}
+.judiciary-global-history{padding:13px 13px 13px 30px;border:1px solid #373737;background:#1b1b1b}
+.judiciary-institution-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.judiciary-institution-card{gap:6px}
+.judiciary-institution-card>span{color:var(--cor-secundaria);font-family:var(--mono);font-size:8px}
+.judiciary-institution-card h3{margin:0;color:#eee;font-size:10px;line-height:1.45}
+.judiciary-institution-card p{margin:0;color:#999;font-size:8px;line-height:1.6}
+.judiciary-institution-card strong{margin-top:3px;color:#ccc;font-size:8px;line-height:1.5;font-weight:500}
+.judiciary-empty{margin:0;padding:16px;border:1px dashed #454545;color:#999;font-size:9px;line-height:1.6}
+.judiciary-disclaimer{display:flex;align-items:flex-start;gap:9px;padding:12px;border:1px solid #3b3b3b;color:var(--cor-secundaria)}
+.judiciary-disclaimer svg{flex:0 0 auto;margin-top:1px}
+.judiciary-disclaimer p{margin:0;color:#999;font-size:8px;line-height:1.65}
+.judiciary-disclaimer strong{color:#ddd;font-weight:600}
+@media(max-width:1000px){.judiciary-justice-grid,.judiciary-institution-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.judiciary-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.judiciary-panel{width:min(100% - 30px,560px);gap:15px;padding-top:24px}.judiciary-heading{flex-direction:column}.judiciary-heading h1{font-size:22px}.judiciary-heading-status{width:100%;box-sizing:border-box}.judiciary-summary-grid,.judiciary-justice-grid,.judiciary-candidate-grid,.judiciary-institution-grid{grid-template-columns:1fr}.judiciary-case-header,.judiciary-vacancy-workflow>header{flex-direction:column}.judiciary-status{max-width:100%}.judiciary-nomination-status{align-items:stretch;flex-direction:column}.judiciary-nomination-status .judiciary-button{width:100%}.judiciary-candidate-card .judiciary-button{width:100%}.judiciary-section-heading{align-items:flex-start}.judiciary-filter{align-items:flex-start;flex-direction:column;width:100%}.judiciary-filter select{width:100%;min-width:0}.judiciary-case-actions{align-items:stretch;flex-direction:column}.judiciary-case-actions .judiciary-button{width:100%}.judiciary-case-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
