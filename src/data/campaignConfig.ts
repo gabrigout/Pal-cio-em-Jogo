@@ -23,14 +23,14 @@ export const partyPalette = [
 // PDT https://pdt.org.br/index.php/pdt-renova-sua-identidade-visual/ | cores RGB/HEX complementares da cartela PDT-RS 2025: https://www.pdtrs.org.br/_files/ugd/835f28_4968db375c5046f58519fbea1642ab8c.pdf
 // PL https://partidoliberal.org.br/wp-content/uploads/2023/03/manual-da-marca-pl-2023.pdf
 // PSDB https://www.psdb.org.br/acompanhe/noticias/psdb-moderniza-sua-marca/
-// NOVO https://novo.org.br/wp-content/uploads/2021/07/NOVO_Manual-de-marca-2021-2.pdf
+// NOVO https://novo.org.br/wp-content/uploads/2024/11/NOVO_brandbook2023.pdf
 export const partyColors = {
   ptp: ['#E4142C', '#FFFFFF'],
-  pso: ['#D71920', '#FFD52B'],
+  pso: ['#E02028', '#FEDF00'],
   pdtt: ['#E4002B', '#005AB2'],
   plim: ['#004F9F', '#009640'],
   pssdb: ['#004C94', '#FFD600'],
-  nova: ['#F17021', '#1A2948'],
+  nova: ['#EC671C', '#1A2644'],
 } as const
 
 export const countryRanges = {
