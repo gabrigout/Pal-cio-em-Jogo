@@ -105,29 +105,6 @@ function targetMinistry(campaign: CampaignState, item: OversightCase): MinistryS
     : undefined
 }
 
-function targetHasMaterialVariance(campaign: CampaignState, item: OversightCase): boolean {
-  const project = targetProject(campaign, item)
-  if (project) {
-    const overspend = project.budgetSpent > project.approvedInvestment * 1.1
-      || project.budgetSpent > project.estimatedBudget * 1.12
-    const excessiveDelay = project.delayWeeks >= 3
-    const recordedRisk = project.risks.length > 0 || project.history.some((entry) =>
-      ['overrun', 'investigation', 'delay'].includes(entry.type))
-    return overspend || excessiveDelay || recordedRisk
-  }
-  const ministry = targetMinistry(campaign, item)
-  if (ministry) return ministry.risks.length > 0 || ministry.alerts.length > 0
-  if (item.targetKind === 'budget') {
-    return campaign.economy.deferredPayments > 0
-      || campaign.economy.indicators.fiscalBalance < -campaign.economy.indicators.publicRevenue * 0.15
-  }
-  if (item.targetKind === 'bill' && item.targetId) {
-    const bill = campaign.legislature.bills.find((candidate) => candidate.id === item.targetId)
-    return Boolean(bill && (bill.type === 'mp' || bill.type === 'credit'
-      || bill.fiscalImpact > oversightRules.minimumAuditSourceAmount * 10))
-  }
-  return false
-}
 
 function collectEvidence(campaign: CampaignState, item: OversightCase, round: number): EvidenceContext {
   const records: OversightEvidenceRecord[] = []
