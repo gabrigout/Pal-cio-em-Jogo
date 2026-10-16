@@ -97,7 +97,7 @@ test('migra campanha legada sem versão para o save atual', () => {
   assert.equal(result.ok, true)
   if (!result.ok) return
   assert.equal(result.migrated, true)
-  assert.equal(result.save.versaoDoSave, 6)
+  assert.equal(result.save.versaoDoSave, 7)
   assert.equal(result.save.campaign.country.executiveSupport, 50)
   assert.equal(result.save.campaign.country.judiciaryRelation, 50)
   assert.ok(result.save.campaign.turn.activeDecisionId)
@@ -116,7 +116,7 @@ test('migra save v3 sem economia e cria ministérios e orçamento determinístic
   assert.equal(second.ok, true)
   if (!first.ok || !second.ok) return
 
-  assert.equal(first.save.versaoDoSave, 6)
+  assert.equal(first.save.versaoDoSave, 7)
   assert.equal(first.save.campaign.ministries.length, 17)
   assert.deepEqual(first.save.campaign.projects, [])
   assert.equal(first.save.campaign.economy.projectExpensesPaidThisMonth, 0)
@@ -143,7 +143,7 @@ test('migra save versão 1 preservando pontos e inicializando o modelo de evento
   assert.equal(result.ok, true)
   if (!result.ok) return
   assert.equal(result.migrated, true)
-  assert.equal(result.save.versaoDoSave, 6)
+  assert.equal(result.save.versaoDoSave, 7)
   assert.equal(result.save.campaign.turn.availableActionPoints, 3)
   assert.ok(Array.isArray(result.save.campaign.turn.scheduledNarrativeEvents))
 })
@@ -162,7 +162,7 @@ test('migra save versão 2 e gera o gabinete para campanha existente', () => {
   assert.equal(result.ok, true)
   if (!result.ok) return
   assert.equal(result.migrated, true)
-  assert.equal(result.save.versaoDoSave, 6)
+  assert.equal(result.save.versaoDoSave, 7)
   assert.equal(result.save.campaign.ministries.length, 17)
   assert.ok(result.save.campaign.ministries.every((ministry) => ministry.minister))
   const repeatedMigration = migrateSave({
@@ -267,10 +267,11 @@ test('migration v5 multiplies legacy abstract money by ten and initializes socie
     ...sector, annualAllocation: 50, executedThisYear: 10,
   }))
   delete campaign.society
+  delete campaign.legislature
   const result = migrateSave({ versaoDoSave: 5, savedAt: '2027-01-01T00:00:00.000Z', campaign })
   assert.equal(result.ok, true)
   if (!result.ok) return
-  assert.equal(result.save.versaoDoSave, 6)
+  assert.equal(result.save.versaoDoSave, 7)
   assert.equal(result.save.campaign.economy.availableFunds, 420)
   assert.equal(result.save.campaign.economy.indicators.publicRevenue, 520)
   assert.equal(result.save.campaign.economy.indicators.publicDebt, 9000)
@@ -279,4 +280,32 @@ test('migration v5 multiplies legacy abstract money by ten and initializes socie
   assert.equal(result.save.campaign.country.budget, result.save.campaign.economy.availableFunds)
   assert.equal(result.save.campaign.society.classes.length, 5)
   assert.equal(result.save.campaign.society.groups.length, 7)
+})
+
+
+test('migra save v6 para v7 sem reescalar valores que já estão em reais', () => {
+  const campaign = createTestCampaign() as unknown as Record<string, any>
+  campaign.country.budget = 42
+  campaign.economy.availableFunds = 42
+  campaign.economy.indicators.publicRevenue = 52
+  campaign.economy.indicators.publicExpenses = 57
+  campaign.economy.indicators.publicDebt = 900
+  delete campaign.legislature
+
+  const result = migrateSave({
+    versaoDoSave: 6,
+    savedAt: '2027-01-01T00:00:00.000Z',
+    campaign,
+  })
+
+  assert.equal(result.ok, true)
+  if (!result.ok) return
+  assert.equal(result.migrated, true)
+  assert.equal(result.save.versaoDoSave, 7)
+  assert.equal(result.save.campaign.economy.availableFunds, 42)
+  assert.equal(result.save.campaign.economy.indicators.publicRevenue, 52)
+  assert.equal(result.save.campaign.economy.indicators.publicDebt, 900)
+  assert.equal(result.save.campaign.country.budget, 42)
+  assert.equal(result.save.campaign.legislature.chamberOfDeputies.reduce((sum, bloc) => sum + bloc.seats, 0), 513)
+  assert.equal(result.save.campaign.legislature.senate.reduce((sum, bloc) => sum + bloc.seats, 0), 81)
 })
