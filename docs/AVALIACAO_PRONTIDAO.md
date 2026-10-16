@@ -29,7 +29,7 @@ Validação do código de cores: 61 testes aprovados e build concluído no [work
 
 ## O que ainda falta para o jogo ser considerado completo
 
-Mapa de arquitetura e dependências: `docs/MAPA_MENTAL.md`. Este diagnóstico não altera o escopo do projeto; só registra a prontidão real da branch.
+Mapa de arquitetura e dependências: `docs/MAPA_MENTAL.md`. Relatório de implementação e próximas etapas: `docs/RELATORIO_CORES_E_PRONTIDAO.md`. Este diagnóstico não altera o escopo do projeto; só registra a prontidão real da branch.
 
 ### Fase 3 — Instituições e crises
 - Judiciário: processos, decisões, recursos e indicações, sem controle presidencial de julgamentos.
