@@ -2,6 +2,7 @@ import { indicatorLabels } from '../data/campaignConfig'
 import { ministryCatalog } from '../data/ministries'
 import { parties } from '../data/parties'
 import { formatBRLMoney } from '../utils/money'
+import { registerLegislativeProposal } from './legislature'
 import type {
   CampaignState,
   CountryIndicators,
@@ -285,7 +286,14 @@ export function proposeMinistryReorganization(campaign: CampaignState): Campaign
       tone: 'neutral' as const,
     }].slice(-8),
   }
-  return recordCountryChanges(result, campaign, ['politicalCapital'], 'Custo para registrar proposta dependente do Congresso.')
+  const recorded = recordCountryChanges(result, campaign, ['politicalCapital'], 'Custo para registrar proposta dependente do Congresso.')
+  return registerLegislativeProposal(recorded, {
+    type: 'ordinary',
+    title: 'Reorganização da estrutura ministerial',
+    summary: 'Proposta de reorganização administrativa a ser deliberada pelo Congresso; a estrutura atual permanece vigente durante a tramitação.',
+    fiscalImpact: 0,
+    sourceKey: 'executive-ministry-reorganization',
+  })
 }
 
 export function applyExecutiveDecision(
