@@ -1,14 +1,14 @@
 # Relatório de atualização — cores partidárias, prontidão e continuidade
 
 **Data:** 16/10/2026  
-**Branch:** \`codex/phase-3a-congress\`  
+**Branch:** `codex/phase-3a-congress`  
 **Versão do save atual:** v8  
 **Objetivo:** pesquisar e aplicar as cores de cada legenda satírica no tema principal, avaliar a prontidão real do jogo e registrar o que precisa acontecer a seguir.
 
 ## 1. Resumo do que mudou
 
 - Pesquisa de cores feita usando manuais/estatutos e páginas de identidade partidária quando disponíveis.
-- Atualizada a paleta das seis legendas satíricas em \`src/data/campaignConfig.ts\`; o PTP agora usa **vermelho e branco**, como foi pedido.
+- Atualizada a paleta das seis legendas satíricas em `src/data/campaignConfig.ts`; o PTP agora usa **vermelho e branco**, como foi pedido.
 - PDTT foi ajustado para vermelho e azul, em vez de vermelho/verde, com base na tradição cromática documentada do PDT e na cartela digital publicada pelo PDT-RS.
 - O tema do jogo aplica os pares em novas campanhas. A lógica existente deriva variantes contrastantes para a interface escura, sem remover os valores oficiais armazenados.
 - Saves de campanha existentes são migrados de v7 para v8: partidos predefinidos recebem as novas cores e o tema é recalculado; campanhas de partido personalizado conservam suas cores.
@@ -26,23 +26,23 @@
 | PSSDB — Partido dos Senhores, Slides e Debates de Brasília | PSDB | #004C94 — azul | #FFD600 — amarelo | Valores RGB publicados no manual oficial do PSDB de 2012; a marca renovada em 2023 manteve a família azul/amarelo. Os códigos exatos de 2012 não são apresentados como novos HEX oficiais da marca de 2023. |
 | NOVA — Núcleo de Otimização, Valor e Austeridade | NOVO | #F17021 — laranja | #1A2948 — azul-marinho | Códigos HEX publicados no manual de marca do NOVO de 2021. |
 
-As cores servem para reconhecer as **paródias** e não reproduzem necessariamente todos os tons oficiais, os gradientes, os logotipos ou a proporção entre cores de cada partido real. Fontes e observações detalhadas: \`docs/CORES_DOS_PARTIDOS.md\`.
+As cores servem para reconhecer as **paródias** e não reproduzem necessariamente todos os tons oficiais, os gradientes, os logotipos ou a proporção entre cores de cada partido real. Fontes e observações detalhadas: `docs/CORES_DOS_PARTIDOS.md`.
 
 ## 3. Arquivos afetados
 
-- \`src/data/campaignConfig.ts\`: catálogo central das seis paletas e URLs de referência.
-- \`src/data/partyColors.test.ts\`: teste para os pares e tema de novas campanhas.
-- \`src/persistence/campaignRepository.ts\`: atualização do save para v8, troca de paleta/tema apenas nos partidos predefinidos.
-- \`src/persistence/campaignRepository.test.ts\`: migração de v7 para v8 e preservação do partido personalizado.
-- \`src/components/CampaignSetup.tsx\`: explicação de como as cores são usadas no tema.
-- \`docs/CORES_DOS_PARTIDOS.md\`: fontes, paletas, limites de certeza e aplicação no jogo.
-- \`docs/MAPA_MENTAL.md\`: visão sistêmica e regra de documentação de cada etapa.
-- \`docs/AVALIACAO_PRONTIDAO.md\`: diagnóstico geral e sistemas ainda faltantes.
-- \`docs/STATUS.md\`, \`docs/PROXIMOS_PASSOS.md\` e \`docs/RELATORIO_FASE_3_1_CLAUDE.md\`: atualização da situação atual e continuidade.
+- `src/data/campaignConfig.ts`: catálogo central das seis paletas e URLs de referência.
+- `src/data/partyColors.test.ts`: teste para os pares e tema de novas campanhas.
+- `src/persistence/campaignRepository.ts`: atualização do save para v8, troca de paleta/tema apenas nos partidos predefinidos.
+- `src/persistence/campaignRepository.test.ts`: migração de v7 para v8 e preservação do partido personalizado.
+- `src/components/CampaignSetup.tsx`: explicação de como as cores são usadas no tema.
+- `docs/CORES_DOS_PARTIDOS.md`: fontes, paletas, limites de certeza e aplicação no jogo.
+- `docs/MAPA_MENTAL.md`: visão sistêmica e regra de documentação de cada etapa.
+- `docs/AVALIACAO_PRONTIDAO.md`: diagnóstico geral e sistemas ainda faltantes.
+- `docs/STATUS.md`, `docs/PROXIMOS_PASSOS.md` e `docs/RELATORIO_FASE_3_1_CLAUDE.md`: atualização da situação atual e continuidade.
 
 ## 4. Compatibilidade de saves
 
-A versão atual é \`CURRENT_SAVE_VERSION = 8\`.
+A versão atual é `CURRENT_SAVE_VERSION = 8`.
 
 - Novas campanhas já recebem a paleta selecionada.
 - Saves v7 migram para v8 e atualizam o tema dos seis partidos predefinidos.
@@ -52,7 +52,7 @@ A versão atual é \`CURRENT_SAVE_VERSION = 8\`.
 
 ## 5. Validação
 
-O código de paletas/save v8 foi validado pelo GitHub Actions no commit \`601152eee8e9d17511a8ccb8d985516cddbef1a0\`: **61 testes passaram e o build de produção concluiu com sucesso** no [workflow 38947033246](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38947033246).
+O código de paletas/save v8 foi validado pelo GitHub Actions no commit `601152eee8e9d17511a8ccb8d985516cddbef1a0`: **61 testes passaram e o build de produção concluiu com sucesso** no [workflow 38947033246](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38947033246).
 
 O workflow que cobre a atualização documental posterior também executa testes/build. A validação automatizada comprova testes e compilação, mas não substitui revisão visual. Ainda não foi realizada uma sessão real de navegação visual desktop/celular para medir contraste, hierarquia e consistência do tema em todos os painéis.
 
@@ -78,7 +78,7 @@ O workflow que cobre a atualização documental posterior também executa testes
 - Transformação de Relações e Notícias/Histórico de placeholders em sistemas completos.
 - Testes reais de usabilidade visual em desktop/celular.
 
-O projeto deve ser descrito como **protótipo/alpha em desenvolvimento**, não como simulador completo nem como reprodução fiel de todo o sistema jurídico brasileiro. A documentação detalha o grau de implementação de cada mecânica em \`docs/AVALIACAO_PRONTIDAO.md\`.
+O projeto deve ser descrito como **protótipo/alpha em desenvolvimento**, não como simulador completo nem como reprodução fiel de todo o sistema jurídico brasileiro. A documentação detalha o grau de implementação de cada mecânica em `docs/AVALIACAO_PRONTIDAO.md`.
 
 ## 7. Próximos passos recomendados
 
@@ -87,7 +87,7 @@ O projeto deve ser descrito como **protótipo/alpha em desenvolvimento**, não c
 3. Testar campanhas novas, saves v7, saves v6/v5, partido personalizado e as seis paletas; garantir que os saves não percam dados nem cores próprias.
 4. Fazer uma auditoria de gaps da Fase 3.1 (quóruns, sequência por Casa, MP/prazo, orçamento, crédito, veto e efeitos financeiros) com fontes jurídicas oficiais, sem reimplementar do zero.
 5. Só depois estabilizar o motor legislativo, seguir para a Fase 3.2 — Judiciário, numa branch separada, com regras próprias e independência do Executivo.
-6. A cada mudança relevante, atualizar \`docs/STATUS.md\`, \`docs/PROXIMOS_PASSOS.md\`, \`docs/MAPA_MENTAL.md\` quando a arquitetura mudar e o relatório temático correspondente.
+6. A cada mudança relevante, atualizar `docs/STATUS.md`, `docs/PROXIMOS_PASSOS.md`, `docs/MAPA_MENTAL.md` quando a arquitetura mudar e o relatório temático correspondente.
 
 ## 8. Fontes principais da pesquisa cromática
 
