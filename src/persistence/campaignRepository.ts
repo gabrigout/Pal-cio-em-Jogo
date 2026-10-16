@@ -10,7 +10,7 @@ import { legislativeRules } from '../data/legislature'
 import { calendarMonths } from '../state/initialState'
 import type { CampaignState, CampaignTurnState } from '../state/types'
 
-export const CURRENT_SAVE_VERSION = 8
+export const CURRENT_SAVE_VERSION = 9
 const SAVE_KEY_PREFIX = 'palacio-em-jogo:campaign:'
 
 export interface StorageLike {
