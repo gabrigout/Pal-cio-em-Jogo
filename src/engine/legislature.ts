@@ -75,20 +75,15 @@ function getPartyRows(campaign: Pick<CampaignState, 'party'>) {
 function allocateSeats(
   campaign: Pick<CampaignState, 'party'>,
   totalSeats: number,
-  chamber: LegislativeChamber,
+  _chamber: LegislativeChamber,
 ): LegislativeBloc[] {
   const rows = getPartyRows(campaign)
-  const governmentSeats = chamber === 'senate'
-    ? Math.max(1, Math.min(totalSeats - rows.length, Math.round(campaign.party.seats * totalSeats / legislativeRules.chambers.house.seats)))
-    : Math.max(1, Math.min(totalSeats - rows.length, Math.round(campaign.party.seats)))
-  const otherRows = rows.filter((row) => row.partyId !== campaign.party.id)
-  const weightTotal = otherRows.reduce((sum, row) => sum + Math.max(1, row.weight), 0)
-  const remainingSeats = totalSeats - governmentSeats
-  const shares = otherRows.map((row) => {
-    const exact = remainingSeats * Math.max(1, row.weight) / weightTotal
+  const weightTotal = rows.reduce((sum, row) => sum + Math.max(1, row.weight), 0)
+  const shares = rows.map((row) => {
+    const exact = totalSeats * Math.max(1, row.weight) / weightTotal
     return { row, seats: Math.floor(exact), fraction: exact - Math.floor(exact) }
   })
-  let remainder = remainingSeats - shares.reduce((sum, share) => sum + share.seats, 0)
+  let remainder = totalSeats - shares.reduce((sum, share) => sum + share.seats, 0)
   const remainderOrder = [...shares].sort((first, second) => second.fraction - first.fraction)
   for (const item of remainderOrder) {
     if (remainder <= 0) break
@@ -96,21 +91,13 @@ function allocateSeats(
     if (target) target.seats += 1
     remainder -= 1
   }
-  const otherBlocs = shares.map(({ row, seats }) => ({
+  return shares.map(({ row, seats }) => ({
     partyId: row.partyId,
     partyName: row.partyName,
     acronym: row.acronym,
     orientation: row.orientation,
     seats,
-  }))
-  const government = {
-    partyId: campaign.party.id,
-    partyName: campaign.party.fullName,
-    acronym: campaign.party.acronym,
-    orientation: campaign.party.orientation,
-    seats: governmentSeats,
-  }
-  return [...otherBlocs, government].sort((first, second) => second.seats - first.seats)
+  })).sort((first, second) => second.seats - first.seats)
 }
 
 export function createInitialLegislatureState(campaign: Pick<CampaignState, 'party'>): LegislatureState {
