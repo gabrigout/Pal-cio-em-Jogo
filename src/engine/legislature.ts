@@ -649,7 +649,8 @@ function processBillWeek(
   if (bill.type === 'mp' && bill.daysInProcess >= legislativeRules.mpInitialValidityDays + legislativeRules.mpExtensionDays
     && bill.stage !== 'sanction') {
     const reason = 'A medida provisória ' + bill.title + ' perdeu vigência após o prazo configurado de 120 dias sem conclusão das votações.'
-    return { campaign: rejectBill(campaign, bill, reason, 'expired'), bill: { ...bill, stage: 'expired' }, event: reason }
+    const expiredBill: LegislativeBill = { ...bill, stage: 'expired', history: [reason, ...bill.history].slice(0, 12) }
+    return { campaign: rejectBill(campaign, bill, reason, 'expired'), bill: expiredBill, event: reason }
   }
   if (bill.stage === 'sanction' || terminalStages.includes(bill.stage)) return { campaign, bill: originalBill, event: null }
   if (bill.stageWeeks < 1) return { campaign, bill, event: null }
@@ -705,7 +706,8 @@ function processBillWeek(
     }
     if (!vote.passed) {
       const message = 'A proposta ' + bill.title + ' foi rejeitada em ' + legislativeRules.chambers[bill.currentChamber].name + ' (' + vote.yes + ' a favor, ' + vote.no + ' contra).'
-      return { campaign: rejectBill(campaign, nextBill, message), bill: { ...nextBill, stage: 'rejected', history: [message, ...nextBill.history].slice(0, 12) }, event: message }
+      const rejectedBill: LegislativeBill = { ...nextBill, stage: 'rejected', history: [message, ...nextBill.history].slice(0, 12) }
+      return { campaign: rejectBill(campaign, nextBill, message), bill: rejectedBill, event: message }
     }
 
     let message = ''
@@ -842,7 +844,7 @@ export function decidePresidentialSanction(
     turn: {
       ...working.turn,
       availableActionPoints: working.turn.availableActionPoints - 1,
-      actionsTaken: [...working.turn.actionsTaken, decision === 'sanction' ? 'Sancionar ' + bill.title : 'Vet ar ' + bill.title],
+      actionsTaken: [...working.turn.actionsTaken, decision === 'sanction' ? 'Sancionar ' + bill.title : 'Vetar ' + bill.title],
     },
     legislature: {
       ...working.legislature,
