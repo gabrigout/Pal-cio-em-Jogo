@@ -290,9 +290,16 @@ Ao fazer correções, verifique a norma oficial vigente e documente exatamente q
 
 ---
 
+## Atualização posterior — identidade visual dos partidos
+
+Após validar a Fase 3.1, foi criada a branch `codex/party-brand-palettes` para uma tarefa visual separada. As paletas fixas foram pesquisadas e aplicadas em `src/data/campaignConfig.ts`: PTP (vermelho/branco), PSÓ (laranja/amarelo), PDTT (vermelho/azul), PLIM (verde/amarelo), PSSDB (azul/amarelo) e NOVA (laranja/azul-marinho). As fontes oficiais e as aproximações de HEX ficam em `docs/STATUS.md`.
+
+A alteração elevou o save para v8 para atualizar o tema de campanhas já salvas com partido predefinido sem alterar a paleta de partidos personalizados nem reescalar reais de saves v6/v7. A execução de CI no commit `26612c65d62000a45b71cba31e2b421955d92258` passou **62 testes e build** ([workflow 38944301144](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38944301144)). Não houve alteração de mecânicas nesta tarefa visual; a revisão manual em navegador permanece pendente.
+
 ## 10. Estado de integração
 
-- **Branch de trabalho:** `codex/phase-3a-congress`
-- **Branch-base:** `codex/phase-2b-society-finance`
+- **Branch que implementou a Fase 3.1:** `codex/phase-3a-congress`
+- **Branch de trabalho atual:** `codex/party-brand-palettes`
+- **Branch-base da Fase 3.1:** `codex/phase-2b-society-finance`
 - **Main:** não mesclada com a nova etapa.
 - **Próximo passo de produto:** auditoria de gaps e testes manuais; depois Fase 3.2 — Judiciário.
