@@ -50,6 +50,10 @@ test('composição parlamentar soma exatamente 513 deputados e 81 senadores', ()
   assert.equal(state.senate.reduce((sum, bloc) => sum + bloc.seats, 0), legislativeRules.chambers.senate.seats)
   assert.ok(state.chamberOfDeputies.every((bloc) => Number.isInteger(bloc.seats) && bloc.seats >= 0))
   assert.ok(state.senate.every((bloc) => Number.isInteger(bloc.seats) && bloc.seats >= 0))
+  const playerHouseSeats = state.chamberOfDeputies.find((bloc) => bloc.partyId === 'test-party')?.seats ?? 0
+  const playerSenateSeats = state.senate.find((bloc) => bloc.partyId === 'test-party')?.seats ?? 0
+  assert.ok(playerHouseSeats >= 14 && playerHouseSeats <= 16, 'partido personalizado com 3% começa com poucas cadeiras na Câmara')
+  assert.ok(playerSenateSeats >= 2 && playerSenateSeats <= 3, 'partido personalizado com 3% começa com poucas cadeiras no Senado')
 })
 
 test('proposição exige conteúdo, recursos e cobra os custos configurados', () => {
