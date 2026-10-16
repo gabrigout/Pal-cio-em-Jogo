@@ -110,6 +110,26 @@ function collectEvidence(campaign: CampaignState, item: OversightCase, round: nu
   const records: OversightEvidenceRecord[] = []
   let varianceFound = false
   let recommendationLikely = false
+  if (item.type === 'legal-opinion') {
+    const targetBill = item.targetKind === 'bill' && item.targetId
+      ? campaign.legislature.bills.find((bill) => bill.id === item.targetId)
+      : undefined
+    add(
+      'legal-document',
+      'Objeto da consulta jurídica',
+      targetBill
+        ? 'A AGU recebeu consulta sobre a norma ' + targetBill.title + ' (' + targetBill.type.toUpperCase()
+          + '), com impacto fiscal estimado de ' + formatBRLMoney(targetBill.fiscalImpact)
+          + '. A simulação registra análise consultiva, não um julgamento vinculante.'
+        : 'A AGU recebeu pedido de avaliação consultiva sobre ' + item.targetName
+          + '. O parecer não substitui a decisão administrativa competente nem vincula órgãos independentes.',
+      'Pedido consultivo ' + item.id,
+      42,
+      true,
+    )
+    return { records, varianceFound: false, recommendationLikely: false }
+  }
+
   const add = (
     kind: OversightEvidenceKind,
     title: string,
