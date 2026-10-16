@@ -23,7 +23,7 @@ Atualizado conforme `docs/STATUS.md` em 2026-10-16. A Fase 1 está concluída e 
 - **Políticas públicas e projetos: implementados e validados na base da branch `codex/phase-2a-public-projects`.**
 - **Sociedade e grupos de pressão: primeira versão implementada e validada** na branch `codex/phase-2b-society-finance`. O sistema acompanha cinco classes, sete grupos, diálogo/acordos, apoio, pressão, manifestação e paralisação.
 
-Brasil, Estado/Executivo, Economia, Políticas Públicas, Sociedade e Congresso têm telas funcionais na branch atual. Relações e Notícias/Histórico continuam pendentes. Save v7 incorpora o estado legislativo; migrações de v6 preservam a escala monetária em reais e resgatam propostas antigas da reforma tributária/reorganização ministerial. GitHub Actions passou 57 testes e build no commit `210be129e4cce74603b59d6e6d7f4c48e6ec4c97`; a validação atual está registrada em `docs/STATUS.md`.
+Brasil, Estado/Executivo, Economia, Políticas Públicas, Sociedade e Congresso têm telas funcionais na branch atual. Relações e Notícias/Histórico continuam pendentes. Save v7 incorpora o estado legislativo; migrações de v6 preservam a escala monetária em reais e resgatam propostas antigas da reforma tributária/reorganização ministerial. GitHub Actions passou 58 testes e build no commit `0ba015153f9ce0b1318c35ae8bf6157a0737ecbf`; a validação atual está registrada em `docs/STATUS.md`.
 
 ## Histórico das entregas anteriores — Fase 2
 
