@@ -35,7 +35,7 @@ Há uma distinção importante: alguns manuais publicam valores RGB/HEX; outros 
 - **src/data/parties.ts** usa o catálogo; o seletor de partido mostra as duas amostras de cor.
 - **src/engine/campaign.ts** cria o tema da campanha a partir do par escolhido.
 - O componente de configuração descreve como as duas cores afetam os destaques e os grafismos.
-- Campanhas já salvas continham suas próprias cores e tema no estado serializado. Por isso, a versão de save passa de 7 para **8** e migra as cores dos seis partidos predefinidos. O tema também é recalculado; assim, o jogo principal se atualiza tanto para campanhas novas quanto para campanhas antigas abertas após a migração.
+- Campanhas já salvas continham suas próprias cores e tema no estado serializado. Por isso, a versão de save passa de 8 para **9** e migra as cores dos seis partidos predefinidos, incluindo as correções de código de PSOL e NOVO. O tema também é recalculado; assim, o jogo principal se atualiza tanto para campanhas novas quanto para campanhas antigas abertas após a migração.
 - Partidos personalizados mantêm as cores escolhidas pelo jogador; a migração não sobrescreve a paleta personalizada.
 
 ## Contraste e limite de fidelidade
