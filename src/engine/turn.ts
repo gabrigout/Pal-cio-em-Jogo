@@ -13,6 +13,7 @@ import { advancePublicProjectsWeek, closePublicProjectsMonth } from './projects'
 import { closeSocietyMonth } from './society'
 import { advanceLegislatureWeek } from './legislature'
 import { advanceJudiciaryWeek, closeJudiciaryMonth } from './judiciary'
+import { advanceOversightWeek } from './oversight'
 import { formatBRLMoney } from '../utils/money'
 import type {
   ActionAvailability,
@@ -562,6 +563,10 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
   const judiciaryWeek = advanceJudiciaryWeek(workingCampaign, endingCalendar)
   workingCampaign = judiciaryWeek.campaign
   events.push(...judiciaryWeek.events)
+
+  const oversightWeek = advanceOversightWeek(workingCampaign, endingCalendar)
+  workingCampaign = oversightWeek.campaign
+  events.push(...oversightWeek.events)
 
   const isMonthEnd = endingCalendar.week === endingCalendar.weeksPerMonth
   const monthEndEvent = isMonthEnd ? endingMonthlyEvent ?? null : null
