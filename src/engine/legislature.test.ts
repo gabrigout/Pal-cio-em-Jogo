@@ -5,11 +5,13 @@ import type { CampaignState, PartySelection } from '../state/types'
 import {
   advanceLegislatureWeek,
   createInitialLegislatureState,
+  decidePresidentialSanction,
   negotiateLegislativeProposal,
   registerLegislativeProposal,
   submitLegislativeProposal,
 } from './legislature'
 import { createCampaign } from './campaign'
+import { advanceWeek } from './turn'
 
 const party: PartySelection = {
   id: 'test-party',
@@ -228,4 +230,83 @@ test('emenda aprovada remaneja dotação sem elevar o total orçamentário', () 
   } else {
     assert.equal(bill.stage, 'rejected')
   }
+})
+
+
+test('avanço semanal do jogo também avança a tramitação legislativa', () => {
+  const campaign = buildCampaign()
+  const submitted = submitLegislativeProposal(campaign, {
+    type: 'ordinary',
+    title: 'Programa de serviços compartilhados',
+    summary: 'Organiza metas e padrões mínimos para serviços públicos federais.',
+    fiscalImpact: 0,
+  })
+  assert.ok(submitted)
+  if (!submitted) return
+
+  const weekOneClose = advanceWeek(submitted)
+  assert.equal(weekOneClose.calendar.week, 2)
+  assert.equal(weekOneClose.legislature.bills[0].stage, 'negotiation')
+
+  const weekTwoClose = advanceWeek(weekOneClose)
+  assert.ok(['voting', 'rejected'].includes(weekTwoClose.legislature.bills[0].stage))
+})
+
+test('MP que perde vigência desfaz o impacto fiscal provisório', () => {
+  const campaign = buildCampaign()
+  const originalExpensePressure = campaign.economy.pressures.expenses
+  const submitted = submitLegislativeProposal(campaign, {
+    type: 'mp',
+    title: 'Medida temporária de abastecimento',
+    summary: 'Institui resposta urgente e temporária para assegurar abastecimento.',
+    fiscalImpact: 120,
+    declaresUrgency: true,
+  })
+  assert.ok(submitted)
+  if (!submitted) return
+  assert.equal(submitted.economy.pressures.expenses, originalExpensePressure + 10)
+
+  const nearExpiry: CampaignState = {
+    ...submitted,
+    legislature: {
+      ...submitted.legislature,
+      bills: submitted.legislature.bills.map((bill) => ({
+        ...bill,
+        stage: 'negotiation',
+        daysInProcess: 119,
+      })),
+    },
+  }
+  const expired = advanceAt(nearExpiry, 2).campaign
+  assert.equal(expired.legislature.bills[0].stage, 'expired')
+  assert.equal(expired.economy.pressures.expenses, originalExpensePressure)
+})
+
+test('veto volta ao Congresso e uma rejeição não aplica o custo da lei', () => {
+  const campaign = buildCampaign()
+  const originalExpensePressure = campaign.economy.pressures.expenses
+  const bill = registerLegislativeProposal(campaign, {
+    type: 'ordinary',
+    title: 'Programa de despesas administrativas',
+    summary: 'Amplia serviços e cria despesas recorrentes para o Executivo.',
+    fiscalImpact: 120,
+  })
+  const atSanction: CampaignState = {
+    ...bill,
+    legislature: {
+      ...bill.legislature,
+      bills: bill.legislature.bills.map((item) => ({ ...item, stage: 'sanction' })),
+    },
+  }
+  const review = decidePresidentialSanction(atSanction, atSanction.legislature.bills[0].id, 'veto')
+  assert.ok(review)
+  if (!review) return
+  assert.equal(review.legislature.bills[0].stage, 'veto-review')
+  assert.equal(review.economy.pressures.expenses, originalExpensePressure)
+
+  const concluded = advanceAt(review, 2).campaign
+  const concludedBill = concluded.legislature.bills[0]
+  assert.equal(concludedBill.stage, 'rejected')
+  assert.deepEqual(concludedBill.voteHistory.map((vote) => vote.chamber), ['house', 'senate'])
+  assert.equal(concluded.economy.pressures.expenses, originalExpensePressure)
 })
