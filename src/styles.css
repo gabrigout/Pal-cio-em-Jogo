@@ -126,7 +126,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cor-primaria); 
 .footer-context > span:last-child { display: grid; gap: 3px; }
 .footer-context strong { color: #d2d2d2; font-size: 10px; font-weight: 600; }
 .footer-context small { color: var(--muted); font-size: 9px; }
-.advance-button { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 42px; padding: 0 17px; border: 1px solid var(--cor-primaria); background: var(--cor-primaria); color: var(--cor-botao-texto); cursor: pointer; font-size: 11px; font-weight: 800; transition: background .18s ease, transform .18s ease; }
+.advance-button { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 42px; padding: 0 17px; border: 1px solid var(--cor-primaria); background: var(--cor-fundo-botao, var(--cor-primaria)); color: var(--cor-botao-texto); cursor: pointer; font-size: 11px; font-weight: 800; transition: background .18s ease, transform .18s ease; }
 .advance-button:hover { transform: translateY(-1px); filter: brightness(1.08); }
 .section-placeholder { width: min(1160px, calc(100% - 64px)); min-height: calc(100vh - 150px); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; margin-inline: auto; padding-bottom: 70px; }
 .section-placeholder-mark { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 22px; color: var(--cor-secundaria); border: 1px solid color-mix(in srgb, var(--cor-secundaria), transparent 55%); background: color-mix(in srgb, var(--cor-secundaria), var(--neutral-950) 88%); }
@@ -278,7 +278,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cor-primaria); 
 .setup-back, .setup-primary-button { min-height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 0 15px; cursor: pointer; font-size: 10px; font-weight: 600; }
 .setup-back { border: 1px solid #464646; background: transparent; color: #bbbbbb; }
 .setup-back:hover { border-color: #838383; color: #e8e8e8; }
-.setup-primary-button { border: 1px solid var(--cor-primaria); background: var(--cor-primaria); color: var(--cor-botao-texto); }
+.setup-primary-button { border: 1px solid var(--cor-fundo-botao, var(--cor-primaria)); background: var(--cor-fundo-botao, var(--cor-primaria)); color: var(--cor-botao-texto); }
 .setup-primary-button:hover:not(:disabled) { filter: brightness(1.08); }
 .setup-primary-button:disabled { border-color: #454545; background: #2c2c2c; color: #b0b0b0; cursor: not-allowed; }
 .setup-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding: 17px 0; border-top: 1px solid #2f2f2f; color: #6e6e6e; font-family: var(--mono); font-size: 8px; }
@@ -302,7 +302,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cor-primaria); 
 .library-import-button, .library-new-button { min-height: 38px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 0 11px; cursor: pointer; font-size: 9px; font-weight: 600; }
 .library-import-button { border: 1px solid #484848; background: transparent; color: #d0d0d0; }
 .library-import-button:hover { border-color: var(--cor-secundaria); }
-.library-new-button { border: 1px solid var(--cor-primaria); background: var(--cor-primaria); color: var(--cor-botao-texto); }
+.library-new-button { border: 1px solid var(--cor-fundo-botao, var(--cor-primaria)); background: var(--cor-fundo-botao, var(--cor-primaria)); color: var(--cor-botao-texto); }
 .library-new-button:hover { filter: brightness(1.08); }
 .library-file-input { display: none; }
 .library-message { margin: 9px 0; padding: 10px 12px; border: 1px solid #4a4a4a; background: #222222; color: #dddddd; font-size: 10px; line-height: 1.5; }
@@ -322,7 +322,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cor-primaria); 
 .save-last-saved { display: grid; gap: 5px; }
 .save-last-saved small { color: #8d8d8d; font-family: var(--mono); font-size: 7px; }
 .save-last-saved strong { color: #c9c9c9; font-size: 9px; font-weight: 500; }
-.save-continue-button { min-height: 36px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 0 11px; border: 1px solid var(--cor-primaria); background: var(--cor-primaria); color: var(--cor-botao-texto); cursor: pointer; font-size: 9px; font-weight: 700; }
+.save-continue-button { min-height: 36px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 0 11px; border: 1px solid var(--cor-fundo-botao, var(--cor-primaria)); background: var(--cor-fundo-botao, var(--cor-primaria)); color: var(--cor-botao-texto); cursor: pointer; font-size: 9px; font-weight: 700; }
 .save-continue-button:hover { filter: brightness(1.08); }
 .save-card-actions { display: flex; align-items: center; gap: 5px; padding: 0 17px 11px 56px; }
 .save-card-actions button { min-height: 28px; display: inline-flex; align-items: center; gap: 5px; padding: 0 8px; border: 1px solid #404040; background: transparent; color: #ababab; cursor: pointer; font-size: 8px; }
@@ -388,7 +388,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cor-primaria); 
 .executive-empty-note { margin: 0; }
 .executive-danger-button, .executive-primary-button, .executive-secondary-button { min-height: 32px; display: inline-flex; align-items: center; justify-content: center; padding: 6px 9px; border: 1px solid var(--line); cursor: pointer; font-size: 8px; font-weight: 700; line-height: 1.4; }
 .executive-danger-button { margin-top: 10px; border-color: var(--cor-secundaria); background: transparent; color: var(--cor-secundaria); }
-.executive-primary-button { border-color: var(--cor-primaria); background: var(--cor-primaria); color: var(--cor-botao-texto); }
+.executive-primary-button { border-color: var(--cor-fundo-botao, var(--cor-primaria)); background: var(--cor-fundo-botao, var(--cor-primaria)); color: var(--cor-botao-texto); }
 .executive-secondary-button { background: transparent; color: var(--cor-primaria); }
 .executive-danger-button:hover:not(:disabled), .executive-secondary-button:hover:not(:disabled) { background: color-mix(in srgb, var(--cor-primaria), var(--neutral-900) 91%); }
 .executive-primary-button:hover:not(:disabled) { filter: brightness(1.08); }
@@ -535,7 +535,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cor-primaria); 
 .sample-action-copy p { margin: 0; color: #9b9b9b; font-size: 9px; line-height: 1.5; }
 .action-cost, .action-blocked-reason { color: #858585; font-family: var(--mono); font-size: 8px; line-height: 1.4; }
 .action-blocked-reason { color: #b4b4b4; }
-.action-run-button { flex: 0 0 auto; min-width: 76px; min-height: 31px; padding: 0 9px; border: 1px solid var(--cor-primaria); background: var(--cor-primaria); color: var(--cor-botao-texto); cursor: pointer; font-size: 9px; font-weight: 700; }
+.action-run-button { flex: 0 0 auto; min-width: 76px; min-height: 31px; padding: 0 9px; border: 1px solid var(--cor-fundo-botao, var(--cor-primaria)); background: var(--cor-fundo-botao, var(--cor-primaria)); color: var(--cor-botao-texto); cursor: pointer; font-size: 9px; font-weight: 700; }
 .action-run-button:hover:not(:disabled) { filter: brightness(1.08); }
 .action-run-button:disabled { border-color: #414141; background: #282828; color: #929292; cursor: not-allowed; }
 .decision-mark { flex: 0 0 auto; color: var(--cor-secundaria); }
@@ -585,7 +585,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cor-primaria); 
 .summary-economy small { color: #a0a0a0; font-family: var(--mono); font-size: 8px; }
 .summary-points { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 16px; padding-top: 11px; border-top: 1px solid #373737; color: #9d9d9d; font-family: var(--mono); font-size: 8px; }
 .summary-points strong { flex-basis: 100%; color: var(--cor-primaria); font-weight: 500; }
-.summary-dismiss-button { min-height: 38px; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-top: 15px; border: 1px solid var(--cor-primaria); background: var(--cor-primaria); color: var(--cor-botao-texto); cursor: pointer; font-size: 10px; font-weight: 700; }
+.summary-dismiss-button { min-height: 38px; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-top: 15px; border: 1px solid var(--cor-fundo-botao, var(--cor-primaria)); background: var(--cor-fundo-botao, var(--cor-primaria)); color: var(--cor-botao-texto); cursor: pointer; font-size: 10px; font-weight: 700; }
 .summary-dismiss-button:hover { filter: brightness(1.08); }
 
 @media (max-width: 800px) {
