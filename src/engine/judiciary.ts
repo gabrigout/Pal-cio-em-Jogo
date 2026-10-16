@@ -120,7 +120,7 @@ function makeInitialJustices(campaignId: string, year: number): JudicialJustice[
       independence: 68 + Math.floor(random() * 31),
       publicReputation: 65 + Math.floor(random() * 32),
       joinedYear: year - (4 + Math.floor(random() * 20)),
-      monthsUntilRetirement: retiringSoon ? Math.max(1, (judicialRules.mandatoryRetirementAge - age) * 12) : null,
+      monthsUntilRetirement: Math.max(1, (judicialRules.mandatoryRetirementAge - age) * 12),
     }
   })
 }
@@ -749,7 +749,8 @@ function advanceRetirement(
     }
     const months = justice.monthsUntilRetirement - 1
     if (months > 0) {
-      remainingJustices.push({ ...justice, monthsUntilRetirement: months })
+      const ageAfterMonth = Math.max(justice.age, judicialRules.mandatoryRetirementAge - Math.ceil(months / 12))
+      remainingJustices.push({ ...justice, age: ageAfterMonth, monthsUntilRetirement: months })
       continue
     }
     const reason = justice.name + ' atingiu a aposentadoria compulsória ficcional aos 75 anos; a vaga será preenchida somente após nova indicação e aprovação.'
