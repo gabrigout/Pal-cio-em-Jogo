@@ -344,3 +344,45 @@ test('sanção da LOA atualiza a dotação anual sem aumentar o caixa', () => {
   assert.ok(Math.abs(sectorTotal - proposedBudget * 0.85) <= 0.1)
   assert.notEqual(sanctioned.economy.annualBudget.total, originalBudget)
 })
+
+
+test('crédito adicional mantém limites de participação e recalcula as parcelas setoriais sem criar caixa', () => {
+  const campaign = buildCampaign()
+  const originalCash = campaign.economy.availableFunds
+  const originalTotal = campaign.economy.annualBudget.total
+  const originalFixed = campaign.economy.annualBudget.fixedCommitments
+  const target = campaign.economy.annualBudget.sectors.find((sector) => sector.id === 'health')
+  assert.ok(target)
+  if (!target) return
+
+  const submitted = registerLegislativeProposal(campaign, {
+    type: 'credit',
+    title: 'Crédito adicional para atenção básica',
+    summary: 'Amplia a dotação de atenção básica com autorização orçamentária específica.',
+    fiscalImpact: 100,
+    targetSectorId: target.id,
+  })
+  const atSanction: CampaignState = {
+    ...submitted,
+    legislature: {
+      ...submitted.legislature,
+      bills: submitted.legislature.bills.map((bill) => ({ ...bill, stage: 'sanction' })),
+    },
+  }
+  const sanctioned = decidePresidentialSanction(atSanction, atSanction.legislature.bills[0].id, 'sanction')
+  assert.ok(sanctioned)
+  if (!sanctioned) return
+
+  assert.equal(sanctioned.economy.availableFunds, originalCash)
+  assert.equal(sanctioned.economy.annualBudget.total, originalTotal + 100)
+  assert.equal(sanctioned.economy.annualBudget.fixedCommitments, originalFixed + 15)
+  const sectors = sanctioned.economy.annualBudget.sectors
+  const sectorTotal = sectors.reduce((sum, sector) => sum + sector.annualAllocation, 0)
+  assert.ok(Math.abs(sectorTotal - (originalTotal + 100) * 0.85) < 0.2)
+  assert.ok(Math.abs(sectors.reduce((sum, sector) => sum + sector.share, 0) - 100) < 0.11)
+  for (const sector of sectors) {
+    const resultingShare = sector.annualAllocation / sectorTotal * 100
+    assert.ok(resultingShare >= 4 - 0.1 && resultingShare <= 35 + 0.1)
+    assert.ok(Math.abs(resultingShare - sector.share) < 0.11)
+  }
+})
