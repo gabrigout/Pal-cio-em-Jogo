@@ -376,7 +376,7 @@ function castVote(
   overrideVeto = false,
 ): LegislativeVote {
   const blocs = getBlocs(campaign, chamber)
-  const totalSeats = seatCount(campaign, chamber)
+  const totalSeats = seatCount(chamber)
   const random = seededRandom(campaign.id + ':' + bill.id + ':' + chamber + ':' + round + ':' + (overrideVeto ? 'veto' : 'ordinary'))
   let yes = 0
   let no = 0
