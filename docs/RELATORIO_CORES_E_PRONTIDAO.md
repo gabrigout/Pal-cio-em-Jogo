@@ -20,7 +20,7 @@
 | Partido no jogo | Referência satírica | Primária | Secundária | Grau de certeza da referência |
 |---|---|---|---|---|
 | PTP — Partido da Taxa e da Picanha | PT | #E4142C — vermelho | #FFFFFF — branco | O manual PT Digital publicado em cópia pública identifica vermelho e branco e fornece o HEX vermelho. O manual não está hospedado no domínio oficial, por isso a origem do valor HEX está sinalizada no documento de fontes. |
-| PSÓ — Partido Socialista Óbvio | PSOL | #D71920 — vermelho | #FFD52B — amarelo | O estatuto oficial descreve bandeira vermelha com sol amarelo. Os HEX do jogo são aproximações visuais, não valores oficiais publicados no estatuto. |
+| PSÓ — Partido Socialista Óbvio | PSOL | #E02028 — vermelho | #FEDF00 — amarelo | O estatuto oficial descreve bandeira vermelha com sol amarelo; o manual oficial de aplicação do logotipo publica esses códigos digitais. |
 | PDTT — Partido do Discurso, da Tese e do Trabalhismo | PDT | #E4002B — vermelho | #005AB2 — azul | O PDT identifica o símbolo com rosa vermelha e a tradição partidária inclui vermelho, branco e azul. Os códigos selecionados aparecem na cartela digital PDT-RS 2025. |
 | PLIM — Partido da Live, Influência e Mobilização | PL | #004F9F — azul | #009640 — verde | Valores RGB publicados no manual de marca do PL (azul 0/79/159; verde 0/150/64); o manual também usa amarelo. |
 | PSSDB — Partido dos Senhores, Slides e Debates de Brasília | PSDB | #004C94 — azul | #FFD600 — amarelo | Valores RGB publicados no manual oficial do PSDB de 2012; a marca renovada em 2023 manteve a família azul/amarelo. Os códigos exatos de 2012 não são apresentados como novos HEX oficiais da marca de 2023. |
@@ -52,7 +52,7 @@ A versão atual é `CURRENT_SAVE_VERSION = 8`.
 
 ## 5. Validação
 
-O código de paletas/save v8 foi validado pelo GitHub Actions no commit `601152eee8e9d17511a8ccb8d985516cddbef1a0`: **61 testes passaram e o build de produção concluiu com sucesso** no [workflow 38947033246](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38947033246).
+O código de paletas/save v8, incluindo o uso do HEX primário oficial nos botões principais, foi validado no commit `4b4979065d5e2a9e4ccc4c00da93544abc267345`: **61 testes passaram, 0 falhas, e o build de produção concluiu com sucesso** no [workflow 38960919871](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38960919871).
 
 O workflow que cobre a atualização documental posterior também executa testes/build. A validação automatizada comprova testes e compilação, mas não substitui revisão visual. Ainda não foi realizada uma sessão real de navegação visual desktop/celular para medir contraste, hierarquia e consistência do tema em todos os painéis.
 
