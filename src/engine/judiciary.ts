@@ -147,7 +147,7 @@ function makeOpeningCase(campaign: Pick<CampaignState, 'id' | 'calendar'>): Judi
     evidenceStrength: 55,
     precedentFit: 51,
     proceduralRegularity: 78,
-    publicImpact: 54,
+    publicImpact: judicialRules.initialCasePublicImpact,
     severity: 'important',
     appealTo: 'stj',
     appealCount: 0,
@@ -582,7 +582,7 @@ function progressCase(
   let event: string | null = null
   const stamp = formatDate(campaign.calendar)
 
-  if (next.stage === 'filed') {
+  if (next.stage === 'filed' && next.stageWeeks >= judicialRules.admissibilityWeeks) {
     next = { ...next, stage: 'admissibility', stageWeeks: 0 }
     const message = stamp + ': processo distribuído para análise de admissibilidade.'
     history(message)
@@ -604,7 +604,7 @@ function progressCase(
     const message = stamp + ': instrução concluída; o processo está concluso para decisão.'
     history(message)
     event = message
-  } else if (next.stage === 'awaiting-decision') {
+  } else if (next.stage === 'awaiting-decision' && next.stageWeeks >= judicialRules.deliberationWeeks) {
     const decision = evaluateJudicialCase(campaign, next)
     next = { ...next, stage: 'decision', stageWeeks: 0 }
     const result = applyJudicialDecision(campaign, next, decision)
