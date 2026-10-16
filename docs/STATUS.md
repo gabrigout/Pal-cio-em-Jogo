@@ -49,6 +49,7 @@ A reforma tributária já registrada pelo sistema econômico e a reorganização
 - `docs/CORES_DOS_PARTIDOS.md`: pesquisa de cores e distinção entre códigos oficiais e aproximações.
 - `docs/AVALIACAO_PRONTIDAO.md`: avaliação geral do que está e do que não está pronto.
 - `docs/RELATORIO_FASE_3_1_CLAUDE.md`: relatório detalhado de Congresso, regras, testes e limitações.
+- `docs/RELATORIO_CORES_E_PRONTIDAO.md`: o que mudou nas cores, avaliação de prontidão e próximos passos.
 
 ## Pastas e arquivos principais
 
