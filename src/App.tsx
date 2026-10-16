@@ -8,6 +8,7 @@ import ExecutivePanel from './components/ExecutivePanel'
 import EconomyPanel from './components/EconomyPanel'
 import PolicyProjectsPanel from './components/PolicyProjectsPanel'
 import SocietyPanel from './components/SocietyPanel'
+import LegislaturePanel from './components/LegislaturePanel'
 import TopNavigation from './components/TopNavigation'
 import { createCampaign } from './engine/campaign'
 import {
@@ -26,6 +27,7 @@ import {
 import { advanceWeek, chooseNarrativeOption, dismissDecisionResult, dismissWeeklySummary, executeAction } from './engine/turn'
 import { adjustPublicProjectPriority, startPublicProject, togglePublicProjectPause } from './engine/projects'
 import { applySocietyAction } from './engine/society'
+import { decidePresidentialSanction, negotiateLegislativeProposal, submitLegislativeProposal } from './engine/legislature'
 import { downloadCampaignBackup } from './persistence/backup'
 import {
   deleteCampaign,
@@ -42,6 +44,7 @@ const sectionTitles: Record<Exclude<SectionId, 'brasil'>, string> = {
   economia: 'Economia',
   politicas: 'Políticas Públicas',
   sociedade: 'Sociedade',
+  congresso: 'Congresso',
   relacoes: 'Relações',
   historico: 'Notícias/Histórico',
 }
@@ -338,6 +341,12 @@ export default function App() {
         <SocietyPanel campaign={campaign}
           onDialogue={(id) => runPolicyAction(applySocietyAction(campaign,id,'dialogue'),'Não foi possível abrir o diálogo. Confira os pontos e recursos disponíveis.')}
           onAgreement={(id) => runPolicyAction(applySocietyAction(campaign,id,'agreement'),'Não foi possível registrar o compromisso. Confira caixa, dotação e recursos disponíveis.')}
+        />
+      ) : activeSection === 'congresso' ? (
+        <LegislaturePanel campaign={campaign}
+          onSubmitProposal={(input) => runPolicyAction(submitLegislativeProposal(campaign, input), 'A proposição não foi protocolada. Confira os requisitos, o impacto fiscal e os recursos disponíveis.')}
+          onNegotiate={(billId) => runPolicyAction(negotiateLegislativeProposal(campaign, billId), 'A negociação não foi realizada. Confira se a proposta ainda está em tramitação e se há recursos disponíveis.')}
+          onPresidentialDecision={(billId, decision) => runPolicyAction(decidePresidentialSanction(campaign, billId, decision), 'A decisão presidencial não foi registrada. Confira a etapa da proposição e os recursos disponíveis.')}
         />
       ) : (
         <main className="section-placeholder page-enter">
