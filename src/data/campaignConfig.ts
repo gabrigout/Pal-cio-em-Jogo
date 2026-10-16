@@ -16,13 +16,23 @@ export const partyPalette = [
   { name: 'Azul-marinho', color: '#416488' },
 ]
 
+// Pares de cores das legendas satíricas: cor primária de destaque e cor secundária.
+// Referências de marca: PT Digital (vermelho/branco); emblema do PSOL (bandeira vermelha/sol amarelo);
+// PDT (rosa vermelha; verde usado como cor de apoio do símbolo); PL 2023 (azul/verde/amarelo);
+ // PSDB (azul/amarelo); NOVO (laranja/azul). Valores HEX oficiais são usados quando publicados;
+// nos demais casos, o HEX é uma aproximação visual para a paleta do jogo, não uma declaração oficial.
+// PT: https://pt.org.br/ | PSOL: https://psol50.org.br/partido/estatuto/
+ // PDT: https://www.pdtrs.org.br/identidadevisual
+ // PL: https://partidoliberal.org.br/wp-content/uploads/2023/03/manual-da-marca-pl-2023.pdf
+ // PSDB: https://www.psdb.org.br/acompanhe/noticias/psdb-moderniza-sua-marca/
+ // NOVO: https://novo.org.br/wp-content/uploads/2021/07/NOVO_Manual-de-marca-2021-2.pdf
 export const partyColors = {
-  ptp: ['#8bd4af', '#e5bd75'],
-  pso: ['#9872dc', '#e5a05c'],
-  pdtt: ['#6bb9dc', '#d6bd5d'],
-  plim: ['#e97969', '#6bb9dc'],
-  pssdb: ['#8bd4af', '#6bb9dc'],
-  nova: ['#e5a05c', '#23364d'],
+  ptp: ['#E4142C', '#FFFFFF'],
+  pso: ['#D71920', '#FFD52B'],
+  pdtt: ['#C8102E', '#009640'],
+  plim: ['#004F9F', '#009640'],
+  pssdb: ['#004C94', '#FFD600'],
+  nova: ['#F17021', '#1A2948'],
 } as const
 
 export const countryRanges = {
