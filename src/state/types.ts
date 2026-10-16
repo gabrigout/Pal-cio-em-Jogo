@@ -6,6 +6,7 @@ export type SectionId =
   | 'sociedade'
   | 'congresso'
   | 'judiciario'
+  | 'controle'
   | 'relacoes'
   | 'historico'
 
@@ -71,6 +72,7 @@ export interface CampaignState {
   society: SocietyState
   legislature: LegislatureState
   judiciary: JudiciaryState
+  oversight: OversightState
   executiveProposals: string[]
   economy: EconomicState
   turn: CampaignTurnState
@@ -272,6 +274,70 @@ export interface JudiciaryState {
   processedSourceKeys: string[]
   lastAdvancedKey: string | null
   lastClosedMonthKey: string | null
+}
+
+export type OversightBodyId = 'mpf' | 'pf' | 'cgu' | 'tcu' | 'agu' | 'tse' | 'congress'
+export type OversightCaseType = 'internal-audit' | 'external-audit' | 'federal-investigation' | 'prosecutorial-review' | 'legal-opinion' | 'electoral-proceeding'
+export type OversightCaseStage = 'received' | 'screening' | 'evidence' | 'analysis' | 'finding' | 'referred' | 'archived'
+export type OversightTargetKind = 'project' | 'ministry' | 'budget' | 'bill' | 'general'
+export type OversightFinding =
+  | 'inconclusive'
+  | 'no-irregularity-found'
+  | 'administrative-recommendation'
+  | 'accounting-adjustment'
+  | 'referred-to-mpf'
+  | 'referred-to-pf'
+  | 'electoral-referral'
+  | 'legal-opinion-issued'
+export type OversightEvidenceKind = 'financial-record' | 'project-document' | 'audit-trail' | 'contradictory-record' | 'testimony' | 'public-data' | 'legal-document'
+export type OversightSourceKind = 'citizen-report' | 'executive-request' | 'automatic-audit-trigger' | 'legislative-referral' | 'judicial-referral' | 'institutional-referral'
+
+export interface OversightEvidenceRecord {
+  id: string
+  kind: OversightEvidenceKind
+  title: string
+  description: string
+  source: string
+  strength: number
+  verified: boolean
+  dateLabel: string
+}
+
+export interface OversightCase {
+  id: string
+  type: OversightCaseType
+  body: OversightBodyId
+  title: string
+  summary: string
+  targetKind: OversightTargetKind
+  targetId: string | null
+  targetName: string
+  origin: string
+  sourceKind: OversightSourceKind
+  sourceKey: string | null
+  createdYear: number
+  createdMonth: string
+  createdWeek: number
+  stage: OversightCaseStage
+  stageWeeks: number
+  daysInProcess: number
+  suspicionScore: number
+  evidenceStrength: number
+  publicImpact: number
+  severity: 'routine' | 'important' | 'critical'
+  evidence: OversightEvidenceRecord[]
+  finding: OversightFinding | null
+  referralTarget: OversightBodyId | null
+  linkedCaseId: string | null
+  closureReason: string | null
+  history: string[]
+}
+
+export interface OversightState {
+  cases: OversightCase[]
+  history: string[]
+  processedSourceKeys: string[]
+  lastAdvancedKey: string | null
 }
 
 export type ExecutiveActionType =
