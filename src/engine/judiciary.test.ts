@@ -281,7 +281,7 @@ test('cumprir decisão final reduz impacto institucional de atraso e recupera co
 test('aposentadoria abre vaga uma única vez por mês e exige novo processo de nomeação', () => {
   const campaign = buildCampaign()
   const justices = campaign.judiciary.stfJustices.map((justice) =>
-    justice.monthsUntilRetirement === null ? justice : { ...justice, monthsUntilRetirement: 1 })
+    justice.seatNumber === 4 ? { ...justice, monthsUntilRetirement: 1 } : justice)
   const nearRetirement: CampaignState = {
     ...campaign,
     judiciary: { ...campaign.judiciary, stfJustices: justices, lastClosedMonthKey: null },
