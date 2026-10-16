@@ -185,7 +185,7 @@ export default function CampaignSetup({ onStart, onBackToLibrary }: CampaignSetu
                   </label>
                 </div>
                 <div className="palette-heading">
-                  <div><strong>Duas cores oficiais</strong><small>Primeira cor: destaque e botões. Segunda: ícones e bordas.</small></div>
+                  <div><strong>Duas cores oficiais</strong><small>Primeira cor: texto de destaque e botões. Segunda: ícones, bordas e grafismos.</small></div>
                   <span>{customColors.length}/2 selecionadas</span>
                 </div>
                 <div aria-label="Paleta de cores do partido" className="color-palette">
