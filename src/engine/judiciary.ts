@@ -2,7 +2,6 @@ import { judicialRules } from '../data/judiciary'
 import type {
   CampaignState,
   JudicialCase,
-  JudicialCaseStage,
   JudicialCourtId,
   JudicialDecisionRecord,
   JudicialJustice,
