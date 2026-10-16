@@ -522,7 +522,7 @@ function migrateLegacyCampaign(value: unknown, scaleLegacyMoney = true): Campaig
 
 function refreshPredefinedPartyPalette(campaign: CampaignState): CampaignState {
   const palette = partyColors[campaign.party.id as keyof typeof partyColors]
-  if (!palette) return campaign
+  if (!palette || campaign.party.custom) return campaign
   const colors: [string, string] = [palette[0], palette[1]]
   return {
     ...campaign,
