@@ -4,7 +4,7 @@ import { createInitialMinistries } from '../engine/executive'
 import { allocateSectorBudgetToMinistries, createEconomicState } from '../engine/economy'
 import { initializeCampaignTurn } from '../engine/turn'
 import { createInitialSocietyState } from '../engine/society'
-import { createInitialLegislatureState } from '../engine/legislature'
+import { createInitialLegislatureState, registerLegislativeProposal } from '../engine/legislature'
 import { legislativeRules } from '../data/legislature'
 import { calendarMonths } from '../state/initialState'
 import type { CampaignState, CampaignTurnState } from '../state/types'
@@ -425,6 +425,7 @@ function freshTurnState(): CampaignTurnState {
 }
 
 function migrateLegacyCampaign(value: unknown, scaleLegacyMoney = true): CampaignState | null {
+  const hadLegislatureState = isRecord(value) && isLegislatureState(value.legislature)
   if (!isRecord(value) || !isRecord(value.party) || !isRecord(value.calendar) || !isRecord(value.country)) return null
   if (scaleLegacyMoney) value = scaleLegacyMoneyDeep(value)
   if (!isRecord(value) || !isRecord(value.party) || !isRecord(value.calendar) || !isRecord(value.country)) return null
@@ -487,9 +488,35 @@ function migrateLegacyCampaign(value: unknown, scaleLegacyMoney = true): Campaig
     country: { ...migratedCandidate.country, budget: economy.availableFunds },
   }
   if (!isCampaignState(economicCandidate)) return null
+  let migratedCampaign = economicCandidate
+  if (!hadLegislatureState) {
+    for (const [index, proposal] of migratedCampaign.economy.congressProposals.entries()) {
+      const title = proposal.trim()
+      if (!title) continue
+      const taxReform = title.toLocaleLowerCase('pt-BR').includes('tributári')
+      migratedCampaign = registerLegislativeProposal(migratedCampaign, {
+        type: taxReform ? 'complementary' : 'ordinary',
+        title,
+        summary: 'Proposta recuperada de um save anterior à tramitação legislativa. A votação e seus efeitos passam a seguir as regras da versão atual.',
+        fiscalImpact: 0,
+        sourceKey: 'legacy-economic-proposal-' + index + '-' + title,
+      })
+    }
+    for (const [index, proposal] of migratedCampaign.executiveProposals.entries()) {
+      const title = proposal.trim()
+      if (!title) continue
+      migratedCampaign = registerLegislativeProposal(migratedCampaign, {
+        type: 'ordinary',
+        title,
+        summary: 'Proposta administrativa recuperada de um save anterior à tramitação legislativa. A estrutura do Executivo só muda após aprovação e efeitos institucionais posteriores.',
+        fiscalImpact: 0,
+        sourceKey: 'legacy-executive-proposal-' + index + '-' + title,
+      })
+    }
+  }
   const hasDecisionStateV2 = isRecord(value.turn) && 'activeReactionEventId' in value.turn
-  if (!hasDecisionStateV2) return initializeCampaignTurn(economicCandidate)
-  return economicCandidate
+  if (!hasDecisionStateV2) return initializeCampaignTurn(migratedCampaign)
+  return migratedCampaign
 }
 
 function migrationRandom(seedText: string): () => number {
