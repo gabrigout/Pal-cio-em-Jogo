@@ -2,7 +2,7 @@
 
 Atualizado em: 2026-10-16  
 Branch avaliada: codex/phase-3a-congress  
-Versão atual do save: v8  
+Versão atual do save: v9  
 Validação do código de cores e dos botões principais: 61 testes aprovados e build concluído no [workflow 38960919871](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38960919871); a branch continua com CI para o HEAD documental atual.
 
 ## Veredito
@@ -24,7 +24,7 @@ Validação do código de cores e dos botões principais: 61 testes aprovados e 
 | Políticas públicas | Primeira versão | Programas e projetos por setor, investimento, prioridade, prazo, avanço semanal, resultado mensal e riscos. |
 | Sociedade | Primeira versão | Cinco classes econômicas e sete grupos de pressão; apoio, pressão, diálogo, acordos, manifestações/paralisações e revisão mensal. |
 | Congresso | Primeira versão, Fase 3.1 | Composição agregada das duas Casas, PL/PLP/PEC/MP e proposições orçamentárias, negociação, votações, sanção/veto e efeitos fiscais simplificados. |
-| Paletas partidárias | Implementado nesta atualização | Seis pares pesquisados para as paródias, aplicação no tema e migração de campanhas salvas v7 para v8. As fontes e as aproximações HEX estão em `docs/CORES_DOS_PARTIDOS.md`. |
+| Paletas partidárias | Implementado nesta atualização | Seis pares pesquisados para as paródias, aplicação no tema e migração de campanhas salvas v8 para v9. As fontes e as aproximações HEX estão em `docs/CORES_DOS_PARTIDOS.md`. |
 | Testes automatizados e build | Verificar workflow atual | O CI executa testes e build. Isso não substitui o teste real no navegador. |
 
 ## O que ainda falta para o jogo ser considerado completo
