@@ -1,7 +1,9 @@
 # Avaliação de prontidão — Palácio em Jogo
 
 Atualizado em: 2026-10-16  
-Branch avaliada: codex/phase-3a-congress
+Branch avaliada: codex/phase-3a-congress  
+Versão atual do save: v8  
+Validação do código de cores: 61 testes aprovados e build concluído no [workflow 38947033246](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38947033246); a branch continua com CI para o HEAD documental atual.
 
 ## Veredito
 
@@ -22,10 +24,12 @@ Branch avaliada: codex/phase-3a-congress
 | Políticas públicas | Primeira versão | Programas e projetos por setor, investimento, prioridade, prazo, avanço semanal, resultado mensal e riscos. |
 | Sociedade | Primeira versão | Cinco classes econômicas e sete grupos de pressão; apoio, pressão, diálogo, acordos, manifestações/paralisações e revisão mensal. |
 | Congresso | Primeira versão, Fase 3.1 | Composição agregada das duas Casas, PL/PLP/PEC/MP e proposições orçamentárias, negociação, votações, sanção/veto e efeitos fiscais simplificados. |
-| Paletas partidárias | Implementado nesta atualização | Seis pares pesquisados para as paródias, aplicação no tema e migração de campanhas salvas v7 para v8. |
+| Paletas partidárias | Implementado nesta atualização | Seis pares pesquisados para as paródias, aplicação no tema e migração de campanhas salvas v7 para v8. As fontes e as aproximações HEX estão em `docs/CORES_DOS_PARTIDOS.md`. |
 | Testes automatizados e build | Verificar workflow atual | O CI executa testes e build. Isso não substitui o teste real no navegador. |
 
 ## O que ainda falta para o jogo ser considerado completo
+
+Mapa de arquitetura e dependências: `docs/MAPA_MENTAL.md`. Este diagnóstico não altera o escopo do projeto; só registra a prontidão real da branch.
 
 ### Fase 3 — Instituições e crises
 - Judiciário: processos, decisões, recursos e indicações, sem controle presidencial de julgamentos.
