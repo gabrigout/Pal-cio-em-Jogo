@@ -1,4 +1,5 @@
 import { dashboardNews } from '../data/dashboard'
+import { partyColors } from '../data/campaignConfig'
 import { createCampaignTheme } from '../engine/theme'
 import { createInitialMinistries } from '../engine/executive'
 import { allocateSectorBudgetToMinistries, createEconomicState } from '../engine/economy'
@@ -9,7 +10,7 @@ import { legislativeRules } from '../data/legislature'
 import { calendarMonths } from '../state/initialState'
 import type { CampaignState, CampaignTurnState } from '../state/types'
 
-export const CURRENT_SAVE_VERSION = 7
+export const CURRENT_SAVE_VERSION = 8
 const SAVE_KEY_PREFIX = 'palacio-em-jogo:campaign:'
 
 export interface StorageLike {
@@ -429,6 +430,21 @@ function migrateLegacyCampaign(value: unknown, scaleLegacyMoney = true): Campaig
   if (!isRecord(value) || !isRecord(value.party) || !isRecord(value.calendar) || !isRecord(value.country)) return null
   if (scaleLegacyMoney) value = scaleLegacyMoneyDeep(value)
   if (!isRecord(value) || !isRecord(value.party) || !isRecord(value.calendar) || !isRecord(value.country)) return null
+
+  // Atualiza apenas legendas predefinidas; o esquema de cores de partidos criados pelo jogador é preservado.
+  const existingParty = value.party
+  const existingPartyId = typeof existingParty.id === 'string' ? existingParty.id : ''
+  const standardPalette = existingParty.custom !== true && Object.prototype.hasOwnProperty.call(partyColors, existingPartyId)
+    ? partyColors[existingPartyId as keyof typeof partyColors]
+    : null
+  if (standardPalette) {
+    value = {
+      ...value,
+      party: { ...existingParty, colors: [standardPalette[0], standardPalette[1]] },
+      theme: createCampaignTheme(standardPalette[0], standardPalette[1]),
+    }
+  }
+
   const party = value.party
   if (!Array.isArray(party.colors) || party.colors.length !== 2 || !party.colors.every(isHexColor)) return null
 
