@@ -1,10 +1,10 @@
 # Relatório de continuidade — Palácio em Jogo — Fase 3.1 (Congresso e legislação)
 
 **Data:** 16 de outubro de 2026  
-**Branch de trabalho:** [\`codex/phase-3a-congress\`](https://github.com/gabrigout/Pal-cio-em-Jogo/tree/codex/phase-3a-congress)  
-**Base:** \`codex/phase-2b-society-finance\`  
+**Branch de trabalho:** [`codex/phase-3a-congress`](https://github.com/gabrigout/Pal-cio-em-Jogo/tree/codex/phase-3a-congress)  
+**Base:** `codex/phase-2b-society-finance`  
 **Escopo concluído nesta etapa:** Fase 3.1 — Congresso, propostas legislativas, tramitação, votações e orçamento legislativo simplificado.  
-**Atenção:** a branch ainda não foi mesclada à \`main\`. Testes automatizados e build não substituem a revisão visual manual em navegador.
+**Atenção:** a branch ainda não foi mesclada à `main`. Testes automatizados e build não substituem a revisão visual manual em navegador.
 
 ---
 
@@ -42,7 +42,7 @@ Na etapa 2B, a validação registrada foi de 45 testes e build aprovado. A prese
 
 ### 3.1. Estado serializável do Congresso
 
-Foi adicionada a propriedade \`legislature\` ao estado de campanha. Ela contém:
+Foi adicionada a propriedade `legislature` ao estado de campanha. Ela contém:
 - Bancadas da Câmara e do Senado, com sigla, partido, orientação e quantidade de cadeiras.
 - Lista de proposições e sua etapa atual.
 - Datas simuladas de apresentação e tempo acumulado na tramitação.
@@ -57,7 +57,7 @@ Os dados ficam no estado e no engine, não no componente visual, de forma que sa
 
 ### 3.2. Composição inicial das Casas
 
-As configurações usam 513 cadeiras para a Câmara e 81 para o Senado (594 na soma aritmética das duas Casas para o modo simplificado de sessão conjunta). Os números ficam parametrizados em \`src/data/legislature.ts\`.
+As configurações usam 513 cadeiras para a Câmara e 81 para o Senado (594 na soma aritmética das duas Casas para o modo simplificado de sessão conjunta). Os números ficam parametrizados em `src/data/legislature.ts`.
 
 A distribuição inicial é ficcional e usa pesos configurados para os partidos e a popularidade do partido do jogador. A distribuição inteira usa um método de maiores restos para preencher exatamente o número de cadeiras de cada Casa. Um teste confirma o total de 513 e 81; outro verifica que o partido personalizado que começa com 3% de popularidade tem uma bancada inicial pequena, em vez de receber automaticamente uma maioria.
 
@@ -91,7 +91,7 @@ O fluxo padrão das leis comuns é:
 5. Sanção ou veto presidencial, quando aplicável.
 6. Se houver veto, análise do Congresso nas duas Casas.
 
-A cada semana do jogo, \`advanceLegislatureWeek\` processa as proposições em andamento uma vez para a chave de calendário correspondente. A transição produz eventos/histórico e, quando há fatos, acrescenta notícias de Congresso ao feed.
+A cada semana do jogo, `advanceLegislatureWeek` processa as proposições em andamento uma vez para a chave de calendário correspondente. A transição produz eventos/histórico e, quando há fatos, acrescenta notícias de Congresso ao feed.
 
 A negociação consome pontos de ação e capital político e aumenta a margem de apoio modelada. O aumento de apoio não é promessa de resultado nem comando aos parlamentares. Votos continuam sujeitos a uma regra probabilística determinística, influenciada por apoio no Congresso, aprovação, orientação do partido, bancada do governo e negociação.
 
@@ -99,7 +99,7 @@ A negociação consome pontos de ação e capital político e aumenta a margem d
 
 ### 3.5. Regras de votação modeladas
 
-As regras e limites configuráveis estão em \`src/data/legislature.ts\`.
+As regras e limites configuráveis estão em `src/data/legislature.ts`.
 
 - **PL ordinário:** maioria dos votos válidos da simulação, com quórum mínimo de presença parametrizado, em cada uma das Casas.
 - **PLP:** maioria absoluta dos membros da Casa.
@@ -163,27 +163,27 @@ Ela exibe:
 
 | Arquivo | Papel |
 |---|---|
-| \`src/data/legislature.ts\` | Cadeiras, regras, custos, limites, rótulos e explicações dos tipos legislativos. |
-| \`src/state/types.ts\` | Estado serializável do Legislativo, bancadas, proposições, etapas e votos; nova área de navegação Congresso. |
-| \`src/engine/legislature.ts\` | Validação de propostas, distribuição das bancadas, negociação, votação, tramitação semanal, veto e efeitos fiscais/orçamentários. |
-| \`src/engine/legislature.test.ts\` | Testes de composição, protocolo, custo, votação, PEC, emenda, cronômetro de MP, veto, avanço semanal, LOA e crédito. |
-| \`src/components/LegislaturePanel.tsx\` | Interface funcional do Congresso. |
-| \`src/components/TopNavigation.tsx\` | Adiciona navegação para Congresso. |
-| \`src/App.tsx\` | Liga a aba e as callbacks ao engine. |
-| \`src/engine/campaign.ts\` | Inicializa composição e estado legislativo em novas campanhas. |
-| \`src/engine/turn.ts\` | Integra tramitação ao avanço de semana. |
-| \`src/engine/economy.ts\` | Conecta reforma tributária à agenda legislativa. |
-| \`src/engine/executive.ts\` | Conecta reorganização ministerial à agenda legislativa. |
-| \`src/persistence/campaignRepository.ts\` | Save v7, validação de estado legislativo e migração de dados antigos. |
-| \`src/persistence/campaignRepository.test.ts\` | Testa migração v6→v7 sem reescalar moeda, números das Casas e recuperação de propostas legadas. |
-| \`src/styles.css\` | Estilos responsivos do painel e formulários do Congresso. |
-| \`package.json\` | Inclui os testes legislativos no script principal. |
-| \`docs/STATUS.md\` | Estado técnico atualizado e limitações conhecidas. |
-| \`docs/PROXIMOS_PASSOS.md\` | Roteiro marcado com a Fase 3.1 concluída e Fase 3.2 como próxima. |
+| `src/data/legislature.ts` | Cadeiras, regras, custos, limites, rótulos e explicações dos tipos legislativos. |
+| `src/state/types.ts` | Estado serializável do Legislativo, bancadas, proposições, etapas e votos; nova área de navegação Congresso. |
+| `src/engine/legislature.ts` | Validação de propostas, distribuição das bancadas, negociação, votação, tramitação semanal, veto e efeitos fiscais/orçamentários. |
+| `src/engine/legislature.test.ts` | Testes de composição, protocolo, custo, votação, PEC, emenda, cronômetro de MP, veto, avanço semanal, LOA e crédito. |
+| `src/components/LegislaturePanel.tsx` | Interface funcional do Congresso. |
+| `src/components/TopNavigation.tsx` | Adiciona navegação para Congresso. |
+| `src/App.tsx` | Liga a aba e as callbacks ao engine. |
+| `src/engine/campaign.ts` | Inicializa composição e estado legislativo em novas campanhas. |
+| `src/engine/turn.ts` | Integra tramitação ao avanço de semana. |
+| `src/engine/economy.ts` | Conecta reforma tributária à agenda legislativa. |
+| `src/engine/executive.ts` | Conecta reorganização ministerial à agenda legislativa. |
+| `src/persistence/campaignRepository.ts` | Save v7, validação de estado legislativo e migração de dados antigos. |
+| `src/persistence/campaignRepository.test.ts` | Testa migração v6→v7 sem reescalar moeda, números das Casas e recuperação de propostas legadas. |
+| `src/styles.css` | Estilos responsivos do painel e formulários do Congresso. |
+| `package.json` | Inclui os testes legislativos no script principal. |
+| `docs/STATUS.md` | Estado técnico atualizado e limitações conhecidas. |
+| `docs/PROXIMOS_PASSOS.md` | Roteiro marcado com a Fase 3.1 concluída e Fase 3.2 como próxima. |
 
 ## 5. Persistência e compatibilidade
 
-A versão do save foi elevada de \`versaoDoSave: 6\` para \`versaoDoSave: 7\`.
+A versão do save foi elevada de `versaoDoSave: 6` para `versaoDoSave: 7`.
 
 - Saves v7 são validados com a presença e estrutura do estado legislativo.
 - Saves v6 que não tinham Legislativo recebem uma composição legislativa determinística.
@@ -199,13 +199,13 @@ O teste de migração v6 verifica explicitamente que caixa/receitas/dívida não
 ## 6. Validação automatizada
 
 A execução GitHub Actions mais recente com o núcleo legislativo e os testes originais foi configurada para executar:
-1. \`npm ci\`
-2. \`npm run test\`
-3. \`npm run build\`
+1. `npm ci`
+2. `npm run test`
+3. `npm run build`
 
-O commit \`210be129e4cce74603b59d6e6d7f4c48e6ec4c97\` passou **57 testes, 0 falhas**, e build de produção com sucesso no [workflow 38942064992](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38942064992). Depois disso, uma revisão adicional reforçou os limites de crédito e acrescentou um teste específico para garantir consistência das parcelas setoriais e ausência de criação de caixa. **Confirme o workflow que cobre o HEAD atual antes de considerar esta entrega definitivamente encerrada**; os commits de código posteriores devem passar pela mesma rotina.
+O commit `210be129e4cce74603b59d6e6d7f4c48e6ec4c97` passou **57 testes, 0 falhas**, e build de produção com sucesso no [workflow 38942064992](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38942064992). Depois disso, uma revisão adicional reforçou os limites de crédito e acrescentou um teste específico para garantir consistência das parcelas setoriais e ausência de criação de caixa. **Confirme o workflow que cobre o HEAD atual antes de considerar esta entrega definitivamente encerrada**; os commits de código posteriores devem passar pela mesma rotina.
 
-Coberturas relevantes em \`src/engine/legislature.test.ts\`:
+Coberturas relevantes em `src/engine/legislature.test.ts`:
 - Totais exatos de 513 e 81 cadeiras.
 - Bancada inicial pequena de partido personalizado.
 - Campos, custo de ação e capital político para apresentar propostas.
@@ -260,26 +260,26 @@ Ao fazer correções, verifique a norma oficial vigente e documente exatamente q
 
 **Não reimplementar a Fase 3.1 do zero.** O trabalho mais útil agora é uma revisão por gaps, apontando problemas concretos antes de iniciar a próxima fase.
 
-1. Ler \`AGENTS.md\`, \`docs/STATUS.md\`, este relatório, \`docs/PROXIMOS_PASSOS.md\` e as seções 7 e 19 do Documento Mestre.
+1. Ler `AGENTS.md`, `docs/STATUS.md`, este relatório, `docs/PROXIMOS_PASSOS.md` e as seções 7 e 19 do Documento Mestre.
 2. Comparar o engine com a Constituição consolidada e as fontes oficiais sobre orçamento e medidas provisórias.
 3. Categorizar cada achado em:
    - **P0 — bloqueador:** pode corromper save, criar caixa indevidamente, quebrar tramitação ou violar competência básica de um Poder.
    - **P1 — importante:** regra de quórum, sequência procedimental, prazo ou orçamento materialmente inconsistente.
    - **P2 — melhoria:** interface, redação, balanceamento ou simplificação bem documentada.
 4. Para cada achado, informar o arquivo/função, cenário de reprodução, resultado atual, resultado esperado e proposta de correção. Não afirmar bug sem confirmar o fluxo no código.
-5. Corrigir somente achados confirmados; adicionar testes automatizados e repetir \`npm run test\` e \`npm run build\`.
+5. Corrigir somente achados confirmados; adicionar testes automatizados e repetir `npm run test` e `npm run build`.
 6. Fazer revisão visual real em desktop e celular, caso seja possível executar a aplicação, e descrever quais cenários foram efetivamente verificados.
-7. Somente depois da revisão estável, iniciar a **Fase 3.2 — Judiciário**, em nova branch. Manter a independência do Judiciário; não mesclar a nova fase em \`main\` sem revisão do responsável.
+7. Somente depois da revisão estável, iniciar a **Fase 3.2 — Judiciário**, em nova branch. Manter a independência do Judiciário; não mesclar a nova fase em `main` sem revisão do responsável.
 
 ### Prompt de continuidade para colar no Claude
 
-> Você está continuando o projeto Palácio em Jogo. Leia \`AGENTS.md\`, \`docs/STATUS.md\`, \`docs/PROXIMOS_PASSOS.md\`, \`docs/RELATORIO_FASE_3_1_CLAUDE.md\` e as seções 7 e 19 do Documento Mestre. A Fase 3.1 — Congresso e legislação já foi implementada na branch \`codex/phase-3a-congress\`; não a recrie. Faça primeiro uma auditoria de gaps do código existente, com foco em quóruns, sequência por Casa, veto, MP/prazos, PPA/LDO/LOA, créditos/emendas, efeito no caixa e migração v6→v7. Use as fontes oficiais indicadas no relatório e não assuma que a abstração de jogo é uma implementação legal completa. Liste achados confirmados em P0/P1/P2 com arquivo/função, cenário, efeito e correção sugerida. Corrija apenas os problemas confirmados, escreva testes de regressão, execute \`npm run test\` e \`npm run build\`, e atualize a documentação com o resultado real. Faça/relate a revisão visual em desktop e celular se a ferramenta permitir. Depois, e apenas depois de estabilizar a Fase 3.1, prepare a Fase 3.2 — Judiciário numa branch separada, respeitando a separação dos Poderes. Não faça push nem merge sem autorização explícita do responsável.
+> Você está continuando o projeto Palácio em Jogo. Leia `AGENTS.md`, `docs/STATUS.md`, `docs/PROXIMOS_PASSOS.md`, `docs/RELATORIO_FASE_3_1_CLAUDE.md` e as seções 7 e 19 do Documento Mestre. A Fase 3.1 — Congresso e legislação já foi implementada na branch `codex/phase-3a-congress`; não a recrie. Faça primeiro uma auditoria de gaps do código existente, com foco em quóruns, sequência por Casa, veto, MP/prazos, PPA/LDO/LOA, créditos/emendas, efeito no caixa e migração v6→v7. Use as fontes oficiais indicadas no relatório e não assuma que a abstração de jogo é uma implementação legal completa. Liste achados confirmados em P0/P1/P2 com arquivo/função, cenário, efeito e correção sugerida. Corrija apenas os problemas confirmados, escreva testes de regressão, execute `npm run test` e `npm run build`, e atualize a documentação com o resultado real. Faça/relate a revisão visual em desktop e celular se a ferramenta permitir. Depois, e apenas depois de estabilizar a Fase 3.1, prepare a Fase 3.2 — Judiciário numa branch separada, respeitando a separação dos Poderes. Não faça push nem merge sem autorização explícita do responsável.
 
 ---
 
 ## 10. Estado de integração
 
-- **Branch de trabalho:** \`codex/phase-3a-congress\`
-- **Branch-base:** \`codex/phase-2b-society-finance\`
+- **Branch de trabalho:** `codex/phase-3a-congress`
+- **Branch-base:** `codex/phase-2b-society-finance`
 - **Main:** não mesclada com a nova etapa.
 - **Próximo passo de produto:** auditoria de gaps e testes manuais; depois Fase 3.2 — Judiciário.
