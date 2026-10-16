@@ -2,7 +2,7 @@
 
 Atualizado em: 2026-10-16  
 Branch de referência: `codex/phase-3a-congress`  
-Versão atual do save: `v8`
+Versão atual do save: `v9`
 
 Este arquivo é o mapa geral do projeto para pessoas e IAs que forem continuar o desenvolvimento. Antes de alterar qualquer sistema, leia também `AGENTS.md`, `docs/STATUS.md`, `docs/PROXIMOS_PASSOS.md` e as seções relevantes do Documento Mestre.
 
@@ -87,8 +87,9 @@ Calendário atual: início em janeiro de 2027, quatro semanas por mês. Dinheiro
 
 ## 6. Persistência e migração
 
-- Versão atual do save: v8.
-- v7 → v8: atualiza tema/paleta de partidos predefinidos nas campanhas existentes; mantém as cores de partido personalizado.
+- Versão atual do save: v9.
+- v8 → v9: atualiza os códigos de cor revisados e recalcula o tema das campanhas existentes; mantém as cores de partido personalizado.
+- v7 → v8: introduziu a primeira versão das paletas partidárias.
 - v6 → v8: migra o estado legislativo e atualiza a paleta; não reescala os valores financeiros já convertidos para reais.
 - v5 e versões mais antigas: passam pela regra histórica de conversão monetária para a escala em R$ bilhões, além de inicializações/migrações dos sistemas posteriores.
 - LocalStorage é local ao navegador. Backup JSON é a forma atual de transportar a campanha.
