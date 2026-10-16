@@ -16,7 +16,7 @@ A tramitação agora contempla PL, PLP, PEC, MP, PPA, LDO, LOA, crédito adicion
 
 A reforma tributária já registrada pelo sistema econômico e a reorganização ministerial são recuperadas como proposições quando uma campanha anterior é migrada. O save atual é v9: a v7 já incluía o estado legislativo, a v8 introduziu paletas partidárias e a v9 atualiza os códigos revisados e o contraste dos botões nas campanhas salvas, preservando cores de partidos personalizados. Saves v6 mantêm os valores já convertidos para reais, sem nova multiplicação; saves v5 e anteriores ainda recebem a conversão histórica. Dados antigos de propostas pendentes são preservados na agenda legislativa.
 
-**Validação automatizada:** GitHub Actions passou `npm run test` com **61 testes aprovados, 0 falhas**, e `npm run build` com sucesso no commit de código `601152eee8e9d17511a8ccb8d985516cddbef1a0` (execução [38947033246](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38947033246)). A revisão documental posterior foi validada no HEAD `b4f20af61d697fc5fc423e672349b823b29c9535`, com 61 testes e build aprovados no [workflow 38947525507](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38947525507). O resultado automatiza testes e build, mas não equivale a uma revisão visual no navegador. A branch de trabalho não foi mesclada à `main`.
+**Validação automatizada:** GitHub Actions passou `npm run test` com **62 testes aprovados, 0 falhas**, e `npm run build` com sucesso no commit de código `dff95f7b7b776ce2d4045d72f46eedfabe42be51` (execução [38961218149](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38961218149)). O resultado automatiza testes e build, mas não equivale a uma revisão visual no navegador. A branch de trabalho não foi mesclada à `main`.
 
 ## Funcionalidades implementadas
 
@@ -61,7 +61,7 @@ A reforma tributária já registrada pelo sistema econômico e a reorganização
 - `src/engine/legislature.ts`: distribuição inicial de cadeiras, validação e submissão de proposições, negociação, votos, tramitação, efeitos fiscais e sanção/veto.
 - `src/engine/turn.ts`: avança a tramitação legislativa uma vez por semana.
 - `src/engine/economy.ts` e `src/engine/executive.ts`: conectam reforma tributária e reorganização ministerial à agenda legislativa.
-- `src/persistence/campaignRepository.ts`: valida, salva e migra campanhas; versão atual do save é 7.
+- `src/persistence/campaignRepository.ts`: valida, salva e migra campanhas; versão atual do save é 9.
 - `src/styles.css`: estilo responsivo do painel legislativo e telas existentes.
 
 ## Rodar e testar
@@ -82,7 +82,7 @@ A suíte automatizada atual tem 62 testes. O workflow `.github/workflows/validat
 - O modelo legislativo é uma abstração jogável. Quóruns e números principais são parametrizados, mas o sistema não implementa todo o processo regimental, todas as comissões, pareceres, apensamentos, urgências específicas, períodos de recesso ou todas as exceções constitucionais.
 - O resultado de uma votação não é decidido diretamente pelo jogador. Apoio no Congresso e articulação influenciam probabilidades, não substituem o voto.
 - Aprovar uma lei não cria dinheiro disponível automaticamente. A LOA altera o planejamento anual; emendas redistribuem dotação; crédito adicional altera orçamento planejado; caixa e despesas continuam sujeitos ao motor econômico.
-- A migração de v8 para v9 atualiza os códigos revisados de paleta/tema; v7 para v8 introduziu a primeira paleta; a migração de v6 para v8 não reescala reais pela segunda vez. Valores v5 ou anteriores recebem a conversão histórica de unidades abstratas para a escala interna de R$ bilhões.
+- A migração de v8 para v9 atualiza os códigos revisados de paleta/tema; v7 para v8 introduziu a primeira paleta; a migração de v6 para v9 não reescala reais pela segunda vez. Valores v5 ou anteriores recebem a conversão histórica de unidades abstratas para a escala interna de R$ bilhões.
 - LocalStorage é específico do navegador. Exporte backups para preservar campanhas fora da máquina.
 
 ## Pendências e limites conhecidos
