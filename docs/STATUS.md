@@ -16,7 +16,7 @@ A tramitação agora contempla PL, PLP, PEC, MP, PPA, LDO, LOA, crédito adicion
 
 A reforma tributária já registrada pelo sistema econômico e a reorganização ministerial são recuperadas como proposições quando uma campanha anterior é migrada. O formato de save foi elevado para v7. Saves v6 mantêm os valores já convertidos para reais, sem nova multiplicação; saves v5 e anteriores ainda recebem a conversão histórica. Dados antigos de propostas pendentes são preservados na agenda legislativa.
 
-**Validação automatizada:** GitHub Actions passou `npm run test` com **57 testes aprovados, 0 falhas**, e `npm run build` com sucesso no commit de código `210be129e4cce74603b59d6e6d7f4c48e6ec4c97` (execução [38942064992](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38942064992)). O resultado automatiza testes e build, mas não equivale a uma revisão visual no navegador. A branch de trabalho não foi mesclada à `main`.
+**Validação automatizada:** GitHub Actions passou `npm run test` com **58 testes aprovados, 0 falhas**, e `npm run build` com sucesso no commit de código `0ba015153f9ce0b1318c35ae8bf6157a0737ecbf` (execução [38942516918](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38942516918)). O resultado automatiza testes e build, mas não equivale a uma revisão visual no navegador. A branch de trabalho não foi mesclada à `main`.
 
 ## Funcionalidades implementadas
 
@@ -65,7 +65,7 @@ npm run test
 npm run build
 ```
 
-A suíte automatizada atual tem 57 testes. O workflow `.github/workflows/validate.yml` executa testes e build a cada push em `main` ou em branches `codex/**`, e em pull requests direcionados à `main`.
+A suíte automatizada atual tem 58 testes. O workflow `.github/workflows/validate.yml` executa testes e build a cada push em `main` ou em branches `codex/**`, e em pull requests direcionados à `main`.
 
 ## Decisões de design
 
