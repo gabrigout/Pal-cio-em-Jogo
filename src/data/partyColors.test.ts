@@ -7,7 +7,7 @@ import { createCampaign, selectionFromDefinition } from '../engine/campaign'
 const expectedPalettes: Record<string, [string, string]> = {
   ptp: ['#E4142C', '#FFFFFF'],
   pso: ['#D71920', '#FFD52B'],
-  pdtt: ['#C8102E', '#009640'],
+  pdtt: ['#E4002B', '#005AB2'],
   plim: ['#004F9F', '#009640'],
   pssdb: ['#004C94', '#FFD600'],
   nova: ['#F17021', '#1A2948'],
