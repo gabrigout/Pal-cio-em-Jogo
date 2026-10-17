@@ -150,4 +150,4 @@ export const politicalOrientationLabels: Record<PoliticalOrientation, string> = 
   right: 'Direita',
 }
 
-// Paletas temporárias: PTP, PDTT, PLIM e PSSDB aguardam identidade visual definitiva.
+// As seis paletas satíricas são usadas em novas campanhas e aplicadas a saves predefinidos na migração v8.
