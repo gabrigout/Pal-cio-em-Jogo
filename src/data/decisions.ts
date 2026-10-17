@@ -110,4 +110,28 @@ export const weeklyDecisions: NarrativeDecision[] = [
     ],
   },
 
+
+  {
+    id: 'court-congress-showdown',
+    title: 'O Congresso ameaça comprar uma briga com o Supremo',
+    prompt: 'Líderes recém-eleitos prometem endurecer contra decisões do Judiciário. A base do governo quer apoio legislativo, mas juristas alertam para o risco de transformar uma disputa institucional em crise.',
+    condition: { indicator: 'institutionalStability', operator: 'atMost', value: 73 }, weight: 5, category: 'crise institucional',
+    publicFigure: { name: 'Rogério do Plenário', role: 'Senador fictício', description: 'Personagem satírico de um articulador parlamentar que usa embates entre Poderes para mobilizar sua base.' },
+    options: [
+      { id: 'defend-institutional-dialogue', label: 'Defender diálogo entre os Poderes', description: 'Reafirmar competências constitucionais e abrir uma mesa institucional.', icon: 'scale', effects: { institutionalStability: 2, judiciaryRelation: 2, politicalCapital: -2, presidentialApproval: -1 }, resultText: 'A postura reduziu a tensão institucional, mas desagradou quem esperava confronto.' },
+      { id: 'seek-legislative-confrontation', label: 'Apoiar a pressão do Congresso', description: 'Tentar transformar o conflito em moeda de negociação com a base parlamentar.', icon: 'landmark', effects: { congressSupport: 2, polarization: 2, institutionalStability: -3, judiciaryRelation: -2 }, resultText: 'A base legislativa se aproximou, mas a crise entre instituições ganhou força.', schedule: { eventId: 'institutional-crisis-followup', delayWeeks: 1 } },
+    ],
+  },
+  {
+    id: 'ai-campaign-chaos',
+    title: 'A inteligência artificial entrou na campanha',
+    prompt: 'Um vídeo e uma imagem gerados por IA circulam como se fossem registros reais. O conteúdo ganha milhares de compartilhamentos antes de a checagem ficar pronta.',
+    condition: { indicator: 'polarization', operator: 'atLeast', value: 42 }, weight: 6, category: 'redes e eleições',
+    publicFigure: { name: 'Pablo Marçalino', role: 'Influenciador e candidato fictício', description: 'Personagem satírico de um comunicador que transforma alcance digital e vídeos curtos em poder político.' },
+    options: [
+      { id: 'publish-verification', label: 'Publicar checagem e material original', description: 'Divulgar a origem do arquivo, os sinais de manipulação e uma versão verificável.', icon: 'newspaper', effects: { publicTrust: 2, publicIntegrity: 2, administrativeCapacity: -1 }, resultText: 'A checagem forneceu evidências, mas o conteúdo original continuou circulando em grupos fechados.' },
+      { id: 'demand-platform-transparency', label: 'Cobrar transparência da plataforma', description: 'Solicitar explicações sobre alcance, anúncios e rotulagem de conteúdo sintético.', icon: 'message', effects: { publicIntegrity: 1, foreignRelations: -1, politicalCapital: -1, polarization: -1 }, resultText: 'A cobrança abriu uma frente de fiscalização, com resposta lenta e disputa sobre os limites da regulação.' },
+    ],
+  },
+
 ]
