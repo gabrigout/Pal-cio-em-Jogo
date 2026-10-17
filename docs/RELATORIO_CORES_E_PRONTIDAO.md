@@ -52,7 +52,7 @@ A versão atual é `CURRENT_SAVE_VERSION = 8`.
 
 ## 5. Validação
 
-O código de paletas/save v8 foi validado pelo GitHub Actions no commit `601152eee8e9d17511a8ccb8d985516cddbef1a0`: **61 testes passaram e o build de produção concluiu com sucesso** no [workflow 38947033246](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38947033246).
+O código de paletas/save v8 e a integração das cores institucionais no tema principal foram validados no commit `e526778ccf2cec88aaba2b723c21f4d08481759d`: **62 testes passaram e o build de produção concluiu com sucesso** no [workflow 38992792373](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38992792373).
 
 O workflow que cobre a atualização documental posterior também executa testes/build. A validação automatizada comprova testes e compilação, mas não substitui revisão visual. Ainda não foi realizada uma sessão real de navegação visual desktop/celular para medir contraste, hierarquia e consistência do tema em todos os painéis.
 
