@@ -20,16 +20,16 @@ export const partyPalette = [
 // Quando o manual publica RGB/HEX, esses valores são usados; nos demais casos, os HEX são aproximações
 // digitais explícitas, não declarações de códigos oficiais. A interface mantém tons acessíveis para texto
 // e usa as cores institucionais originais em barras, botões e elementos gráficos de destaque.
-// PTP/PT: vermelho e branco — loja oficial e portal: https://loja.pt.org.br/produtos/ | https://pt.org.br/
-// PSÓ/PSOL: vermelho e amarelo — estatuto define bandeira vermelha e sol amarelo: https://psol50.org.br/partido/estatuto/
-// PDTT/PDT: vermelho, branco e azul; a paródia usa vermelho e azul: https://pdt.org.br/index.php/pdt-renova-sua-identidade-visual/
+// PTP/PT: vermelho #E4142C e branco — referência de manual PT Digital: https://pt.org.br/ | cópia pública consultável documentada em docs/CORES_DOS_PARTIDOS.md
+// PSÓ/PSOL: vermelho #D71920 e amarelo #FFD52B como aproximações digitais da bandeira vermelha e sol amarelo descritos no estatuto: https://psol50.org.br/partido/estatuto/
+// PDTT/PDT: vermelho #E4002B e azul #005AB2 da cartela PDT-RS 2025, com branco como cor histórica adicional: https://pdt.org.br/index.php/pdt-renova-sua-identidade-visual/
 // PLIM/PL: RGB 0,79,159 e 0,150,64 (azul e verde) do manual 2023: https://partidoliberal.org.br/wp-content/uploads/2023/03/manual-da-marca-pl-2023.pdf
 // PSSDB/PSDB: azul e amarelo oficiais: https://www.psdb.org.br/acompanhe/noticias/psdb-moderniza-sua-marca/
 // NOVA/NOVO: laranja #F17021 e azul-marinho #1A2948 do manual: https://novo.org.br/wp-content/uploads/2020/08/Manual-da-Identidade-visual-do-NOVO.pdf
 export const partyColors = {
-  ptp: ['#E30613', '#FFFFFF'],
-  pso: ['#E30613', '#FFD500'],
-  pdtt: ['#E30613', '#00529B'],
+  ptp: ['#E4142C', '#FFFFFF'],
+  pso: ['#D71920', '#FFD52B'],
+  pdtt: ['#E4002B', '#005AB2'],
   plim: ['#004F9F', '#009640'],
   pssdb: ['#004C94', '#FFD600'],
   nova: ['#F17021', '#1A2948'],
