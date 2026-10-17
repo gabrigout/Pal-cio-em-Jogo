@@ -292,7 +292,7 @@ Ao fazer correções, verifique a norma oficial vigente e documente exatamente q
 
 ---
 
-## 10.1. Atualização posterior — identidade visual das legendas (2026-10-16)
+## Atualização posterior — identidade visual das legendas (2026-10-16)
 
 Depois da entrega legislativa, as cores das seis legendas satíricas foram revisadas contra fontes oficiais. A paleta do PTP, paródia do PT, é vermelho `#E4142C` e branco. PSÓ/PSOL usa vermelho `#D71920` e amarelo `#FFD52B`; PDTT/PDT usa vermelho `#E4002B` e azul `#005AB2`; PLIM/PL usa azul `#004F9F` e verde `#009640` extraídos do manual oficial; PSSDB/PSDB usa azul e amarelo; NOVA/NOVO usa laranja `#F17021` e azul-marinho `#1A2948` do manual de marca. Quando uma fonte não declara códigos HEX, o relatório e o código deixam claro que se trata de aproximação digital.
 
