@@ -94,4 +94,26 @@ export const scheduledNarrativeEvents: NarrativeDecision[] = [
       { id: 'reconcile-sources', label: 'Conciliar fontes', description: 'Adiar o boletim consolidado até alinhar critérios técnicos.', icon: 'clipboard', effects: { publicIntegrity: 1, publicTrust: -1, administrativeCapacity: 1 }, resultText: 'A conciliação melhorou a qualidade dos dados, com uma espera pública maior.' },
     ],
   },
+
+  ,{
+    id: 'viral-amendment-followup', title: 'A resposta virou outro vídeo', category: 'reação', weight: 5,
+    prompt: 'Depois da resposta do Planalto, Nico Gadelha publica uma nova montagem e líderes do Congresso pedem que a disputa não atrapalhe a liberação dos recursos.',
+    condition: { indicator: 'polarization', operator: 'atLeast', value: 45 },
+    publicFigure: { name: 'Nico Gadelha', role: 'Influenciador político fictício', description: 'O personagem retoma a crítica à emenda e cobra uma reação do governo.' },
+    options: [
+      { id: 'release-tracking-page', label: 'Criar página de acompanhamento', description: 'Exibir destino, cronograma, empenho e execução da emenda.', icon: 'clipboard', effects: { publicTrust: 2, publicIntegrity: 1, politicalCapital: -1 }, resultText: 'A prestação de contas criou uma referência pública e reduziu parte da desconfiança.' },
+      { id: 'negotiate-quietly', label: 'Negociar com líderes', description: 'Separar a disputa digital da negociação institucional e preservar a execução.', icon: 'landmark', effects: { congressSupport: 2, politicalCapital: -2, publicTrust: -1 }, resultText: 'A articulação preservou o acordo no Congresso, mas a falta de comunicação manteve dúvidas entre parte do público.' },
+    ],
+  },
+  {
+    id: 'workweek-cost-followup', title: 'A conta da mudança chegou às empresas', category: 'reação', weight: 5,
+    prompt: 'Entidades empresariais pedem prazo para reorganizar turnos e estimam alta de custos em setores intensivos em mão de obra. Sindicatos dizem que o bem-estar não pode ficar para depois.',
+    condition: { indicator: 'economicOutlook', operator: 'atMost', value: 58 },
+    publicFigure: { name: 'Rui do Comércio', role: 'Representante empresarial fictício', description: 'Personagem satírico que representa pequenos e médios negócios preocupados com custos de adaptação.' },
+    options: [
+      { id: 'pilot-and-measure', label: 'Testar por setor e medir resultados', description: 'Criar transição com metas de emprego, produtividade, preços e qualidade de vida.', icon: 'clipboard', effects: { economicOutlook: 1, publicTrust: 1, administrativeCapacity: -2, politicalCapital: -1 }, resultText: 'O piloto abriu espaço para ajustar a regra com dados, mas exigiu tempo e capacidade administrativa.' },
+      { id: 'offer-small-business-credit', label: 'Oferecer crédito temporário a pequenos negócios', description: 'Amortecer custos iniciais, aceitando mais despesa pública e cobrança por resultados.', icon: 'coins', effects: { economicOutlook: 1, budget: -12, politicalCapital: -1, presidentialApproval: -1 }, resultText: 'O crédito deu fôlego a parte das empresas, mas pressionou o caixa e não resolveu todas as diferenças entre setores.' },
+    ],
+  },
+
 ]
