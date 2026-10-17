@@ -104,7 +104,7 @@ function DecisionChoiceCard({
               onClick={() => onChoose(option.id, category)}
               type="button"
             >
-              <span className="decision-option-icon"><OptionIcon aria-hidden="true" size={17} /></span>
+              <span className="decision-option-icon" title={`Ícone da opção: ${option.label}. ${option.description}`}><OptionIcon aria-hidden="true" size={17} /></span>
               <span className="decision-option-copy">
                 <strong>{option.label}</strong>
                 {executiveOptionType && <small className="executive-action-type">{executiveOptionType}</small>}
