@@ -291,7 +291,6 @@ export default function App() {
           onChooseDecision={chooseDecision}
           onDismissDecisionResult={closeDecisionResult}
           onDismissSummary={closeWeeklySummary}
-          onRunAction={runAction}
         />
       ) : activeSection === 'estado' ? (
         <ExecutivePanel
