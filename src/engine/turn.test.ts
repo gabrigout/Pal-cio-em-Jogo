@@ -3,7 +3,10 @@ import test from 'node:test'
 import { additionalDecisions } from '../data/additionalDecisions'
 import { weeklyDecisions } from '../data/decisions'
 import { createCampaign } from './campaign'
-import { advanceCalendar, advanceWeek, calculateActionPoints, chooseNarrativeOption, getReactionEvent } from './turn'
+import { closeEconomicMonth } from './economy'
+import { closeExecutiveMonth } from './executive'
+import { closePublicProjectsMonth, startPublicProject } from './projects'
+import { advanceCalendar, advanceWeek, calculateActionPoints, calculateMonthlyEconomyBalance, chooseNarrativeOption, getReactionEvent } from './turn'
 
 const thresholdIndicators = {
   executiveSupport: 49,
@@ -131,4 +134,37 @@ test('evento encadeado dispara na semana prevista, após duas viradas', () => {
   assert.equal(afterTwoWeeks.calendar.week, 3)
   assert.equal(afterTwoWeeks.turn.activeReactionEventId, 'rain-follow-up')
   assert.equal(afterTwoWeeks.turn.scheduledNarrativeEvents.length, 0)
+})
+test('prévia do balanço mensal considera os efeitos dos projetos antes de fechar a economia', () => {
+  const campaign = createCampaign('left', {
+    id: 'test-party',
+    fullName: 'Partido de Teste',
+    acronym: 'PDT',
+    description: 'Partido usado em teste.',
+    colors: ['#8bd4af', '#e5a05c'],
+    custom: true,
+  }, () => 0.5)
+  const started = startPublicProject(campaign, 'primary-care-expansion', 140, 'normal')
+  assert.ok(started)
+  if (!started) return
+
+  const withCompletedProject = {
+    ...started,
+    projects: started.projects.map((project) => ({
+      ...project,
+      status: 'completed' as const,
+      progress: 100,
+      outcomesApplied: false,
+      completionEffects: { ...project.completionEffects, publicIntegrity: 10 },
+    })),
+  }
+
+  const preview = calculateMonthlyEconomyBalance(withCompletedProject)
+  const executive = closeExecutiveMonth(withCompletedProject).campaign
+  const projects = closePublicProjectsMonth(executive).campaign
+  const economy = closeEconomicMonth(projects).campaign
+
+  assert.equal(preview.revenue, economy.economy.indicators.publicRevenue)
+  assert.equal(preview.expenses, economy.economy.indicators.publicExpenses)
+  assert.equal(preview.closingBudget, economy.economy.availableFunds)
 })
