@@ -20,7 +20,7 @@ A reforma tributária já registrada pelo sistema econômico e a reorganização
 
 ## Atualização visual — paletas partidárias (2026-10-16)
 
-As seis legendas satíricas agora usam cores pesquisadas nas identidades dos partidos que inspiram suas paródias. PTP/PT usa vermelho `#E30613` e branco; PSÓ/PSOL usa vermelho e amarelo; PDTT/PDT usa vermelho e azul (o partido original também usa branco); PLIM/PL usa os valores RGB do manual oficial de 2023 convertidos para `#004F9F` e `#009640`; PSSDB/PSDB usa azul e amarelo; NOVA/NOVO usa laranja `#F17021` e azul-marinho `#1A2948`. Onde a fonte não publica HEX, os valores são aproximações digitais inspiradas na marca, não códigos oficiais declarados.
+As seis legendas satíricas agora usam cores pesquisadas nas identidades dos partidos que inspiram suas paródias. PTP/PT usa vermelho `#E4142C` e branco; PSÓ/PSOL usa vermelho e amarelo; PDTT/PDT usa vermelho e azul (o partido original também usa branco); PLIM/PL usa os valores RGB do manual oficial de 2023 convertidos para `#004F9F` e `#009640`; PSSDB/PSDB usa azul e amarelo; NOVA/NOVO usa laranja `#F17021` e azul-marinho `#1A2948`. Onde a fonte não publica HEX, os valores são aproximações digitais inspiradas na marca, não códigos oficiais declarados.
 
 As cores originais agora alimentam botões primários, barra de progresso, indicadores gráficos, seleção de partido e linha de assinatura do jogo. Textos e ícones em superfícies escuras continuam usando variantes ajustadas para contraste. O texto dos botões escolhe preto/branco para preservar contraste AA. A migração v8 atualiza campanhas salvas dos partidos predefinidos para as novas cores, recalcula o tema e preserva as cores escolhidas por partidos personalizados.
 
@@ -69,7 +69,7 @@ Fontes consultadas: [loja oficial do PT](https://loja.pt.org.br/produtos/), [est
 - `src/engine/legislature.ts`: distribuição inicial de cadeiras, validação e submissão de proposições, negociação, votos, tramitação, efeitos fiscais e sanção/veto.
 - `src/engine/turn.ts`: avança a tramitação legislativa uma vez por semana.
 - `src/engine/economy.ts` e `src/engine/executive.ts`: conectam reforma tributária e reorganização ministerial à agenda legislativa.
-- `src/persistence/campaignRepository.ts`: valida, salva e migra campanhas; versão atual do save é 7.
+- `src/persistence/campaignRepository.ts`: valida, salva e migra campanhas; versão atual do save é 8.
 - `src/styles.css`: estilo responsivo do painel legislativo e telas existentes.
 
 ## Rodar e testar
