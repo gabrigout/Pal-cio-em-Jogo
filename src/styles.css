@@ -134,7 +134,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cor-primaria); 
 .section-placeholder-mark { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 22px; color: var(--cor-secundaria); border: 1px solid color-mix(in srgb, var(--cor-secundaria), transparent 55%); background: color-mix(in srgb, var(--cor-secundaria), var(--neutral-950) 88%); }
 .section-placeholder .eyebrow { margin-bottom: 9px; }
 .section-placeholder h1 { margin: 0; color: var(--text); font-size: 32px; font-weight: 600; }
-.site-bottom-line { height: 3px; background: linear-gradient(90deg, transparent, var(--cor-primaria-marca), transparent); opacity: .75; }
+.site-bottom-line { height: 3px; background: linear-gradient(90deg, transparent, var(--cor-primaria-marca) 42%, var(--cor-secundaria-marca) 58%, transparent); opacity: .8; }
 .page-enter { animation: enter .35s ease both; }
 @keyframes enter { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -229,7 +229,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cor-primaria); 
 .party-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .party-option { min-height: 190px; display: flex; flex-direction: column; align-items: flex-start; padding: 14px; border: 1px solid #373737; background: linear-gradient(145deg, #202020, #1a1a1a); color: inherit; text-align: left; cursor: pointer; transition: border-color .16s ease, background .16s ease, transform .16s ease; }
 .party-option:hover { transform: translateY(-1px); border-color: #6e6e6e; background: #242424; }
-.party-option.is-selected { border-color: var(--cor-primaria-marca); background: linear-gradient(145deg, color-mix(in srgb, var(--cor-primaria-marca), var(--neutral-900) 88%), #1e1e1e); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cor-primaria-marca), transparent 78%); }
+.party-option.is-selected { border-color: var(--cor-primaria-marca); background: linear-gradient(145deg, color-mix(in srgb, var(--cor-primaria-marca), var(--neutral-900) 88%), color-mix(in srgb, var(--cor-secundaria-marca), var(--neutral-900) 94%) 42%, #1e1e1e); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cor-primaria-marca), transparent 78%); }
 .party-option-top { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
 .party-option-acronym { display: inline-flex; align-items: center; gap: 7px; color: #eaeaea; font-family: var(--mono); font-size: 11px; font-weight: 500; }
 .party-swatches { display: inline-flex; gap: 4px; flex: 0 0 auto; }
