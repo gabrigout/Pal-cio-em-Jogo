@@ -335,7 +335,7 @@ test('migra paleta e tema de campanhas existentes sem alterar partido personaliz
   if (!ptpMigration.ok) return
   assert.equal(ptpMigration.save.versaoDoSave, 8)
   assert.deepEqual(ptpMigration.save.campaign.party.colors, ['#E30613', '#FFFFFF'])
-  assert.equal(ptpMigration.save.campaign.theme.officialPrimary, '#e4142c')
+  assert.equal(ptpMigration.save.campaign.theme.officialPrimary, '#e30613')
   assert.equal(ptpMigration.save.campaign.theme.officialSecondary, '#ffffff')
 
   const customCampaign = createTestCampaign()
