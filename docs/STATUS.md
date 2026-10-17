@@ -18,6 +18,14 @@ A reforma tributária já registrada pelo sistema econômico e a reorganização
 
 **Validação automatizada:** GitHub Actions passou `npm run test` com **61 testes aprovados, 0 falhas**, e `npm run build` com sucesso no commit de código `601152eee8e9d17511a8ccb8d985516cddbef1a0` (execução [38947033246](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38947033246)). A revisão documental posterior foi validada no HEAD `b4f20af61d697fc5fc423e672349b823b29c9535`, com 61 testes e build aprovados no [workflow 38947525507](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38947525507). O resultado automatiza testes e build, mas não equivale a uma revisão visual no navegador. A branch de trabalho não foi mesclada à `main`.
 
+## Atualização visual — paletas partidárias (2026-10-16)
+
+As seis legendas satíricas agora usam cores pesquisadas nas identidades dos partidos que inspiram suas paródias. PTP/PT usa vermelho `#E30613` e branco; PSÓ/PSOL usa vermelho e amarelo; PDTT/PDT usa vermelho e azul (o partido original também usa branco); PLIM/PL usa os valores RGB do manual oficial de 2023 convertidos para `#004F9F` e `#009640`; PSSDB/PSDB usa azul e amarelo; NOVA/NOVO usa laranja `#F17021` e azul-marinho `#1A2948`. Onde a fonte não publica HEX, os valores são aproximações digitais inspiradas na marca, não códigos oficiais declarados.
+
+As cores originais agora alimentam botões primários, barra de progresso, indicadores gráficos, seleção de partido e linha de assinatura do jogo. Textos e ícones em superfícies escuras continuam usando variantes ajustadas para contraste. O texto dos botões escolhe preto/branco para preservar contraste AA. A migração v8 atualiza campanhas salvas dos partidos predefinidos para as novas cores, recalcula o tema e preserva as cores escolhidas por partidos personalizados.
+
+Fontes consultadas: [loja oficial do PT](https://loja.pt.org.br/produtos/), [estatuto do PSOL](https://psol50.org.br/partido/estatuto/), [identidade visual do PDT](https://pdt.org.br/index.php/pdt-renova-sua-identidade-visual/), [manual da marca do PL](https://partidoliberal.org.br/wp-content/uploads/2023/03/manual-da-marca-pl-2023.pdf), [identidade visual do PSDB](https://www.psdb.org.br/acompanhe/noticias/psdb-moderniza-sua-marca/) e [manual de identidade visual do NOVO](https://novo.org.br/wp-content/uploads/2020/08/Manual-da-Identidade-visual-do-NOVO.pdf).
+
 ## Funcionalidades implementadas
 
 - **Criação de campanha e tema:** escolha entre esquerda/direita, seis partidos fictícios ou partido personalizado com nome, sigla e duas cores. A interface usa paletas pesquisadas para PT/PSOL/PDT/PL/PSDB/NOVO como referência das paródias e deriva variantes para contraste. Fontes e limitações estão em `docs/CORES_DOS_PARTIDOS.md`.
