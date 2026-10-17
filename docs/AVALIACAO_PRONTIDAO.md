@@ -3,7 +3,7 @@
 Atualizado em: 2026-10-16  
 Branch avaliada: codex/phase-3a-congress  
 Versão atual do save: v8  
-Validação do código de cores: 61 testes aprovados e build concluído no [workflow 38947033246](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38947033246); a branch continua com CI para o HEAD documental atual.
+Validação do tema partidário: 62 testes aprovados e build concluído no [workflow 38992792373](https://github.com/gabrigout/Pal-cio-em-Jogo/actions/runs/38992792373), commit `e526778ccf2cec88aaba2b723c21f4d08481759d`; a branch continua com CI para o HEAD documental atual.
 
 ## Veredito
 
