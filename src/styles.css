@@ -880,9 +880,9 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cor-primaria); 
 .economy-budget-pie>span{position:relative;z-index:1;display:grid;gap:5px;text-align:center;max-width:78%}
 .economy-budget-pie small{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em}
 .economy-budget-pie strong{font-size:clamp(13px,1.5vw,18px);overflow-wrap:anywhere}
-.economy-budget-legend{display:grid;gap:8px;min-width:0}.economy-budget-legend>.eyebrow{margin:0 0 2px}
-.economy-legend-row{display:grid;grid-template-columns:9px minmax(0,1fr) auto;gap:9px;align-items:center;font-size:11px;color:var(--soft)}
-.economy-legend-row>span:first-child{width:8px;height:8px;border-radius:2px}.economy-legend-row strong{color:var(--text);font-family:var(--mono);font-size:11px}
+.economy-budget-legend{display:grid;gap:11px;min-width:0}.economy-budget-legend>.eyebrow{margin:0 0 2px}
+.economy-legend-row{display:grid;grid-template-columns:8px minmax(0,1fr);gap:9px;align-items:start;font-size:11px;color:var(--soft)}
+.economy-legend-row>span:first-child{width:8px;height:8px;border-radius:2px;margin-top:4px}.economy-legend-detail{display:grid;gap:4px;min-width:0}.economy-legend-topline{display:flex;justify-content:space-between;gap:8px;align-items:center}.economy-legend-topline>span{min-width:0}.economy-legend-row strong{color:var(--text);font-family:var(--mono);font-size:11px;white-space:nowrap}.economy-legend-amount{font-size:10px;color:var(--muted);line-height:1.4;overflow-wrap:anywhere}.economy-legend-track{height:4px;border-radius:99px;background:var(--line);overflow:hidden;display:block}.economy-legend-track>span{height:100%;display:block;border-radius:99px;transition:width .2s ease}
 .economy-sector-row{border-bottom:1px solid var(--line)}
 .economy-sector-toggle{width:100%;display:grid;grid-template-columns:8px minmax(0,1fr) auto 18px;gap:12px;align-items:center;padding:15px 4px;text-align:left;border:0;background:transparent;cursor:pointer;color:var(--text)}
 .economy-sector-toggle:hover{background:rgba(255,255,255,.025)}.economy-sector-swatch{width:8px;height:32px;border-radius:3px}
