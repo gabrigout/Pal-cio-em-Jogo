@@ -126,8 +126,10 @@ export function createCampaignTheme(primaryColor: string, secondaryColor: string
   return {
     officialPrimary: primaryColor.toLowerCase(),
     officialSecondary: secondaryColor.toLowerCase(),
+    // Accessible variants are used for text/icons on dark surfaces.
     primary: ensureContrast(primaryColor, THEME_SURFACE),
     secondary: ensureContrast(secondaryColor, THEME_SURFACE),
-    buttonText: getButtonTextColor(ensureContrast(primaryColor, THEME_SURFACE)),
+    // Solid controls use the exact party primary and choose black/white text for contrast.
+    buttonText: getButtonTextColor(primaryColor),
   }
 }
