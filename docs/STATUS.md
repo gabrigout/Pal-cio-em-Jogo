@@ -81,7 +81,7 @@ npm run test
 npm run build
 ```
 
-A suíte automatizada atual tem 61 testes. O workflow `.github/workflows/validate.yml` executa testes e build a cada push em `main` ou em branches `codex/**`, e em pull requests direcionados à `main`.
+A suíte automatizada atual tem 62 testes. O workflow `.github/workflows/validate.yml` executa testes e build a cada push em `main` ou em branches `codex/**`, e em pull requests direcionados à `main`.
 
 ## Decisões de design
 
