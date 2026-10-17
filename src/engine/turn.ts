@@ -11,6 +11,7 @@ import { applyExecutiveDecision, closeExecutiveMonth, proposeMinistryReorganizat
 import { applyEconomicDecision, closeEconomicMonth, prepareEconomicYear } from './economy'
 import { advancePublicProjectsWeek, closePublicProjectsMonth } from './projects'
 import { closeSocietyMonth } from './society'
+import { advanceLegislatureWeek } from './legislature'
 import { formatBRLMoney } from '../utils/money'
 import type {
   ActionAvailability,
@@ -552,6 +553,10 @@ export function advanceWeek(campaign: CampaignState): CampaignState {
   workingCampaign = projectWeek.campaign
   changes.push(...projectWeek.changes)
   events.push(...projectWeek.events)
+
+  const legislatureWeek = advanceLegislatureWeek(workingCampaign, endingCalendar)
+  workingCampaign = legislatureWeek.campaign
+  events.push(...legislatureWeek.events)
 
   const isMonthEnd = endingCalendar.week === endingCalendar.weeksPerMonth
   const monthEndEvent = isMonthEnd ? endingMonthlyEvent ?? null : null

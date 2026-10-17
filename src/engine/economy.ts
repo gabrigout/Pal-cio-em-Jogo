@@ -1,6 +1,7 @@
 import { economicRanges, economicRules } from '../data/campaignConfig'
 import { budgetSectorCatalog, initialTaxes, sectorEconomicWeights, taxReformProposal } from '../data/economy'
 import { formatBRLMoney } from '../utils/money'
+import { registerLegislativeProposal } from './legislature'
 import type {
   AnnualBudget,
   BudgetSector,
@@ -259,7 +260,7 @@ export function proposeTaxReform(campaign: CampaignState): CampaignState | null 
   if (campaign.economy.congressProposals.includes(taxReformProposal)
     || campaign.turn.availableActionPoints < economicRules.taxReformActionPoints
     || campaign.country.politicalCapital < economicRules.taxReformPoliticalCapital) return null
-  return {
+  const result: CampaignState = {
     ...campaign,
     economy: {
       ...campaign.economy,
@@ -272,6 +273,13 @@ export function proposeTaxReform(campaign: CampaignState): CampaignState | null 
       actionsTaken: [...campaign.turn.actionsTaken, 'Registrar proposta de reforma tributária ao Congresso'],
     },
   }
+  return registerLegislativeProposal(result, {
+    type: 'complementary',
+    title: taxReformProposal,
+    summary: 'Revisão estrutural do sistema de tributos, com regras de transição e avaliação dos efeitos sobre receitas, consumo e atividade produtiva.',
+    fiscalImpact: 0,
+    sourceKey: 'economic-tax-reform',
+  })
 }
 
 function debtLimit(campaign: CampaignState): number {

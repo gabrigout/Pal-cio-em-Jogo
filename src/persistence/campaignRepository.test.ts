@@ -97,7 +97,7 @@ test('migra campanha legada sem versão para o save atual', () => {
   assert.equal(result.ok, true)
   if (!result.ok) return
   assert.equal(result.migrated, true)
-  assert.equal(result.save.versaoDoSave, 6)
+  assert.equal(result.save.versaoDoSave, 8)
   assert.equal(result.save.campaign.country.executiveSupport, 50)
   assert.equal(result.save.campaign.country.judiciaryRelation, 50)
   assert.ok(result.save.campaign.turn.activeDecisionId)
@@ -116,7 +116,7 @@ test('migra save v3 sem economia e cria ministérios e orçamento determinístic
   assert.equal(second.ok, true)
   if (!first.ok || !second.ok) return
 
-  assert.equal(first.save.versaoDoSave, 6)
+  assert.equal(first.save.versaoDoSave, 8)
   assert.equal(first.save.campaign.ministries.length, 17)
   assert.deepEqual(first.save.campaign.projects, [])
   assert.equal(first.save.campaign.economy.projectExpensesPaidThisMonth, 0)
@@ -143,7 +143,7 @@ test('migra save versão 1 preservando pontos e inicializando o modelo de evento
   assert.equal(result.ok, true)
   if (!result.ok) return
   assert.equal(result.migrated, true)
-  assert.equal(result.save.versaoDoSave, 6)
+  assert.equal(result.save.versaoDoSave, 8)
   assert.equal(result.save.campaign.turn.availableActionPoints, 3)
   assert.ok(Array.isArray(result.save.campaign.turn.scheduledNarrativeEvents))
 })
@@ -162,7 +162,7 @@ test('migra save versão 2 e gera o gabinete para campanha existente', () => {
   assert.equal(result.ok, true)
   if (!result.ok) return
   assert.equal(result.migrated, true)
-  assert.equal(result.save.versaoDoSave, 6)
+  assert.equal(result.save.versaoDoSave, 8)
   assert.equal(result.save.campaign.ministries.length, 17)
   assert.ok(result.save.campaign.ministries.every((ministry) => ministry.minister))
   const repeatedMigration = migrateSave({
@@ -267,10 +267,11 @@ test('migration v5 multiplies legacy abstract money by ten and initializes socie
     ...sector, annualAllocation: 50, executedThisYear: 10,
   }))
   delete campaign.society
+  delete campaign.legislature
   const result = migrateSave({ versaoDoSave: 5, savedAt: '2027-01-01T00:00:00.000Z', campaign })
   assert.equal(result.ok, true)
   if (!result.ok) return
-  assert.equal(result.save.versaoDoSave, 6)
+  assert.equal(result.save.versaoDoSave, 8)
   assert.equal(result.save.campaign.economy.availableFunds, 420)
   assert.equal(result.save.campaign.economy.indicators.publicRevenue, 520)
   assert.equal(result.save.campaign.economy.indicators.publicDebt, 9000)
@@ -279,4 +280,72 @@ test('migration v5 multiplies legacy abstract money by ten and initializes socie
   assert.equal(result.save.campaign.country.budget, result.save.campaign.economy.availableFunds)
   assert.equal(result.save.campaign.society.classes.length, 5)
   assert.equal(result.save.campaign.society.groups.length, 7)
+})
+
+
+test('migra save v6 para v8 sem reescalar valores que já estão em reais', () => {
+  const campaign = createTestCampaign() as unknown as Record<string, any>
+  campaign.country.budget = 42
+  campaign.economy.availableFunds = 42
+  campaign.economy.indicators.publicRevenue = 52
+  campaign.economy.indicators.publicExpenses = 57
+  campaign.economy.indicators.publicDebt = 900
+  campaign.economy.congressProposals = ['Reforma tributária estrutural']
+  campaign.executiveProposals = ['Reorganização da estrutura ministerial']
+  delete campaign.legislature
+
+  const result = migrateSave({
+    versaoDoSave: 6,
+    savedAt: '2027-01-01T00:00:00.000Z',
+    campaign,
+  })
+
+  assert.equal(result.ok, true)
+  if (!result.ok) return
+  assert.equal(result.migrated, true)
+  assert.equal(result.save.versaoDoSave, 8)
+  assert.equal(result.save.campaign.economy.availableFunds, 42)
+  assert.equal(result.save.campaign.economy.indicators.publicRevenue, 52)
+  assert.equal(result.save.campaign.economy.indicators.publicDebt, 900)
+  assert.equal(result.save.campaign.country.budget, 42)
+  assert.equal(result.save.campaign.legislature.chamberOfDeputies.reduce((sum, bloc) => sum + bloc.seats, 0), 513)
+  assert.equal(result.save.campaign.legislature.senate.reduce((sum, bloc) => sum + bloc.seats, 0), 81)
+  assert.equal(result.save.campaign.legislature.bills.length, 2)
+  assert.ok(result.save.campaign.legislature.bills.some((bill) => bill.title === 'Reforma tributária estrutural' && bill.type === 'complementary'))
+  assert.ok(result.save.campaign.legislature.bills.some((bill) => bill.title === 'Reorganização da estrutura ministerial'))
+})
+
+
+test('migra save v7 atualizando as paletas fixas e preserva cores de partido personalizado', () => {
+  const predefined = createTestCampaign() as unknown as Record<string, any>
+  predefined.party = {
+    ...predefined.party,
+    id: 'ptp',
+    acronym: 'PTP',
+    fullName: 'Partido da Taxa e da Picanha',
+    custom: false,
+    colors: ['#8bd4af', '#e5a05c'],
+  }
+  const custom = createTestCampaign() as unknown as Record<string, any>
+  custom.party.colors = ['#123456', '#FEDCBA']
+
+  const predefinedResult = migrateSave({
+    versaoDoSave: 7,
+    savedAt: '2027-01-01T00:00:00.000Z',
+    campaign: predefined,
+  })
+  const customResult = migrateSave({
+    versaoDoSave: 7,
+    savedAt: '2027-01-01T00:00:00.000Z',
+    campaign: custom,
+  })
+
+  assert.equal(predefinedResult.ok, true)
+  assert.equal(customResult.ok, true)
+  if (!predefinedResult.ok || !customResult.ok) return
+  assert.equal(predefinedResult.save.versaoDoSave, 8)
+  assert.deepEqual(predefinedResult.save.campaign.party.colors, ['#E30613', '#FFFFFF'])
+  assert.equal(predefinedResult.save.campaign.theme.officialPrimary, '#e30613')
+  assert.equal(predefinedResult.save.campaign.theme.officialSecondary, '#ffffff')
+  assert.deepEqual(customResult.save.campaign.party.colors, ['#123456', '#FEDCBA'])
 })

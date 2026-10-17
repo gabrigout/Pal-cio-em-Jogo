@@ -16,13 +16,20 @@ export const partyPalette = [
   { name: 'Azul-marinho', color: '#416488' },
 ]
 
+// Paletas inspiradas em materiais/identidades oficiais consultados em outubro de 2026.
+// PTP: vermelho + branco, referência visual do PT.
+// PSÓ: vermelho + amarelo, códigos digitais do manual de identidade visual do PSOL.
+// PDTT: vermelho + azul; o PDT também utiliza branco em sua identidade tricolor.
+// PLIM: verde + amarelo; a marca do PL também contém azul.
+// PSSDB: azul + amarelo, cores oficiais reafirmadas pelo PSDB em 2023.
+// NOVA: laranja + azul-marinho, cores primárias da identidade visual do NOVO.
 export const partyColors = {
-  ptp: ['#8bd4af', '#e5bd75'],
-  pso: ['#9872dc', '#e5a05c'],
-  pdtt: ['#6bb9dc', '#d6bd5d'],
-  plim: ['#e97969', '#6bb9dc'],
-  pssdb: ['#8bd4af', '#6bb9dc'],
-  nova: ['#e5a05c', '#23364d'],
+  ptp: ['#E30613', '#FFFFFF'],
+  pso: ['#E02028', '#FEDF00'],
+  pdtt: ['#C8102E', '#00529B'],
+  plim: ['#009640', '#FFD500'],
+  pssdb: ['#064A8C', '#F6C700'],
+  nova: ['#EC671C', '#1A2644'],
 } as const
 
 export const countryRanges = {
@@ -140,4 +147,4 @@ export const politicalOrientationLabels: Record<PoliticalOrientation, string> = 
   right: 'Direita',
 }
 
-// Paletas temporárias: PTP, PDTT, PLIM e PSSDB aguardam identidade visual definitiva.
+// As paletas de partidos conhecidos são fixas; a paleta personalizada continua disponível para novas legendas.

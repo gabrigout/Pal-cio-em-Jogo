@@ -1,6 +1,7 @@
 import {
   Building2,
   Globe2,
+  Gavel,
   Landmark,
   Newspaper,
   Scale,
@@ -22,6 +23,7 @@ const navigationItems: NavigationItem[] = [
   { id: 'economia', label: 'Economia', icon: Wallet },
   { id: 'politicas', label: 'Políticas Públicas', icon: Building2 },
   { id: 'sociedade', label: 'Sociedade', icon: UsersRound },
+  { id: 'congresso', label: 'Congresso', icon: Gavel },
   { id: 'relacoes', label: 'Relações', icon: Scale },
   { id: 'historico', label: 'Notícias/Histórico', icon: Newspaper },
 ]

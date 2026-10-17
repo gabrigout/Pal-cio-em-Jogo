@@ -783,3 +783,85 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cor-primaria); 
 .society-history-kind{justify-self:end;font-size:8px;text-align:right}
 @media(max-width:900px){.society-class-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.society-panel{width:min(100% - 30px,560px);gap:18px;padding-top:24px}.society-heading{flex-direction:column}.society-heading h1{font-size:22px}.society-overview-balance{width:100%}.society-class-grid,.society-group-grid{grid-template-columns:1fr}.society-section-heading{align-items:flex-start;flex-direction:column}.society-actions{grid-template-columns:1fr}.society-history-list li{grid-template-columns:1fr;gap:5px}.society-history-kind{justify-self:start;text-align:left}}
+
+
+/* Congress and legislative procedure */
+.legislature-panel{width:min(1160px,calc(100% - 64px));display:grid;gap:20px;margin:0 auto;padding:34px 0 60px}
+.legislature-heading,.legislature-section-heading,.legislature-bill-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.legislature-heading h1{margin:7px 0;font-size:28px;font-weight:600}
+.legislature-heading>div:first-child>p:not(.eyebrow){max-width:760px;color:#999;font-size:10px;line-height:1.7}
+.legislature-heading-status{display:flex;align-items:center;gap:10px;border:1px solid var(--line);padding:12px;color:var(--cor-secundaria);font-size:9px;white-space:nowrap}
+.legislature-heading-status span{display:grid;gap:4px;color:#aaa}
+.legislature-heading-status strong{color:#eee;font-family:var(--mono);font-size:17px}
+.legislature-chamber-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.legislature-chamber,.legislature-card{min-width:0;border:1px solid #373737;background:#1b1b1b;padding:15px}
+.legislature-chamber>header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;color:#eee;font-size:11px;font-weight:600}
+.legislature-chamber>header strong{font-family:var(--mono);font-size:9px;color:#aaa;font-weight:500}
+.legislature-blocs{display:grid;gap:7px}
+.legislature-bloc{display:grid;grid-template-columns:64px minmax(0,1fr) 32px;align-items:center;gap:9px}
+.legislature-bloc>span{overflow:hidden;color:#bbb;font-family:var(--mono);font-size:8px;text-overflow:ellipsis;white-space:nowrap}
+.legislature-bloc>strong{color:#eee;text-align:right;font-family:var(--mono);font-size:9px;font-weight:500}
+.legislature-bloc-track{height:5px;overflow:hidden;background:#353535}
+.legislature-bloc-track span{display:block;height:100%;background:var(--cor-secundaria)}
+.legislature-caption,.legislature-form-help{margin:0;color:#888;font-size:8px;line-height:1.55}
+.legislature-caption{margin-top:12px}
+.legislature-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.legislature-summary-grid article{display:grid;gap:6px;padding:12px;border:1px solid #373737;background:#191919}
+.legislature-summary-grid article>span{color:#999;font-size:8px;letter-spacing:.08em}
+.legislature-summary-grid article>strong{color:#eee;font-family:var(--mono);font-size:19px;font-weight:500}
+.legislature-summary-grid article>p{margin:0;color:#8c8c8c;font-size:8px;line-height:1.5}
+.legislature-work-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+.legislature-card{display:grid;align-content:start;gap:13px}
+.legislature-section-heading{align-items:center}
+.legislature-section-heading h2{margin:5px 0 0;color:#eee;font-size:16px;font-weight:600}
+.legislature-section-heading>svg{flex:0 0 auto;color:var(--cor-secundaria)}
+.legislature-form{display:grid;gap:10px}
+.legislature-form label{display:grid;gap:5px;color:#aaa;font-size:8px;line-height:1.4}
+.legislature-form input,.legislature-form select,.legislature-form textarea,.legislature-filter select{box-sizing:border-box;width:100%;min-width:0;min-height:32px;padding:7px 9px;border:1px solid #444;border-radius:0;background:#151515;color:#eee;font:inherit;font-size:9px}
+.legislature-form textarea{resize:vertical;line-height:1.5}
+.legislature-form input:focus,.legislature-form select:focus,.legislature-form textarea:focus,.legislature-filter select:focus{outline:1px solid var(--cor-secundaria);outline-offset:1px}
+.legislature-form-help{padding:7px 9px;border-left:2px solid #4c4c4c;background:#171717}
+.legislature-checkbox{display:flex!important;grid-template-columns:16px minmax(0,1fr);align-items:center;gap:7px!important;padding:7px 0}
+.legislature-checkbox input{width:14px;min-height:14px;margin:0;accent-color:var(--cor-secundaria)}
+.legislature-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:32px;padding:7px 10px;border:1px solid var(--cor-secundaria);background:color-mix(in srgb,var(--cor-secundaria),#171717 89%);color:#eee;font-size:8px;font-weight:600;cursor:pointer}
+.legislature-button-secondary{border-color:#555;background:#222}
+.legislature-button:disabled{opacity:.4;cursor:not-allowed}
+.legislature-form-error{margin:0;padding:8px;border:1px solid #555;color:#ddd;font-size:9px;line-height:1.5}
+.legislature-two-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.legislature-filter{display:flex;align-items:center;gap:8px;color:#999;font-size:8px}
+.legislature-filter select{min-width:130px}
+.legislature-bills-section{gap:15px}
+.legislature-bill-list{display:grid;gap:9px}
+.legislature-bill{display:grid;gap:9px;padding:13px;border:1px solid #363636;background:#171717}
+.legislature-bill-head{align-items:flex-start}
+.legislature-bill-type{display:block;margin-bottom:5px;color:var(--cor-secundaria);font-size:8px}
+.legislature-bill-head h3{margin:0;color:#eee;font-size:12px;font-weight:600;line-height:1.45}
+.legislature-status{display:inline-flex;flex:0 0 auto;max-width:160px;padding:4px 6px;border:1px solid #4a4a4a;color:#bdbdbd;font-size:7px;line-height:1.35;text-align:center}
+.legislature-status.tone-positive{border-color:color-mix(in srgb,var(--cor-secundaria),transparent 50%);color:var(--cor-secundaria)}
+.legislature-status.tone-warning{border-color:#555;color:#c9b9a7}
+.legislature-status.tone-attention{border-color:color-mix(in srgb,var(--cor-primaria),transparent 45%);color:var(--cor-primaria)}
+.legislature-bill-summary{margin:0;color:#aaa;font-size:9px;line-height:1.6}
+.legislature-bill-meta{display:flex;flex-wrap:wrap;gap:7px 13px;padding:8px 0;border-top:1px solid #303030;border-bottom:1px solid #303030;color:#888;font-size:8px}
+.legislature-bill-meta strong{color:#ddd;font-family:var(--mono);font-weight:500}
+.legislature-vote-result{display:grid;grid-template-columns:18px minmax(0,1fr);align-items:start;gap:7px;color:#aaa;font-size:8px;line-height:1.5}
+.legislature-vote-result svg{color:var(--cor-secundaria)}
+.legislature-vote-result strong{color:#eee;font-family:var(--mono);font-weight:500}
+.legislature-vote-result>b{grid-column:2;color:#bbb;font-size:8px;font-weight:500}
+.legislature-history{color:#aaa;font-size:8px;line-height:1.5}
+.legislature-history summary{cursor:pointer}
+.legislature-history ol{display:grid;gap:6px;padding-left:18px;margin:8px 0 0;color:#888}
+.legislature-bill-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:4px}
+.legislature-bill-actions>span{flex:1 1 180px;color:#858585;font-size:8px;line-height:1.5}
+.legislature-empty{margin:0;padding:16px;border:1px dashed #454545;color:#999;font-size:9px;line-height:1.6}
+.legislature-two-column{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.legislature-activity-list{display:grid;gap:0;margin:0;padding:0;list-style:none}
+.legislature-activity-list li{display:grid;gap:4px;padding:9px 0;border-bottom:1px solid #303030;color:#aaa;font-size:8px;line-height:1.5}
+.legislature-activity-list li:last-child{border-bottom:0}
+.legislature-activity-list strong{color:#ddd;font-weight:500}
+.legislature-activity-list span{color:#888}
+.legislature-note{display:flex;align-items:flex-start;gap:9px;padding:12px;border:1px solid #3b3b3b;color:var(--cor-secundaria)}
+.legislature-note svg{flex:0 0 auto;margin-top:1px}
+.legislature-note p{margin:0;color:#999;font-size:8px;line-height:1.65}
+.legislature-note strong{color:#ddd;font-weight:600}
+@media(max-width:900px){.legislature-summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.legislature-summary-grid article>strong{font-size:16px}}
+@media(max-width:700px){.legislature-panel{width:min(100% - 30px,560px);gap:15px;padding-top:24px}.legislature-heading{flex-direction:column}.legislature-heading h1{font-size:22px}.legislature-heading-status{width:100%;box-sizing:border-box}.legislature-chamber-grid,.legislature-work-grid,.legislature-two-column{grid-template-columns:1fr}.legislature-summary-grid{grid-template-columns:1fr}.legislature-summary-grid article{grid-template-columns:minmax(0,1fr) auto;align-items:center}.legislature-summary-grid article>p{grid-column:1/-1}.legislature-summary-grid article>strong{grid-row:1;grid-column:2}.legislature-section-heading{align-items:flex-start}.legislature-bill-head{flex-direction:column}.legislature-status{max-width:100%}.legislature-two-fields{grid-template-columns:1fr}.legislature-form .legislature-button{width:100%}.legislature-filter{align-items:flex-start;flex-direction:column}.legislature-filter select{min-width:0}}
