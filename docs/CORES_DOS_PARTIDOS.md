@@ -9,6 +9,8 @@ As siglas e os nomes do jogo são paródias de partidos reais, não cópias inte
 
 Há uma distinção importante: alguns manuais publicam valores RGB/HEX; outros confirmam apenas os elementos cromáticos do símbolo. Onde não encontrei valor digital oficial acessível, usei uma aproximação inspirada pela marca, indicada como tal — não como código oficial do partido real.
 
+Na implementação atual, a cor institucional original também é aplicada a elementos gráficos principais (botões de ação, barra de progresso, destaque de seleção e assinatura inferior da interface). Para textos e ícones sobre superfícies escuras, o tema mantém uma variante com contraste ajustado. O texto de botões primários é calculado a partir da cor institucional para manter contraste legível.
+
 ## Paletas aplicadas
 
 | Partido ficcional | Inspiração | Cor primária | Cor secundária | Como foi escolhida |
