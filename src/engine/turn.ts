@@ -471,7 +471,8 @@ function applyContextualVariations(campaign: CampaignState): { campaign: Campaig
 
 export function calculateMonthlyEconomyBalance(campaign: CampaignState): EconomyBalance {
   const executiveCampaign = closeExecutiveMonth(campaign).campaign
-  const economicClosure = closeEconomicMonth(executiveCampaign).campaign
+  const projectClosure = closePublicProjectsMonth(executiveCampaign).campaign
+  const economicClosure = closeEconomicMonth(projectClosure).campaign
   return {
     openingBudget: campaign.country.budget,
     revenue: economicClosure.economy.indicators.publicRevenue,
