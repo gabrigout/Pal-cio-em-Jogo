@@ -6,9 +6,9 @@ import { createCampaign, selectionFromDefinition } from '../engine/campaign'
 import { contrastRatio } from '../engine/theme'
 
 const expectedPalettes: Record<string, [string, string]> = {
-  ptp: ['#E30613', '#FFFFFF'],
-  pso: ['#E30613', '#FFD500'],
-  pdtt: ['#E30613', '#00529B'],
+  ptp: ['#E4142C', '#FFFFFF'],
+  pso: ['#D71920', '#FFD52B'],
+  pdtt: ['#E4002B', '#005AB2'],
   plim: ['#004F9F', '#009640'],
   pssdb: ['#004C94', '#FFD600'],
   nova: ['#F17021', '#1A2948'],
