@@ -95,7 +95,7 @@ export const scheduledNarrativeEvents: NarrativeDecision[] = [
     ],
   },
 
-  ,{
+  {
     id: 'viral-amendment-followup', title: 'A resposta virou outro vídeo', category: 'reação', weight: 5,
     prompt: 'Depois da resposta do Planalto, Nico Gadelha publica uma nova montagem e líderes do Congresso pedem que a disputa não atrapalhe a liberação dos recursos.',
     condition: { indicator: 'polarization', operator: 'atLeast', value: 45 },
