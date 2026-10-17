@@ -243,6 +243,8 @@ export default function App() {
   const themeStyle = {
     '--cor-primaria': campaign.theme.primary,
     '--cor-secundaria': campaign.theme.secondary,
+    '--cor-primaria-marca': campaign.theme.officialPrimary,
+    '--cor-secundaria-marca': campaign.theme.officialSecondary,
     '--cor-botao-texto': campaign.theme.buttonText,
   } as CSSProperties
 
