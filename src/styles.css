@@ -865,3 +865,41 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cor-primaria); 
 .legislature-note strong{color:#ddd;font-weight:600}
 @media(max-width:900px){.legislature-summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.legislature-summary-grid article>strong{font-size:16px}}
 @media(max-width:700px){.legislature-panel{width:min(100% - 30px,560px);gap:15px;padding-top:24px}.legislature-heading{flex-direction:column}.legislature-heading h1{font-size:22px}.legislature-heading-status{width:100%;box-sizing:border-box}.legislature-chamber-grid,.legislature-work-grid,.legislature-two-column{grid-template-columns:1fr}.legislature-summary-grid{grid-template-columns:1fr}.legislature-summary-grid article{grid-template-columns:minmax(0,1fr) auto;align-items:center}.legislature-summary-grid article>p{grid-column:1/-1}.legislature-summary-grid article>strong{grid-row:1;grid-column:2}.legislature-section-heading{align-items:flex-start}.legislature-bill-head{flex-direction:column}.legislature-status{max-width:100%}.legislature-two-fields{grid-template-columns:1fr}.legislature-form .legislature-button{width:100%}.legislature-filter{align-items:flex-start;flex-direction:column}.legislature-filter select{min-width:0}}
+
+
+/* Controles persistentes e visualização econômica */
+.site-header{position:sticky;top:0;z-index:40;background:rgba(19,19,19,.96);backdrop-filter:blur(14px)}
+.header-utility{gap:10px}
+.header-advance-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:38px;padding:0 13px;border:1px solid var(--cor-primaria);border-radius:7px;background:var(--cor-primaria);color:var(--cor-botao-texto);font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap}
+.header-advance-button:hover{filter:brightness(1.08)}
+.action-notice{position:sticky;top:151px;z-index:35;width:min(1160px,calc(100% - 64px));margin:10px auto 0;padding:10px 14px;border:1px solid color-mix(in srgb,var(--cor-primaria) 45%,var(--line));border-radius:8px;background:var(--surface-raised);color:var(--text);font-size:12px;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.footer-next-step{color:var(--muted);font-size:12px}
+.economy-budget-visuals{display:grid;grid-template-columns:minmax(150px,220px) minmax(0,1fr);gap:24px;align-items:center;padding:18px 0 22px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.economy-budget-pie{width:min(190px,100%);aspect-ratio:1;margin-inline:auto;border-radius:50%;display:grid;place-items:center;position:relative}
+.economy-budget-pie::before{content:'';position:absolute;inset:22%;border-radius:50%;background:var(--surface);border:1px solid var(--line)}
+.economy-budget-pie>span{position:relative;z-index:1;display:grid;gap:5px;text-align:center;max-width:78%}
+.economy-budget-pie small{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em}
+.economy-budget-pie strong{font-size:clamp(13px,1.5vw,18px);overflow-wrap:anywhere}
+.economy-budget-legend{display:grid;gap:8px;min-width:0}.economy-budget-legend>.eyebrow{margin:0 0 2px}
+.economy-legend-row{display:grid;grid-template-columns:9px minmax(0,1fr) auto;gap:9px;align-items:center;font-size:11px;color:var(--soft)}
+.economy-legend-row>span:first-child{width:8px;height:8px;border-radius:2px}.economy-legend-row strong{color:var(--text);font-family:var(--mono);font-size:11px}
+.economy-sector-row{border-bottom:1px solid var(--line)}
+.economy-sector-toggle{width:100%;display:grid;grid-template-columns:8px minmax(0,1fr) auto 18px;gap:12px;align-items:center;padding:15px 4px;text-align:left;border:0;background:transparent;cursor:pointer;color:var(--text)}
+.economy-sector-toggle:hover{background:rgba(255,255,255,.025)}.economy-sector-swatch{width:8px;height:32px;border-radius:3px}
+.economy-sector-title{display:grid;gap:4px;min-width:0}.economy-sector-title strong{font-size:13px;font-weight:700}.economy-sector-title small{color:var(--muted);font-size:10px;font-weight:400}
+.economy-sector-percent{font-family:var(--mono);font-size:13px}.economy-sector-toggle>svg{color:var(--muted);transition:transform .18s ease}.economy-sector-toggle>svg.is-rotated{transform:rotate(180deg)}
+.economy-sector-details{padding:2px 12px 18px 20px;animation:economy-open .16s ease-out}
+.economy-sector-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.economy-sector-metrics>span{display:grid;gap:5px;color:var(--muted);font-size:10px}.economy-sector-metrics strong{color:var(--text);font-size:12px;overflow-wrap:anywhere}
+.economy-slider-label{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:17px;font-size:11px;color:var(--soft)}.economy-slider-label strong{color:var(--text);font-family:var(--mono);font-size:14px}
+.economy-budget-slider{width:100%;margin:13px 0 0;accent-color:var(--cor-primaria);cursor:pointer}.economy-slider-range{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:9px}
+.economy-sector-details .economy-caption{margin-top:12px}
+@keyframes economy-open{from{opacity:.55;transform:translateY(-3px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:800px){.header-main,.navigation-scroll,.dashboard{width:min(100% - 28px,1160px)}.header-main{gap:10px}.header-advance-button{padding-inline:9px}.header-advance-button span{max-width:70px;white-space:normal;line-height:1.1}.action-notice{width:calc(100% - 28px);top:142px}}
+@media(max-width:560px){.header-main{min-height:74px;flex-wrap:wrap;padding-block:10px}.campaign-date{order:3;flex:1 0 100%}.party-identity{display:none}.header-utility{margin-left:auto;gap:6px}.header-advance-button{min-height:34px;font-size:10px}.game-menu-button{font-size:0;padding-inline:8px}.save-indicator{display:none}.economy-budget-visuals{grid-template-columns:120px minmax(0,1fr);gap:15px}.economy-sector-metrics{grid-template-columns:1fr;gap:9px}.economy-sector-metrics>span{grid-template-columns:1fr auto;align-items:center}.economy-sector-toggle{grid-template-columns:7px minmax(0,1fr) auto 15px;gap:8px}.economy-sector-title small{line-height:1.4}}
+
+/* Contexto de figuras satíricas e capital político */
+.event-public-figure{display:flex;align-items:flex-start;gap:11px;margin:14px 0 18px;padding:12px;border:1px solid var(--line);border-radius:9px;background:var(--surface-raised)}
+.event-avatar{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border-radius:50%;background:var(--cor-primaria);color:var(--cor-botao-texto);font-size:11px;font-weight:800;letter-spacing:.02em}
+.event-public-figure>span:last-child{display:grid;gap:3px;min-width:0}.event-public-figure strong{font-size:12px;color:var(--text)}.event-public-figure small{font-size:10px;line-height:1.45;color:var(--muted)}.event-public-figure small:last-child{color:var(--soft)}
+.political-capital-resource{min-width:150px}.political-capital-resource>span{min-width:0}.political-capital-meter{display:block;width:100%;height:4px;margin-top:6px;overflow:hidden;border-radius:99px;background:var(--line)}.political-capital-meter>span{display:block;height:100%;border-radius:99px;background:var(--cor-primaria);transition:width .2s ease}.global-resource .capital-hint{display:block;margin-top:4px;font-size:9px;line-height:1.3;color:var(--muted);white-space:normal}

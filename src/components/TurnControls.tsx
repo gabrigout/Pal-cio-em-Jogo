@@ -16,7 +16,6 @@ import {
   Scale,
   Shield,
   Sparkles,
-  Swords,
   UsersRound,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -75,6 +74,7 @@ function DecisionChoiceCard({
         <Sparkles aria-hidden="true" className="decision-mark" size={18} />
       </div>
       <p className="decision-prompt">{decision.prompt}</p>
+      {decision.publicFigure && <div className="event-public-figure"><span className="event-avatar" aria-hidden="true">{decision.publicFigure.name.split(' ').map((part) => part[0]).slice(0, 2).join('')}</span><span><strong>{decision.publicFigure.name}</strong><small>{decision.publicFigure.role}</small><small>{decision.publicFigure.description}</small></span></div>}
       <div className="decision-options">
         {decision.options.map((option) => {
           const OptionIcon = option.icon ? decisionIcons[option.icon] : Sparkles
@@ -104,7 +104,7 @@ function DecisionChoiceCard({
               onClick={() => onChoose(option.id, category)}
               type="button"
             >
-              <span className="decision-option-icon"><OptionIcon aria-hidden="true" size={17} /></span>
+              <span className="decision-option-icon" title={`Ícone da opção: ${option.label}. ${option.description}`}><OptionIcon aria-hidden="true" size={17} /></span>
               <span className="decision-option-copy">
                 <strong>{option.label}</strong>
                 {executiveOptionType && <small className="executive-action-type">{executiveOptionType}</small>}
@@ -132,11 +132,10 @@ function DecisionChoiceCard({
 interface TurnControlsProps {
   campaign: CampaignState
   data: TurnDashboardData
-  onRunAction: (actionId: string) => void
   onChooseDecision: (optionId: string, category: DecisionResult['category']) => void
 }
 
-export default function TurnControls({ campaign, data, onRunAction, onChooseDecision }: TurnControlsProps) {
+export default function TurnControls({ campaign, data, onChooseDecision }: TurnControlsProps) {
   return (
     <div className="turn-controls">
       <section aria-label="Pontos de ação e recursos globais" className="resource-overview">
@@ -154,45 +153,11 @@ export default function TurnControls({ campaign, data, onRunAction, onChooseDeci
             <Banknote aria-hidden="true" size={15} />
             <span><small>CAIXA DISPONÍVEL</small><strong>{formatBRLMoney(campaign.country.budget)}</strong></span>
           </div>
-          <div className="global-resource">
-            <Coins aria-hidden="true" size={15} />
-            <span><small>CAPITAL POLÍTICO</small><strong>{campaign.country.politicalCapital} <i>pt</i></strong></span>
-          </div>
+          <div className="global-resource political-capital-resource" title="Capital político: reserva de apoio e capacidade de negociação. Gaste para negociar votos, fazer concessões e sustentar alianças; escolhas públicas e acordos podem aumentar ou reduzir essa reserva."><Coins aria-hidden="true" size={15} /><span><small>CAPITAL POLÍTICO <b aria-hidden="true">ⓘ</b></small><strong>{campaign.country.politicalCapital} <i>pt</i></strong><span className="political-capital-meter"><span style={{ width: `${campaign.country.politicalCapital}%` }} /></span><small className="capital-hint">{campaign.country.politicalCapital < 25 ? "Baixo: negociações mais difíceis" : campaign.country.politicalCapital > 70 ? "Alto: maior margem de negociação" : "Reserva para negociar e manter apoio"}</small></span></div>
           <div className="global-resource">
             <BriefcaseBusiness aria-hidden="true" size={15} />
             <span><small>CAPACIDADE ADMINISTRATIVA</small><strong>{campaign.country.administrativeCapacity} <i>pt</i></strong></span>
           </div>
-        </div>
-      </section>
-
-      <section aria-labelledby="actions-title" className="sample-actions-panel">
-        <div className="turn-section-heading">
-          <div><p className="eyebrow">AGENDA EXECUTIVA <span>·</span> AÇÕES DE EXEMPLO</p><h2 id="actions-title">Ações da semana</h2></div>
-          <span className="free-activity-note">Navegação, notícias e consulta são gratuitas.</span>
-        </div>
-        <div className="sample-actions-list">
-          {data.actions.map(({ action, blockedReason, costSummary }) => (
-            <article className={`sample-action${blockedReason ? ' is-blocked' : ''}`} key={action.id}>
-              <span className="sample-action-icon"><Swords aria-hidden="true" size={15} /></span>
-              <div className="sample-action-copy">
-                <h3>{action.title}</h3>
-                <span className="executive-action-type">{actionTypeLabels[action.actionType]}</span>
-                <p>{action.description}</p>
-                <span className="action-cost">Custo: {costSummary}</span>
-                {blockedReason && <span className="action-blocked-reason">{blockedReason}</span>}
-              </div>
-              <button
-                aria-label={blockedReason ? `${action.title}: ${blockedReason}` : `Executar ${action.title}`}
-                className="action-run-button"
-                disabled={Boolean(blockedReason)}
-                onClick={() => onRunAction(action.id)}
-                title={blockedReason ?? `Executar por ${costSummary}`}
-                type="button"
-              >
-                {blockedReason ? 'Bloqueada' : 'Executar'}
-              </button>
-            </article>
-          ))}
         </div>
       </section>
 

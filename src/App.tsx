@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { CSSProperties } from 'react'
-import { ArrowLeft, Landmark } from 'lucide-react'
+import { ArrowLeft, ChevronRight, Landmark } from 'lucide-react'
 import CampaignLibrary from './components/CampaignLibrary'
 import CampaignSetup from './components/CampaignSetup'
 import Dashboard from './components/Dashboard'
@@ -24,7 +24,7 @@ import {
   reviseBudgetDistribution,
   takeEmergencyLoan,
 } from './engine/economy'
-import { advanceWeek, chooseNarrativeOption, dismissDecisionResult, dismissWeeklySummary, executeAction } from './engine/turn'
+import { advanceWeek, chooseNarrativeOption, dismissDecisionResult, dismissWeeklySummary } from './engine/turn'
 import { adjustPublicProjectPriority, startPublicProject, togglePublicProjectPause } from './engine/projects'
 import { applySocietyAction } from './engine/society'
 import { decidePresidentialSanction, negotiateLegislativeProposal, submitLegislativeProposal } from './engine/legislature'
@@ -59,6 +59,13 @@ export default function App() {
   const [libraryNotice, setLibraryNotice] = useState<string | null>(null)
   const [saveStatus, setSaveStatus] = useState<'saved' | null>(null)
   const [lastSavedAt, setLastSavedAt] = useState<string | null>(null)
+  const [actionNotice, setActionNotice] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!actionNotice) return
+    const timeout = window.setTimeout(() => setActionNotice(null), 4200)
+    return () => window.clearTimeout(timeout)
+  }, [actionNotice])
 
   function refreshLibrary() {
     const result = listSavedCampaigns()
@@ -92,18 +99,12 @@ export default function App() {
     setScreen('game')
   }
 
-  function runAction(actionId: string) {
-    if (!campaign) return
-    const nextCampaign = executeAction(campaign, actionId)
-    if (nextCampaign) persistCampaign(nextCampaign)
-  }
-
   function runExecutiveAction(nextCampaign: CampaignState | null, failureMessage: string) {
     if (!nextCampaign) {
       setStorageError(failureMessage)
       return
     }
-    persistCampaign(nextCampaign)
+    if (persistCampaign(nextCampaign)) setActionNotice('Ação do Executivo registrada com sucesso.')
   }
 
   function runEconomicAction(nextCampaign: CampaignState | null, failureMessage: string) {
@@ -111,19 +112,19 @@ export default function App() {
       setStorageError(failureMessage)
       return
     }
-    persistCampaign(nextCampaign)
+    if (persistCampaign(nextCampaign)) setActionNotice('Mudança econômica registrada com sucesso.')
   }
 
   function runPolicyAction(nextCampaign: CampaignState | null, message: string) {
     if (!nextCampaign) { setStorageError(message); return }
-    persistCampaign(nextCampaign)
+    if (persistCampaign(nextCampaign)) setActionNotice('Ação registrada. O estado do jogo foi atualizado.')
     setStorageError(null)
   }
 
   function chooseDecision(optionId: string, category: 'decisão' | 'reação' | 'mensal') {
     if (!campaign) return
     const nextCampaign = chooseNarrativeOption(campaign, category, optionId)
-    if (nextCampaign) persistCampaign(nextCampaign)
+    if (nextCampaign && persistCampaign(nextCampaign)) setActionNotice('Decisão registrada. As consequências foram aplicadas.')
   }
 
   function closeDecisionResult() {
@@ -131,7 +132,11 @@ export default function App() {
   }
 
   function moveToNextWeek() {
-    if (campaign) persistCampaign(advanceWeek(campaign))
+    if (!campaign) return
+    if (persistCampaign(advanceWeek(campaign))) {
+      setActionNotice('Semana encerrada. O resumo e os acontecimentos foram atualizados.')
+      window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'smooth' }))
+    }
   }
 
   function closeWeeklySummary() {
@@ -269,6 +274,7 @@ export default function App() {
             <span className="party-name">{campaign.party.fullName}</span>
           </div>
           <div className="header-utility">
+            <button aria-label="Avançar para a próxima semana" className="header-advance-button" onClick={moveToNextWeek} type="button"><span>Avançar semana</span><ChevronRight aria-hidden="true" size={16} /></button>
             <button className="game-menu-button" onClick={returnToLibrary} type="button"><ArrowLeft aria-hidden="true" size={14} /> Menu</button>
             {saveStatus === 'saved' && <span aria-label={`Salvo${lastSavedAt ? ` em ${lastSavedAt}` : ''}`} className="save-indicator" role="status">Salvo</span>}
           </div>
@@ -277,15 +283,14 @@ export default function App() {
       </header>
 
       {storageError && <p className="storage-error-banner" role="alert">{storageError}</p>}
+      {actionNotice && <p className="action-notice" role="status">{actionNotice}</p>}
 
       {activeSection === 'brasil' ? (
         <Dashboard
           campaign={campaign}
-          onAdvanceWeek={moveToNextWeek}
           onChooseDecision={chooseDecision}
           onDismissDecisionResult={closeDecisionResult}
           onDismissSummary={closeWeeklySummary}
-          onRunAction={runAction}
         />
       ) : activeSection === 'estado' ? (
         <ExecutivePanel

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowDown, ArrowUp, Banknote, ChartNoAxesCombined, Landmark, Scale } from 'lucide-react'
+import { ArrowDown, ArrowUp, Banknote, ChartNoAxesCombined, ChevronDown, Landmark, Scale } from 'lucide-react'
 import { economicRules } from '../data/campaignConfig'
 import { canReviseBudget } from '../engine/economy'
 import type { CampaignState, EconomicIndicators } from '../state/types'
@@ -55,6 +55,7 @@ export default function EconomyPanel({
   onDeferPayments: () => void
 }) {
   const { economy } = campaign
+  const [expandedSector, setExpandedSector] = useState<string | null>(economy.annualBudget.sectors[0]?.id ?? null)
   const [shares, setShares] = useState<Record<string, number>>(
     Object.fromEntries(economy.annualBudget.sectors.map((sector) => [sector.id, sector.share])),
   )
@@ -67,6 +68,49 @@ export default function EconomyPanel({
   const monthlyPayments = economy.loans.reduce((sum, loan) => sum + loan.monthlyPayment, 0)
   const debtRatio = economy.indicators.publicDebt / Math.max(1, economy.indicators.publicRevenue * 12)
   const cashIsLow = economy.availableFunds <= economicRules.emergencyCashThreshold
+  const sectorColors = [campaign.theme.primary, campaign.theme.secondary, '#73808c', '#9aa5af', '#59636e', '#c2c9cf', '#87918b', '#a6a08d']
+  let pieAngle = 0
+  const sectorPie = economy.annualBudget.sectors.map((sector, index) => {
+    const share = Math.max(0, shares[sector.id] ?? sector.share)
+    const nextAngle = pieAngle + share / 100 * 360
+    const slice = `${sectorColors[index % sectorColors.length]} ${pieAngle}deg ${nextAngle}deg`
+    pieAngle = nextAngle
+    return slice
+  }).join(', ')
+  function updateSectorShare(sectorId: string, requested: number) {
+    const sectors = economy.annualBudget.sectors
+    const target = sectors.find((sector) => sector.id === sectorId)
+    if (!target) return
+    const minimum = economicRules.minimumSectorShare
+    const maximum = economicRules.maximumSectorShare
+    const nextTarget = Math.max(minimum, Math.min(maximum, Math.round(requested)))
+    setShares((current) => {
+      const next = { ...current, [sectorId]: nextTarget }
+      let remaining = (current[sectorId] ?? target.share) - nextTarget
+      let eligible = sectors.filter((sector) => sector.id !== sectorId)
+      for (let pass = 0; pass < sectors.length && Math.abs(remaining) > 0.001; pass += 1) {
+        eligible = eligible.filter((sector) => remaining > 0 ? (next[sector.id] ?? sector.share) < maximum : (next[sector.id] ?? sector.share) > minimum)
+        if (!eligible.length) break
+        const portion = remaining / eligible.length
+        let moved = 0
+        for (const sector of eligible) {
+          const value = next[sector.id] ?? sector.share
+          const adjusted = remaining > 0 ? Math.min(maximum, value + portion) : Math.max(minimum, value + portion)
+          moved += adjusted - value
+          next[sector.id] = Math.round(adjusted * 10) / 10
+        }
+        remaining -= moved
+        if (Math.abs(moved) < 0.001) break
+      }
+      const sum = sectors.reduce((total, sector) => total + (next[sector.id] ?? sector.share), 0)
+      if (Math.abs(sum - 100) < 0.2) {
+        const correction = Math.round((100 - sum) * 10) / 10
+        const recipient = sectors.find((sector) => sector.id !== sectorId && (next[sector.id] ?? sector.share) + correction >= minimum && (next[sector.id] ?? sector.share) + correction <= maximum)
+        if (recipient) next[recipient.id] = Math.round(((next[recipient.id] ?? recipient.share) + correction) * 10) / 10
+      }
+      return next
+    })
+  }
 
   return (
     <main className="economy-panel page-enter">
@@ -101,16 +145,49 @@ export default function EconomyPanel({
           <span className="executive-action-type"><Landmark aria-hidden="true" size={12} /> {economicActionType}</span>
         </div>
         <p className="economy-caption">Envelope anual: {formatBRLMoney(economy.annualBudget.total)} · compromissos fixos: {formatBRLMoney(economy.annualBudget.fixedCommitments)} · execução mensal financiada pelo caixa.</p>
-        <div className="economy-sector-list">
-          {economy.annualBudget.sectors.map((sector) => {
-            const share = shares[sector.id] ?? sector.share
-            const execution = sector.annualAllocation > 0 ? Math.min(100, sector.executedThisYear / sector.annualAllocation * 100) : 0
-            return (
-              <div className="economy-sector-row" key={sector.id}>
-                <div className="economy-sector-title"><strong>{sector.name}</strong><span>{formatBRLMoney(sector.annualAllocation)} · executado {formatBRLMoney(sector.executedThisYear)}</span></div>
-                <div aria-label={`${execution.toFixed(0)}% executado`} className="economy-progress"><span style={{ width: `${execution}%` }} /></div>
-                <label className="economy-share-input">{share}%<input aria-label={`Percentual do setor ${sector.name}`} max={economicRules.maximumSectorShare} min={economicRules.minimumSectorShare} onChange={(event) => setShares((current) => ({ ...current, [sector.id]: Number(event.target.value) }))} step="1" type="number" value={share} /></label>
+        <div className="economy-budget-visuals">
+          <div className="economy-budget-pie" role="img" aria-label="Gráfico da distribuição planejada do orçamento por setor" style={{ background: `conic-gradient(${sectorPie})` }}>
+            <span><small>Orçamento</small><strong>{formatBRLMoney(economy.annualBudget.total)}</strong></span>
+          </div>
+          <div className="economy-budget-legend">
+            <p className="eyebrow">DISTRIBUIÇÃO PLANEJADA</p>
+            {economy.annualBudget.sectors.map((sector, index) => (
+              <div className="economy-legend-row" key={sector.id}>
+                <span aria-hidden="true" style={{ backgroundColor: sectorColors[index % sectorColors.length] }} />
+                <span>{sector.name}</span><strong>{shares[sector.id] ?? sector.share}%</strong>
               </div>
+            ))}
+          </div>
+        </div>
+        <div className="economy-sector-list">
+          {economy.annualBudget.sectors.map((sector, index) => {
+            const share = shares[sector.id] ?? sector.share
+            const allocation = economy.annualBudget.total * share / 100
+            const execution = sector.annualAllocation > 0 ? Math.min(100, sector.executedThisYear / sector.annualAllocation * 100) : 0
+            const expanded = expandedSector === sector.id
+            return (
+              <article className={`economy-sector-row${expanded ? ' is-expanded' : ''}`} key={sector.id}>
+                <button aria-expanded={expanded} className="economy-sector-toggle" onClick={() => setExpandedSector(expanded ? null : sector.id)} type="button">
+                  <span aria-hidden="true" className="economy-sector-swatch" style={{ backgroundColor: sectorColors[index % sectorColors.length] }} />
+                  <span className="economy-sector-title"><strong>{sector.name}</strong><small>{formatBRLMoney(allocation)} planejados · {formatBRLMoney(sector.executedThisYear)} executados</small></span>
+                  <strong className="economy-sector-percent">{share}%</strong>
+                  <ChevronDown aria-hidden="true" className={expanded ? 'is-rotated' : ''} size={17} />
+                </button>
+                {expanded && (
+                  <div className="economy-sector-details">
+                    <div className="economy-sector-metrics">
+                      <span>Dotação planejada<strong>{formatBRLMoney(allocation)}</strong></span>
+                      <span>Execução anual<strong>{execution.toFixed(0)}%</strong></span>
+                      <span>Executado<strong>{formatBRLMoney(sector.executedThisYear)}</strong></span>
+                    </div>
+                    <div aria-label={`Execução de ${sector.name}: ${execution.toFixed(0)} por cento`} className="economy-progress"><span style={{ width: `${execution}%` }} /></div>
+                    <label className="economy-slider-label" htmlFor={`budget-share-${sector.id}`}><span>Participação no orçamento</span><strong>{share}%</strong></label>
+                    <input aria-label={`Participação do orçamento destinada a ${sector.name}`} className="economy-budget-slider" id={`budget-share-${sector.id}`} max={economicRules.maximumSectorShare} min={economicRules.minimumSectorShare} onChange={(event) => updateSectorShare(sector.id, Number(event.target.value))} step="1" type="range" value={share} />
+                    <div className="economy-slider-range"><span>{economicRules.minimumSectorShare}%</span><span>{economicRules.maximumSectorShare}% permitido</span></div>
+                    <p className="economy-caption">Aumentar este setor redistribui a participação dos demais. O total permanece em 100%.</p>
+                  </div>
+                )}
+              </article>
             )
           })}
         </div>

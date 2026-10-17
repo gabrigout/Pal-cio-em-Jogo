@@ -488,6 +488,7 @@ export interface NarrativeDecision {
   condition: DecisionCondition
   weight: number
   category?: string
+  publicFigure?: { name: string; role: string; description: string }
   options: DecisionOption[]
 }
 

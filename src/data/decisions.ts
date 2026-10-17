@@ -75,4 +75,63 @@ export const weeklyDecisions: NarrativeDecision[] = [
       { id: 'expand-table', label: 'Ampliar a mesa', description: 'Convidar mais áreas para escuta, aceitando uma decisão mais lenta.', icon: 'users', effects: { executiveSupport: 1, publicTrust: 1, administrativeCapacity: -1 }, resultText: 'Mais áreas participaram; a escuta cresceu e o ritmo administrativo caiu.' },
     ],
   },
+
+  {
+    id: 'amendment-viral-backlash',
+    title: 'A emenda que virou trend',
+    prompt: 'Uma emenda parlamentar do governo viralizou. Um influenciador político acusa o Planalto de privilegiar aliados, enquanto prefeitos defendem o recurso para serviços locais.',
+    condition: { indicator: 'congressSupport', operator: 'atMost', value: 55 }, weight: 8, category: 'opinião pública',
+    publicFigure: { name: 'Nico Gadelha', role: 'Influenciador político fictício', description: 'Personagem satírico de um deputado-influenciador que transforma decisões do Congresso em vídeos virais.' },
+    options: [
+      { id: 'publish-amendment-details', label: 'Abrir os dados da emenda', description: 'Publicar valor, destino, critérios e andamento da execução para reduzir suspeitas.', icon: 'newspaper', effects: { publicTrust: 2, publicIntegrity: 1, politicalCapital: -1 }, resultText: 'A transparência ajudou a explicar o gasto, mas a oposição continuou questionando a prioridade.' },
+      { id: 'challenge-influencer', label: 'Responder publicamente', description: 'Contestar a crítica em vídeo e defender a negociação política.', icon: 'megaphone', effects: { presidentialApproval: 1, polarization: 2, publicTrust: -1, politicalCapital: 1 }, uncertainConsequences: ['A repercussão nas redes pode ampliar a controvérsia'], resultText: 'A resposta animou apoiadores, mas aumentou a polarização e manteve a emenda no centro do debate.', schedule: { eventId: 'viral-amendment-followup', delayWeeks: 1 } },
+    ],
+  },
+  {
+    id: 'six-by-one-pressure',
+    title: 'A semana de trabalho virou debate nacional',
+    prompt: 'Uma proposta para reduzir a escala 6x1 ganha força nas redes. Trabalhadores cobram mudança; setores empresariais alertam para custos, preços e necessidade de adaptação.',
+    condition: { indicator: 'presidentialApproval', operator: 'atMost', value: 58 }, weight: 7, category: 'trabalho e economia',
+    publicFigure: { name: 'Bia do Ponto', role: 'Criadora de conteúdo trabalhista fictícia', description: 'Influenciadora satírica que dá voz a relatos de trabalhadores e pressiona o governo por mudanças.' },
+    options: [
+      { id: 'negotiate-transition', label: 'Negociar transição gradual', description: 'Abrir mesa com trabalhadores, pequenas empresas e especialistas para estimar custos e prazos.', icon: 'users', effects: { publicTrust: 2, presidentialApproval: 1, politicalCapital: -2, administrativeCapacity: -1 }, resultText: 'A negociação reduziu a tensão imediata, mas criou custos de coordenação e não satisfez quem queria mudança imediata.' },
+      { id: 'announce-immediate-change', label: 'Defender mudança imediata', description: 'Apoiar uma transição rápida, assumindo disputa política e pressão por compensações às empresas.', icon: 'megaphone', effects: { presidentialApproval: 2, polarization: 2, economicOutlook: -1, politicalCapital: -1 }, uncertainConsequences: ['Preços, contratações e produtividade podem reagir de formas diferentes'], resultText: 'A proposta agradou parte dos trabalhadores, enquanto empresas pediram prazo e medidas de compensação.', schedule: { eventId: 'workweek-cost-followup', delayWeeks: 1 } },
+    ],
+  },
+  {
+    id: 'fact-check-viral-claim',
+    title: 'O vídeo de 30 segundos e a crise de 3 dias',
+    prompt: 'Um recorte de fala presidencial circula sem contexto. Jornalistas, perfis de opinião e parlamentares disputam a narrativa antes de a equipe conseguir publicar a íntegra.',
+    condition: { indicator: 'polarization', operator: 'atLeast', value: 42 }, weight: 6, category: 'comunicação pública',
+    publicFigure: { name: 'Lara Nogueira', role: 'Jornalista política fictícia', description: 'Repórter satírica que cobra contexto, documentos e respostas verificáveis do governo.' },
+    options: [
+      { id: 'publish-full-context', label: 'Publicar íntegra e documentos', description: 'Divulgar o vídeo completo, a transcrição e os dados usados na fala.', icon: 'newspaper', effects: { publicTrust: 2, publicIntegrity: 1, presidentialApproval: -1 }, resultText: 'A íntegra esclareceu parte do caso, mas o recorte continuou circulando e a correção teve menos alcance.' },
+      { id: 'attack-critics', label: 'Atacar quem compartilhou', description: 'Responder com confronto, tentando mobilizar a própria base.', icon: 'megaphone', effects: { polarization: 3, presidentialApproval: 1, publicTrust: -2 }, resultText: 'A base reagiu bem, mas jornalistas e grupos de oposição ampliaram a cobrança por transparência.' },
+    ],
+  },
+
+
+  {
+    id: 'court-congress-showdown',
+    title: 'O Congresso ameaça comprar uma briga com o Supremo',
+    prompt: 'Líderes recém-eleitos prometem endurecer contra decisões do Judiciário. A base do governo quer apoio legislativo, mas juristas alertam para o risco de transformar uma disputa institucional em crise.',
+    condition: { indicator: 'institutionalStability', operator: 'atMost', value: 73 }, weight: 5, category: 'crise institucional',
+    publicFigure: { name: 'Rogério do Plenário', role: 'Senador fictício', description: 'Personagem satírico de um articulador parlamentar que usa embates entre Poderes para mobilizar sua base.' },
+    options: [
+      { id: 'defend-institutional-dialogue', label: 'Defender diálogo entre os Poderes', description: 'Reafirmar competências constitucionais e abrir uma mesa institucional.', icon: 'scale', effects: { institutionalStability: 2, judiciaryRelation: 2, politicalCapital: -2, presidentialApproval: -1 }, resultText: 'A postura reduziu a tensão institucional, mas desagradou quem esperava confronto.' },
+      { id: 'seek-legislative-confrontation', label: 'Apoiar a pressão do Congresso', description: 'Tentar transformar o conflito em moeda de negociação com a base parlamentar.', icon: 'landmark', effects: { congressSupport: 2, polarization: 2, institutionalStability: -3, judiciaryRelation: -2 }, resultText: 'A base legislativa se aproximou, mas a crise entre instituições ganhou força.', schedule: { eventId: 'institutional-crisis-followup', delayWeeks: 1 } },
+    ],
+  },
+  {
+    id: 'ai-campaign-chaos',
+    title: 'A inteligência artificial entrou na campanha',
+    prompt: 'Um vídeo e uma imagem gerados por IA circulam como se fossem registros reais. O conteúdo ganha milhares de compartilhamentos antes de a checagem ficar pronta.',
+    condition: { indicator: 'polarization', operator: 'atLeast', value: 42 }, weight: 6, category: 'redes e eleições',
+    publicFigure: { name: 'Pablo Marçalino', role: 'Influenciador e candidato fictício', description: 'Personagem satírico de um comunicador que transforma alcance digital e vídeos curtos em poder político.' },
+    options: [
+      { id: 'publish-verification', label: 'Publicar checagem e material original', description: 'Divulgar a origem do arquivo, os sinais de manipulação e uma versão verificável.', icon: 'newspaper', effects: { publicTrust: 2, publicIntegrity: 2, administrativeCapacity: -1 }, resultText: 'A checagem forneceu evidências, mas o conteúdo original continuou circulando em grupos fechados.' },
+      { id: 'demand-platform-transparency', label: 'Cobrar transparência da plataforma', description: 'Solicitar explicações sobre alcance, anúncios e rotulagem de conteúdo sintético.', icon: 'message', effects: { publicIntegrity: 1, foreignRelations: -1, politicalCapital: -1, polarization: -1 }, resultText: 'A cobrança abriu uma frente de fiscalização, com resposta lenta e disputa sobre os limites da regulação.' },
+    ],
+  },
+
 ]
