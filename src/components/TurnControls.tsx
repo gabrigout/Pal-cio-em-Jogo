@@ -16,7 +16,6 @@ import {
   Scale,
   Shield,
   Sparkles,
-  Swords,
   UsersRound,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -132,11 +131,10 @@ function DecisionChoiceCard({
 interface TurnControlsProps {
   campaign: CampaignState
   data: TurnDashboardData
-  onRunAction: (actionId: string) => void
   onChooseDecision: (optionId: string, category: DecisionResult['category']) => void
 }
 
-export default function TurnControls({ campaign, data, onRunAction, onChooseDecision }: TurnControlsProps) {
+export default function TurnControls({ campaign, data, onChooseDecision }: TurnControlsProps) {
   return (
     <div className="turn-controls">
       <section aria-label="Pontos de ação e recursos globais" className="resource-overview">
@@ -162,37 +160,6 @@ export default function TurnControls({ campaign, data, onRunAction, onChooseDeci
             <BriefcaseBusiness aria-hidden="true" size={15} />
             <span><small>CAPACIDADE ADMINISTRATIVA</small><strong>{campaign.country.administrativeCapacity} <i>pt</i></strong></span>
           </div>
-        </div>
-      </section>
-
-      <section aria-labelledby="actions-title" className="sample-actions-panel">
-        <div className="turn-section-heading">
-          <div><p className="eyebrow">AGENDA EXECUTIVA <span>·</span> AÇÕES DE EXEMPLO</p><h2 id="actions-title">Ações da semana</h2></div>
-          <span className="free-activity-note">Navegação, notícias e consulta são gratuitas.</span>
-        </div>
-        <div className="sample-actions-list">
-          {data.actions.map(({ action, blockedReason, costSummary }) => (
-            <article className={`sample-action${blockedReason ? ' is-blocked' : ''}`} key={action.id}>
-              <span className="sample-action-icon"><Swords aria-hidden="true" size={15} /></span>
-              <div className="sample-action-copy">
-                <h3>{action.title}</h3>
-                <span className="executive-action-type">{actionTypeLabels[action.actionType]}</span>
-                <p>{action.description}</p>
-                <span className="action-cost">Custo: {costSummary}</span>
-                {blockedReason && <span className="action-blocked-reason">{blockedReason}</span>}
-              </div>
-              <button
-                aria-label={blockedReason ? `${action.title}: ${blockedReason}` : `Executar ${action.title}`}
-                className="action-run-button"
-                disabled={Boolean(blockedReason)}
-                onClick={() => onRunAction(action.id)}
-                title={blockedReason ?? `Executar por ${costSummary}`}
-                type="button"
-              >
-                {blockedReason ? 'Bloqueada' : 'Executar'}
-              </button>
-            </article>
-          ))}
         </div>
       </section>
 
