@@ -53,14 +53,12 @@ function WorkColumn({ title, items, icon: Icon }: {
 
 interface DashboardProps {
   campaign: CampaignState
-  onAdvanceWeek: () => void
-  onRunAction: (actionId: string) => void
   onChooseDecision: (optionId: string, category: DecisionResult['category']) => void
   onDismissDecisionResult: () => void
   onDismissSummary: () => void
 }
 
-export default function Dashboard({ campaign, onAdvanceWeek, onRunAction, onChooseDecision, onDismissDecisionResult, onDismissSummary }: DashboardProps) {
+export default function Dashboard({ campaign, onChooseDecision, onDismissDecisionResult, onDismissSummary }: DashboardProps) {
   const overviewTitleRef = useRef<HTMLHeadingElement>(null)
   const dashboardMetrics = getDashboardMetrics(campaign)
   const turnDashboardData = getTurnDashboardData(campaign)
@@ -94,7 +92,6 @@ export default function Dashboard({ campaign, onAdvanceWeek, onRunAction, onChoo
         campaign={campaign}
         data={turnDashboardData}
         onChooseDecision={onChooseDecision}
-        onRunAction={onRunAction}
       />
 
       <section aria-labelledby="alerts-title" className="alerts-panel">
@@ -153,9 +150,7 @@ export default function Dashboard({ campaign, onAdvanceWeek, onRunAction, onChoo
           <span className="footer-flag"><Flag aria-hidden="true" size={16} /></span>
           <span><strong>Fim do resumo semanal</strong><small>O próximo passo é seu.</small></span>
         </div>
-        <button className="advance-button" onClick={onAdvanceWeek} type="button">
-          Avançar Semana <ChevronRight aria-hidden="true" size={17} />
-        </button>
+        <span className="footer-next-step">Use o botão fixo no cabeçalho para avançar quando estiver pronto.</span>
       </footer>
       {campaign.weeklySummary && (
         <WeeklySummaryDialog
