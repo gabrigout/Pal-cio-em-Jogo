@@ -294,7 +294,7 @@ Ao fazer correções, verifique a norma oficial vigente e documente exatamente q
 
 ## 10.1. Atualização posterior — identidade visual das legendas (2026-10-16)
 
-Depois da entrega legislativa, as cores das seis legendas satíricas foram revisadas contra fontes oficiais. A paleta do PTP, paródia do PT, é vermelho `#E30613` e branco. PSÓ/PSOL usa vermelho e amarelo; PDTT/PDT usa vermelho e azul; PLIM/PL usa azul `#004F9F` e verde `#009640` extraídos do manual oficial; PSSDB/PSDB usa azul e amarelo; NOVA/NOVO usa laranja `#F17021` e azul-marinho `#1A2948` do manual de marca. Quando uma fonte não declara códigos HEX, o relatório e o código deixam claro que se trata de aproximação digital.
+Depois da entrega legislativa, as cores das seis legendas satíricas foram revisadas contra fontes oficiais. A paleta do PTP, paródia do PT, é vermelho `#E4142C` e branco. PSÓ/PSOL usa vermelho `#D71920` e amarelo `#FFD52B`; PDTT/PDT usa vermelho `#E4002B` e azul `#005AB2`; PLIM/PL usa azul `#004F9F` e verde `#009640` extraídos do manual oficial; PSSDB/PSDB usa azul e amarelo; NOVA/NOVO usa laranja `#F17021` e azul-marinho `#1A2948` do manual de marca. Quando uma fonte não declara códigos HEX, o relatório e o código deixam claro que se trata de aproximação digital.
 
 A aplicação agora separa cores institucionais exatas de variantes de texto acessíveis: botões primários, progresso, seleção e elementos gráficos usam a cor de marca; textos/ícones em superfícies escuras usam variantes com contraste adequado. A cor do texto nos botões é calculada sobre a cor oficial. O save v8 já tem migração para atualizar temas de campanhas predefinidas antigas e preservar as cores de partidos personalizados.
 
