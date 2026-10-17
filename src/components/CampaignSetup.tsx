@@ -39,6 +39,8 @@ export default function CampaignSetup({ onStart, onBackToLibrary }: CampaignSetu
   const setupThemeStyle = previewTheme ? {
     '--cor-primaria': previewTheme.primary,
     '--cor-secundaria': previewTheme.secondary,
+    '--cor-primaria-marca': previewTheme.officialPrimary,
+    '--cor-secundaria-marca': previewTheme.officialSecondary,
     '--cor-botao-texto': previewTheme.buttonText,
   } as CSSProperties : undefined
 
