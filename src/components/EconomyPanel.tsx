@@ -151,12 +151,22 @@ export default function EconomyPanel({
           </div>
           <div className="economy-budget-legend">
             <p className="eyebrow">DISTRIBUIÇÃO PLANEJADA</p>
-            {economy.annualBudget.sectors.map((sector, index) => (
-              <div className="economy-legend-row" key={sector.id}>
-                <span aria-hidden="true" style={{ backgroundColor: sectorColors[index % sectorColors.length] }} />
-                <span>{sector.name}</span><strong>{shares[sector.id] ?? sector.share}%</strong>
-              </div>
-            ))}
+            {economy.annualBudget.sectors.map((sector, index) => {
+              const share = shares[sector.id] ?? sector.share
+              const planned = economy.annualBudget.total * share / 100
+              const executed = sector.executedThisYear
+              const execution = planned > 0 ? Math.min(100, executed / planned * 100) : 0
+              return (
+                <div className="economy-legend-row" key={sector.id}>
+                  <span aria-hidden="true" style={{ backgroundColor: sectorColors[index % sectorColors.length] }} />
+                  <span className="economy-legend-detail">
+                    <span className="economy-legend-topline"><span>{sector.name}</span><strong>{share}%</strong></span>
+                    <span className="economy-legend-amount">{formatBRLMoney(planned)} planejados · {formatBRLMoney(executed)} executados</span>
+                    <span className="economy-legend-track" aria-label={`Execução de ${sector.name}: ${execution.toFixed(0)}%`}><span style={{ width: `${execution}%`, backgroundColor: sectorColors[index % sectorColors.length] }} /></span>
+                  </span>
+                </div>
+              )
+            })}
           </div>
         </div>
         <div className="economy-sector-list">
